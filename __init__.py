@@ -1,11 +1,15 @@
-from flask import Flask, render_template, flash, url_for
+from flask import Flask, render_template, request, url_for, flash
 
 app = Flask(__name__)
 
-@app.route('/', )
+@app.route('/')
 def signin():
 	return render_template("signin.html", methods=['POST'])
 
+@app.route('/home/')
+def home():
+	return render_template("home.html")
 
 if __name__ == "__main__":
+    # app.run(debug=True)
     app.run()

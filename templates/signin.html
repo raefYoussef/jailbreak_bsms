@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  	<head>
-    	<meta charset="utf-8">
-    	<meta name="viewport" content="width=device-width, initial-scale=1">    
-    	<link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap/bootstrap.min.css')}}">
-    	<link rel="stylesheet" href="{{url_for('static', filename='css/custom/signin.css')}}">
-    	<title>Log in</title>
-  	</head>
-  	<body> 		
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">    
+		<link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='css/custom/signin.css')}}">
+		<title>Log in</title>
+	</head>
+	<body> 		
 			<!-- Logo -->
-			<img src="{{url_for('static', filename='images/jailbreak_logo.png')}}" class="center-block img-responsive" width="220px"/>		
+			<img src="{{url_for('static', filename='images/bsms_logo9_white.png')}}" class="center-block img-responsive" width="250px"/>		
 			
 			<div class="signin">
 				<div class="signin-screen">
 					<div class="app-title">
-					<h1>Sign in</h1>
+					<h1>Sign In</h1>
 				</div>
 
 				<div class="signin-form">
@@ -27,7 +27,7 @@
 							<input type="password" class="signin-field" placeholder="password" id="signin-pass" required="true">
 						</div>
 
-						<input type="submit" value="Sign in" class="btn btn-primary btn7-large btn-block">
+						<input type="submit" value="Sign In" class="btn btn-primary btn7-large btn-block">
 					</form>	
 					
 					<a class="signin-link" href="#">Forgot your password?</a>
@@ -35,7 +35,8 @@
 			</div>
 		</div>
 
-    	<script src="{{url_for('static', filename='js/bootstrap/bootstrap.min.js')}}"></script>
-  	</body>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+	</body>
 </html>
 
