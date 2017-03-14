@@ -6,8 +6,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">    
 		<link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
 		<link rel="stylesheet" href="{{url_for('static', filename='css/custom/header.css')}}">
+		{% block head %}{% endblock %}
+		{% block title %}{% endblock %}
+		<link rel="shortcut icon" href="{{url_for('static', filename='images/favicon_1.ico')}}" />
 	</head>
-	<body>    
+	<body>
 		<nav class="navbar navbar-inverse" id="header">
 			<div class="container-fluid" >
     			<div class="navbar-header">
@@ -42,7 +45,6 @@
 		</nav>
 
 		{% block body %}
-		
 		{% endblock %}
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

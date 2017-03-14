@@ -1,0 +1,15 @@
+.thumbnail
+{
+	/* Adds shadow effect to thumbnail */
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.thumbnail:hover
+{
+	/* adds two shadows to thumbnail upon hovering over it*/
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 15px 20px 0 rgba(0, 0, 0, 0.19);
+	-webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 15px 20px 0 rgba(0, 0, 0, 0.19);
+	-moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 15px 20px 0 rgba(0, 0, 0, 0.19);
+}
