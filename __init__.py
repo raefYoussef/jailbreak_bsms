@@ -10,6 +10,10 @@ def signin():
 def home():
 	return render_template("home.html")
 
+@app.route('/signin_temp/')
+def signin_temp():
+	return render_template("signin_temp.html", methods=['POST'])
+
 if __name__ == "__main__":
-	#app.run(debug=True)
-	app.run()
+	app.run(debug=True)
+	#app.run()
