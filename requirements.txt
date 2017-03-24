@@ -1,0 +1,11 @@
+click==6.7
+docloud==1.0.130
+docplex==1.0.557
+Flask==0.12
+itsdangerous==0.24
+Jinja2==2.9.5
+MarkupSafe==1.0
+requests==2.10.0
+six==1.10.0
+virtualenv==15.1.0
+Werkzeug==0.11.15
