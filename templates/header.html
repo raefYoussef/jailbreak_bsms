@@ -4,8 +4,8 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">    
-		<link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
-		<link rel="stylesheet" href="{{url_for('static', filename='css/custom/header.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='custom/css/header.css')}}">
 		{% block head %}{% endblock %}
 		{% block title %}{% endblock %}
 		<link rel="shortcut icon" href="{{url_for('static', filename='images/favicon_1.ico')}}" />
@@ -22,7 +22,7 @@
       				</button>
     				
     				<!-- Logo -->
-      				<a class="brand-logo" href="#"><img src="{{url_for('static', filename='images/bsms_logo9_white.png')}}" id="brand_logo"></a>
+      				<a class="brand-logo" href="#"><img src="{{url_for('static', filename='custom/images/bsms_logo9_white.png')}}" id="brand_logo"></a>
     			</div>
 
 			    <div class="collapse navbar-collapse" id="collapseNavbar">	
@@ -46,8 +46,8 @@
 
 		{% block body %}{% endblock %}
 
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-		<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+		<script src="{{url_for('static', filename='jquery/jquery.js')}}"></script>
+		<script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
 
 		{% block script %}{% endblock %}
 	</body>
