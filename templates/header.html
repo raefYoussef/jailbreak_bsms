@@ -11,7 +11,7 @@
 		<link rel="shortcut icon" href="{{url_for('static', filename='images/favicon_1.ico')}}" />
 	</head>
 	<body>
-		<nav class="navbar navbar-inverse navbar-fixed-top" id="header">
+		<nav class="navbar navbar-inverse navbar-fixed-top" id="theme-color-dark-blue">
 			<div class="container-fluid" >
     			<div class="navbar-header">
     				<!-- defines the toggle botton that collapses the header bar on smaller screens -->
@@ -28,16 +28,16 @@
 			    <div class="collapse navbar-collapse" id="collapseNavbar">	
 					<!-- Links -->
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="#"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+						<li><a href="/home/"><span class="glyphicon glyphicon-home"></span> Home</a></li>
 						<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-list"></span> Site Map <span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="#">View Inventory</a></li>
-								<li><a href="#">Edit Inventory</a></li>
-								<li><a href="#">Statistics</a></li>
+								<li><a href="/view_inventory/">View Inventory</a></li>
+								<li><a href="/edit_inventory/">Edit Inventory</a></li>
+								<li><a href="/logistics/">Logistics</a></li>
 							</ul>
 						</li>
-						<li><a href="#"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+						<li><a href="/settings/"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
 						<li><a href="#"><span class="glyphicon glyphicon-log-out"></span> Sign Out</a></li>
 					</ul>
 			    </div>
@@ -48,5 +48,7 @@
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+
+		{% block script %}{% endblock %}
 	</body>
 </html>

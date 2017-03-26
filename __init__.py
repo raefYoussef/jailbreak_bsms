@@ -36,6 +36,26 @@ def signin_temp():
 #def method_not_found(e):
 #	return render_template("405.html")
 
+@app.route('/dashboard/')
+def dashboard():
+	return render_template("dashboard.html")
+
+@app.route('/settings/')
+def settings():
+	return render_template("settings.html")
+
+@app.route('/view_inventory/')
+def view_inventory():
+	return render_template("view_inventory.html")
+
+@app.route('/edit_inventory/')
+def edit_inventory():
+	return render_template("edit_inventory.html")
+
+@app.route('/logistics/')
+def logistics():
+	return render_template("logistics.html")
+
 if __name__ == "__main__":
 	app.secret_key = 'some secret key'
 	app.run(debug=True)
