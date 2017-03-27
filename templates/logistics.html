@@ -1,0 +1,41 @@
+{% extends "blank_template.html" %}
+	
+	{% block page_title %} Logistics {% endblock %}
+	
+	{% block stylesheets %}{% endblock %}
+	
+	{% block account_name %} {{ account_name }} {% endblock %}
+	
+	{% block sidebar %}
+		<li>
+			<a href="/dashboard/"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+		</li>
+		<li>
+			<a href="/view_inventory/"><i class="fa fa-fw fa-table"></i> View Inventory</a>
+		</li>
+		<li>
+			<a href="/edit_inventory/"><i class="fa fa-fw fa-edit"></i> Edit Inventory</a>
+		</li>
+		<li class="active">
+			<a href="/logistics/"><i class="fa fa-fw fa-bar-chart-o"></i> Logistics</a>
+		</li>
+	{% endblock %}
+
+	{% block page_heading %} Logistics {% endblock %}
+	
+	{% block page_subheading %}{% endblock %}
+	
+	{% block breadcrumbs %}
+		<li>
+			<i class="fa fa-dashboard"></i> <a href="/dashboard/">Dashboard</a>
+		</li>
+		<li class="active">
+			<i class="fa fa-bar-chart-o"></i> Logistics
+		</li>
+	{% endblock %}
+
+	{% block alerts %}{% endblock %}
+
+	{% block body %}{% endblock %}
+
+	{% block scripts %}{% endblock %}

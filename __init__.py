@@ -38,7 +38,7 @@ def home():
 
 @app.route('/dashboard/')
 def dashboard():
-	return render_template("dashboard.html")
+	return render_template("dashboard.html", account_name = "John Smith")
 
 @app.route('/settings/')
 def settings():
@@ -46,15 +46,15 @@ def settings():
 
 @app.route('/view_inventory/')
 def view_inventory():
-	return render_template("view_inventory.html")
+	return render_template("view_inventory.html", account_name = "John Smith")
 
 @app.route('/edit_inventory/')
 def edit_inventory():
-	return render_template("edit_inventory.html")
+	return render_template("edit_inventory.html", account_name = "John Smith")
 
 @app.route('/logistics/')
 def logistics():
-	return render_template("logistics.html")
+	return render_template("logistics.html", account_name = "John Smith")
 
 if __name__ == "__main__":
 	app.secret_key = 'some secret key'
