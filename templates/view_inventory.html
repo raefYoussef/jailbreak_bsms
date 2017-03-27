@@ -25,6 +25,28 @@
 		<li>
 			<a href="/logistics/"><i class="fa fa-fw fa-bar-chart-o"></i> Logistics</a>
 		</li>
+		<li>
+			<a href="javascript:;" data-toggle="collapse" data-target="#demo"> Level 0 <i class="fa fa-fw fa-caret-down"></i></a>
+			<ul id="demo" class="collapse">
+				<li>
+					<a href="#">Level 1</a>
+				</li>
+				<li>
+					<a href="#">Level 1</a>
+				</li>
+				<li>
+					<a href="javascript:;" data-toggle="collapse" data-target="#demo1"> Level 1 <i class="fa fa-fw fa-caret-down"></i></a>
+					<ul id="demo1" class="collapse">
+						<li>
+							<a href="#">Level 2</a>
+						</li>
+						<li>
+							<a href="#">Level 2</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
 	{% endblock %}
 
 	{% block page_heading %} View Inventory {% endblock %}

@@ -3,3 +3,18 @@
 	width: 80px; 
 	margin: 10px;
 }
+
+.side-nav>li>ul>li>ul {
+    padding: 0;
+}
+
+.side-nav>li>ul>li>ul>li>a {
+    display: block;
+    padding: 10px 15px 10px 61px;
+    text-decoration: none;
+    color: #999;
+}
+
+.side-nav>li>ul>li>ul>li>a:hover {
+    color: #fff;
+}
