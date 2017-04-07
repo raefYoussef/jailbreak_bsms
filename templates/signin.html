@@ -3,40 +3,50 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">    
-		<link rel="stylesheet" href="{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}">
-		<link rel="stylesheet" href="{{url_for('static', filename='custom/css/signin.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+		
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="{{url_for('static', filename='css/custom/signin.css')}}">
+
+
 		<title>Log in</title>
 	</head>
 	<body> 		
 			<!-- Logo -->
 			<img src="{{url_for('static', filename='images/bsms_logo9_white.png')}}" class="center-block img-responsive" width="250px"/>		
 			
-			<div class="signin">
-				<div class="signin-screen">
-					<div class="app-title">
-					<h1>Sign In</h1>
-				</div>
+	<div class="container">
 
-				<div class="signin-form">
-					<form action="" class="form-group" method="post"> 
-						<div class="control-group">
-							<input type="text" class="signin-field" placeholder="username" id="signin-name" name="username" value="{{request.form.username}}" required="true">
-						</div>
+      <form class="form-signin">
+        <h2 class="form-signin-heading"> <b>Please sign in</b></h2>
 
-						<div class="control-group">
-							<input type="password" class="signin-field" placeholder="password" id="signin-pass" required="true">
-						</div>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn7-larges btn-primary btn-block" type="submit">Sign in</button>
+        
+         <div class="hr"></div>
+                <div class="foot-lnk">
+                    <a href="#forgot">Forgot Password?</a>
+                </div>
+      </form>
 
-						<input type="submit" value="Sign In" class="btn btn-primary btn7-large btn-block">
-					</form>	
-					
-					<a class="signin-link" href="#">Forgot your password?</a>
-				</div>
-			</div>
-		</div>
+               
 
-		<script src="{{url_for('static', filename='jquery/bootstrap.min.js')}}"></script>		
+    </div> <!-- /container -->		
+
+
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
 	</body>
 </html>
-
