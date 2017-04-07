@@ -5,52 +5,57 @@ box-sizing: border-box;
 *:focus {
 	outline: none;
 }
+
+
 body {
-font-family: Arial;
-background-color: #3498DB;
-padding: 25px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #808080;
 }
 
-.signin {
+.container {
 margin: 20px auto;
 width: 325px;
 display: block;
+background-color: #fff;
 }
 
-.signin-screen {
-background-color: #FFF;
-padding: 20px;
-border-radius: 5px;
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
 }
-
-.app-title {
-text-align: center;
-color: #777;
-margin-bottom: 20px;
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+  font-size: 16px;
 }
-
-.signin-form {
-text-align: center;
+.form-signin .checkbox {
+  font-weight: bold;
+  
+  
 }
-.control-group {
-margin-bottom: 10px;
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
 }
-
-input {
-text-align: center;
-background-color: #ECF0F1;
-border: 2px solid transparent;
-border-radius: 3px;
-font-size: 16px;
-font-weight: 200;
-padding: 10px 0;
-width: 275px;
-transition: border .5s;
+.form-signin .form-control:focus {
+  z-index: 2;
 }
-
-input:focus {
-border: 2px solid #3498DB;
-box-shadow: none;
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .btn {
@@ -66,17 +71,25 @@ box-shadow: none;
   box-shadow: none;
   transition: 0.25s;
   display: block;
-  width: 275px;
+  width: 225px;
   margin: 0 auto;
 }
 
 .btn:hover {
   background-color: #2980B9;
 }
+.hr{
 
-.signin-link {
-  font-size: 12px;
-  color: #444;
-  display: block;
-	margin-top: 12px;
+    height:2px;
+   font-weight: bold;
+    margin: 10px auto;
+    background:#fff;
 }
+.foot-lnk{
+  font-weight: bold;
+    text-align:center;
+    padding: 10px 0;
+    margin: 0 auto;
+    
+}
+
