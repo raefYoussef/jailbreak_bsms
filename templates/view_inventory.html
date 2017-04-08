@@ -4,10 +4,11 @@
 	
 	{% block stylesheets %}
 		<!-- DataTables CSS -->
-		<link href="{{url_for('static', filename='datatables-plugins/dataTables.bootstrap.css')}}">
-		
-		<!-- DataTables Responsive CSS -->
-		<link href="{{url_for('static', filename='datatables-responsive/dataTables.responsive.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/DataTables-1.10.13/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/ColReorder-1.3.2/css/colReorder.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/Responsive-2.1.1/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/Scroller-1.4.2/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
 	{% endblock %}
 	
 	{% block account_name %}{{ account_name }}{% endblock %}
@@ -151,11 +152,15 @@
 
 	{% block scripts %}
 		<!-- DataTables JavaScript -->
-		<script src="{{url_for('static', filename='datatables/js/jquery.dataTables.min.js')}}"></script>
-		<script src="{{url_for('static', filename='datatables-plugins/dataTables.bootstrap.min.js')}}"></script>
-		<script src="{{url_for('static', filename='datatables-responsive/dataTables.responsive.js')}}"></script>
-
-		<!-- Page-Level Demo Scripts - Tables - Use for reference -->
+		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/jquery.dataTables.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/dataTables.bootstrap.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/ColReorder-1.3.2/js/dataTables.colReorder.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/dataTables.responsive.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/responsive.bootstrap.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/Scroller-1.4.2/js/dataTables.scroller.min.js')}}"></script>
+		
+		<!-- Inventory Table -->
 		<script>
 		$(document).ready(function() {
 			$('#dataTables-inventory').DataTable({
