@@ -1,5 +1,5 @@
 Include the following in your HTML to load the required Javascript and CSS for the desired options.
-Note: Do not include bootstrap and jquery if there are already included. Such is the case of extending
+Note: Do not include bootstrap and jquery if they are already included. Such is the case of extending
       the blank template.
 
 <link rel="stylesheet" type="text/css" href="DataTables/Bootstrap-3.3.7/css/bootstrap.min.css"/>
