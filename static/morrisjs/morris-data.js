@@ -2,6 +2,83 @@
 
 $(function() {
 
+    Morris.Line({
+        element: 'dashboard_keg_status',
+        data: [{
+            date: '2017-03-26',
+            dirty: 100,
+            clean: 40,
+            full_out: 150,
+            full_tap: 10,
+            full_inv: 50 
+        }, {
+            date: '2017-03-27',
+            dirty: 80,
+            clean: 45,
+            full_out: 155,
+            full_tap: 10,
+            full_inv: 60
+        }, {
+            date: '2017-03-28',
+            dirty: 90,
+            clean: 40,
+            full_out: 135,
+            full_tap: 10,
+            full_inv: 70
+        }, {
+            date: '2017-03-29',
+            dirty: 70,
+            clean: 50,
+            full_out: 135,
+            full_tap: 15,
+            full_inv: 75
+        }, {
+            date: '2017-03-30',
+            dirty: 75,
+            clean: 55,
+            full_out: 115,
+            full_tap: 15,
+            full_inv: 85
+        }, {
+            date: '2017-03-31',
+            dirty: 55,
+            clean: 65,
+            full_out: 115,
+            full_tap: 15,
+            full_inv: 95
+        }, {
+            date: '2017-04-01',
+            dirty: 55,
+            clean: 65,
+            full_out: 135,
+            full_tap: 10,
+            full_inv: 80
+        }],
+        xkey: 'date',
+        ykeys: ['dirty', 'clean', 'full_out', 'full_tap', 'full_inv'],
+        labels: ['Dirty', 'Clean', 'Full (Out)', 'Full (Tap)', 'Full (Inventory)'],
+        lineColors: ['#DCA525', '#076BB6', '#E66665', '#AE70AF', '#9ECEB4'],
+        pointSize: 2,
+        resize: true,
+        hideHover: 'auto'
+    });
+
+    // Donut Chart
+    Morris.Donut({
+        element: 'dashboard_inventory_beers',
+        data: [{
+            label: "Big Punisher",
+            value: 5
+        }, {
+            label: "Feed the Monkey",
+            value: 10
+        }, {
+            label: "Poor Righteous",
+            value: 20
+        }],
+        resize: true
+    });
+
     // Area Chart
     Morris.Area({
         element: 'morris-area-chart',
@@ -60,7 +137,7 @@ $(function() {
         ykeys: ['iphone', 'ipad', 'itouch'],
         labels: ['iPhone', 'iPad', 'iPod Touch'],
         pointSize: 2,
-        hideHover: 'auto',
+        hideHover: false,
         resize: true
     });
 
