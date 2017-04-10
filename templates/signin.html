@@ -1,15 +1,15 @@
+	<!-- Signin.html, login page for jailbreakbsms.me -->
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">    
-		<link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
-		
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="{{url_for('static', filename='css/custom/signin.css')}}">
-
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+       	<!-- CSS Files local -->
+		<link rel="stylesheet" href="{{url_for('static', filename='bootstrap/css/bootstrap.min.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='custom/css/signin.css')}}">
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>-->
+  	 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
 
 		<title>Log in</title>
 	</head>
@@ -32,21 +32,16 @@
           </label>
         </div>
         <button class="btn btn7-larges btn-primary btn-block" type="submit">Sign in</button>
-        
+        	<!-- Line -->
          <div class="hr"></div>
                 <div class="foot-lnk">
                     <a href="#forgot">Forgot Password?</a>
                 </div>
       </form>
-
-               
-
     </div> <!-- /container -->		
-
-
-
-
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-		<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+<!-- Online/Offline jquery and javascript files -->	
+	<!--	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->		
+   	<script src="{{url_for('static', filename='jquery/jquery.min.js')}}"></script>
+		<script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
 	</body>
 </html>
