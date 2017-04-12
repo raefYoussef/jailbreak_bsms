@@ -9,6 +9,7 @@
 		<link href="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/Responsive-2.1.1/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/Scroller-1.4.2/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}}" rel="stylesheet">
 	{% endblock %}
 	
 	{% block account_name %}{{ account_name }}{% endblock %}
@@ -25,28 +26,6 @@
 		</li>
 		<li>
 			<a href="/logistics/"><i class="fa fa-fw fa-bar-chart-o"></i> Logistics</a>
-		</li>
-		<li>
-			<a href="javascript:;" data-toggle="collapse" data-target="#demo"> Level 0 <i class="fa fa-fw fa-caret-down"></i></a>
-			<ul id="demo" class="collapse">
-				<li>
-					<a href="#">Level 1</a>
-				</li>
-				<li>
-					<a href="#">Level 1</a>
-				</li>
-				<li>
-					<a href="javascript:;" data-toggle="collapse" data-target="#demo1"> Level 1 <i class="fa fa-fw fa-caret-down"></i></a>
-					<ul id="demo1" class="collapse">
-						<li>
-							<a href="#">Level 2</a>
-						</li>
-						<li>
-							<a href="#">Level 2</a>
-						</li>
-					</ul>
-				</li>
-			</ul>
 		</li>
 	{% endblock %}
 
@@ -65,7 +44,141 @@
 
 	{% block body%} 
 		<div class="row">
-				<div class="col-lg-12">
+			<div class="col col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<button type="button" class="btn btn-sm btn-primary" data-toggle="collapse" data-target="#collapsible_advanced_search" id="advanced_search_btn">
+							<i class="fa fa-fw fa-search"></i> Advanced Search
+						</button>
+					</div>
+					<!-- /.panel-heading -->
+					
+					<div class="panel-collapse collapse" id="collapsible_advanced_search">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col col-xs-12 col-sm-6">
+									<label>Keg ID</label>
+									<div class="input-group" id="input_group_id">
+										<span class="input-group-addon" id="addon_id">ID</span>
+										<input type="text" class="form-control" placeholder="Search ID" id="input_keg_id">
+									</div>
+									<!-- /.input-group -->
+								</div>
+								<!-- /.col -->
+
+								<div class="col col-xs-12 col-sm-6">
+									<label>Notes</label>
+									<div class="input-group" id="input_group_notes">
+										<span class="input-group-addon" id="addon_id">Notes</span>
+										<input type="text" class="form-control" placeholder="Search Notes" id="input_keg_notes">
+									</div>
+									<!-- /.input-group -->
+								</div>
+								<!-- /.col -->
+							</div>
+							<!-- /.row -->
+
+							<div class="row">
+								<div class="col col-xs-12 col-sm-6 col-lg-3">
+									<label>Time In</label>
+									<div class="input-daterange input-group" id="input_keg_timeIn">
+										<input type="text" class="input-sm form-control" id="input_keg_timeIn_start" placeholder="Start Date">
+										<div class="input-group-addon">to</div>
+										<input type="text" class="input-sm form-control" id="input_keg_timeIn_end" placeholder="End Date">
+									</div>
+								</div>
+								<!-- /.col -->
+
+								<div class="col col-xs-12 col-sm-6 col-lg-3">
+									<label>Time Cleaned</label>
+									<div class="input-daterange input-group" id="input_keg_timeCleaned">
+										<input type="text" class="input-sm form-control" id="input_keg_timeCleaned_start" placeholder="Start Date">
+										<div class="input-group-addon">to</div>
+										<input type="text" class="input-sm form-control" id="input_keg_timeCleaned_end" placeholder="End Date">
+									</div>
+								</div>
+								<!-- /.col -->
+
+								<div class="col col-xs-12 col-sm-6 col-lg-3">
+									<label>Time Filled</label>
+									<div class="input-daterange input-group" id="input_keg_timeFilled">
+										<input type="text" class="input-sm form-control" id="input_keg_timeFilled_start" placeholder="Start Date">
+										<div class="input-group-addon">to</div>
+										<input type="text" class="input-sm form-control" id="input_keg_timeFilled_end" placeholder="End Date">
+									</div>
+								</div>
+								<!-- /.col -->
+
+								<div class="col col-xs-12 col-sm-6 col-lg-3">
+									<label>Time Shipped</label>
+									<div class="input-daterange input-group" id="input_keg_timeShipped">
+										<input type="text" class="input-sm form-control" id="input_keg_timeShipped_start" placeholder="Start Date">
+										<div class="input-group-addon">to</div>
+										<input type="text" class="input-sm form-control" id="input_keg_timeShipped_end" placeholder="End Date">
+									</div>
+								</div>
+								<!-- /.col -->
+							</div>
+							<!-- /.row -->
+
+							<div class="row">
+								<div class="col col-xs-12 col-sm-6 col-lg-3">
+									<label>Keg Type</label>
+									<div class="input-group" id="input_group_type">
+										<span class="input-group-addon" id="addon_type">Type</span>
+										<select multiple class="form-control" id="input_keg_type" style="min-width: 150px; max-height: 75px;">
+										</select>
+									</div>
+									<!-- /.input-group -->
+								</div>
+								<!-- /.col -->
+
+								<div class="col col-xs-12 col-sm-6 col-lg-3">
+									<label>Keg Status</label>
+									<div class="input-group" id="input_group_status">
+										<span class="input-group-addon" id="addon_status">Status</span>
+										<select multiple class="form-control" id="input_keg_status" style="min-width: 150px; max-height: 75px;">
+										</select>
+									</div>
+									<!-- /.input-group -->
+								</div>
+								<!-- /.col -->
+
+								<div class="col col-xs-12 col-sm-6 col-lg-3">
+									<label>Beer Brand</label>
+									<div class="input-group" id="input_group_brand">
+										<span class="input-group-addon" id="addon_brand">Brand</span>
+										<select multiple class="form-control" id="input_keg_brand" style="min-width: 150px; max-height: 75px;">
+										</select>
+									</div>
+									<!-- /.input-group -->
+								</div>
+								<!-- /.col -->
+
+								<div class="col col-xs-12 col-sm-6 col-lg-3">
+									<label>Customer</label>
+									<div class="input-group" id="input_group_brand">
+										<span class="input-group-addon" id="addon_brand">Name</span>
+										<select multiple class="form-control" id="input_customer" style="min-width: 150px; max-height: 75px;">
+										</select>
+									</div>
+									<!-- /.input-group -->
+								</div>
+								<!-- /.col -->
+							</div>
+							<!-- /.row -->
+						</div>
+					</div>
+					<!-- /.panel-collapse -->
+				</div>
+				<!-- /.panel -->
+			</div>
+			<!-- /.col -->
+		</div>
+		<!-- /.row -->
+
+		<div class="row">
+				<div class="col col-lg-12">
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							Inventory
@@ -73,7 +186,7 @@
 						<!-- /.panel-heading -->
 
 						<div class="panel-body">
-							<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-inventory">
+							<table width="100%" class="table table-striped table-bordered table-hover" id="inventory_table">
 								<thead>
 									<tr>
 										<th>ID</th>
@@ -83,8 +196,10 @@
 										<th>Time In</th>
 										<th>Time Cleaned</th>
 										<th>Time Filled</th>
-										<th>Note</th>
-								    </tr>
+										<th>Time Shipped</th>
+										<th>Customer</th>
+										<th>Notes</th>
+									</tr>
 								</thead>
 								<tbody>
 									<tr>
@@ -92,19 +207,23 @@
 										<td>QB</td>
 										<td>FULL OUT</td>
 										<td>Feed the Monkey</td>
-										<td>03/25/2017</td>	
-										<td>03/26/2017</td>
-										<td>03/27/2017</td>
-										<td></th>
+										<td>2017-03-25</td>	
+										<td>2017-03-26</td>
+										<td>2017-03-27</td>
+										<td>2017-03-28</td>
+										<td>Tubbys Diner</td>
+										<td></td>
 									</tr>
 									<tr>
 										<td>3</td>
 										<td>HB</td>
 										<td>DIRTY</td>
-										<td>Poor Rigtheous</td>
-										<td>03/01/2017</td>
-										<td>03/02/2017</td>
-										<td>03/03/2017</td>
+										<td>Poor Righteous</td>
+										<td>2017-03-01</td>
+										<td>2017-03-02</td>
+										<td>2017-03-03</td>
+										<td>2017-03-04</td>
+										<td>Rams Head Tavern</td>
 										<td>Little Dented</td>
 									</tr>
 									<tr>
@@ -112,29 +231,155 @@
 										<td>QB</td>
 										<td>CLEAN</td>
 										<td>Feed the Monkey</td>
-										<td>02/01/2017</td>
-										<td>02/02/2017</td>
-										<td>02/03/2017</td>
+										<td>2017-02-01</td>
+										<td>2017-02-02</td>
+										<td>2017-02-03</td>
+										<td>2017-02-04</td>
+										<td>Greene Turtle</td>
 										<td></td>
 									</tr>
 									<tr>
 										<td>2</td>
-										<td>QB</td>
+										<td>HB</td>
 										<td>DIRTY</td>
 										<td>Smoke</td>
-										<td>03/01/2017</td>
-										<td>03/02/2017</td>
-										<td>03/03/2017</td>
+										<td>2017-03-02</td>
+										<td>2017-03-03</td>
+										<td>2017-03-04</td>
+										<td></td>
+										<td></td>
 										<td></td>
 									</tr>
 									<tr>
-										<td>10</td>
+										<td>32</td>
+										<td>QB</td>
+										<td>FULL INV</td>
+										<td>Poor Righteous</td>
+										<td>2016-03-03</td>
+										<td>2016-03-04</td>
+										<td>2016-03-05</td>
+										<td>2016-03-06</td>
+										<td>Rams Head Tavern</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>15</td>
 										<td>HB</td>
 										<td>FULL INV</td>
-										<td>Poor Rigtheous</td>
-										<td>03/01/2016</td>
-										<td>03/02/2016</td>
-										<td>03/03/2016</td>
+										<td>Poor Righteous</td>
+										<td>2016-03-04</td>
+										<td>2016-03-05</td>
+										<td>2016-03-06</td>
+										<td>2016-03-07</td>
+										<td>Tubbys Diner</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>12</td>
+										<td>HB</td>
+										<td>FULL INV</td>
+										<td>Poor Righteous</td>
+										<td>2016-03-05</td>
+										<td>2016-03-06</td>
+										<td>2016-03-07</td>
+										<td>2016-03-08</td>
+										<td>Greene Turtle</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>110</td>
+										<td>HB</td>
+										<td>FULL INV</td>
+										<td>Poor Righteous</td>
+										<td>2016-03-06</td>
+										<td>2016-03-07</td>
+										<td>2016-03-08</td>
+										<td>2016-03-09</td>
+										<td>Rams Head Tavern</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>25</td>
+										<td>HB</td>
+										<td>FULL INV</td>
+										<td>Poor Righteous</td>
+										<td>2016-03-07</td>
+										<td>2016-03-08</td>
+										<td>2016-03-09</td>
+										<td>2016-03-10</td>
+										<td>Greene Turtle</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>24</td>
+										<td>HB</td>
+										<td>FULL INV</td>
+										<td>Poor Righteous</td>
+										<td>2016-03-08</td>
+										<td>2016-03-09</td>
+										<td>2016-03-10</td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>17</td>
+										<td>HB</td>
+										<td>FULL INV</td>
+										<td>Poor Righteous</td>
+										<td>2016-03-09</td>
+										<td>2016-03-10</td>
+										<td>2016-03-11</td>
+										<td>2016-03-12</td>
+										<td>Tubbys Diner</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>84</td>
+										<td>HB</td>
+										<td>FULL INV</td>
+										<td>Poor Righteous</td>
+										<td>2016-03-10</td>
+										<td>2016-03-11</td>
+										<td>2016-03-12</td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>92</td>
+										<td>HB</td>
+										<td>FULL INV</td>
+										<td>Poor Righteous</td>
+										<td>2016-03-11</td>
+										<td>2016-03-12</td>
+										<td>2016-03-13</td>
+										<td>2016-03-14</td>
+										<td>Greene Turtle</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>55</td>
+										<td>HB</td>
+										<td>FULL INV</td>
+										<td>Poor Righteous</td>
+										<td>2016-03-01</td>
+										<td>2016-03-02</td>
+										<td>2016-03-03</td>
+										<td>2016-03-04</td>
+										<td>Rams Head Tavern</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>44</td>
+										<td>HB</td>
+										<td>FULL INV</td>
+										<td>Poor Righteous</td>
+										<td>2016-03-13</td>
+										<td>2016-03-14</td>
+										<td>2016-03-15</td>
+										<td>2016-03-16</td>
+										<td>Greene Turtle</td>
 										<td></td>
 									</tr>
 								</tbody>
@@ -145,7 +390,7 @@
 					</div>
 					<!-- /.panel -->
 				</div>
-				<!-- /.col-lg-12 -->
+				<!-- /.col -->
 			</div>
 			<!-- /.row -->
 	{% endblock %}
@@ -159,13 +404,322 @@
 		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/dataTables.responsive.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/responsive.bootstrap.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Scroller-1.4.2/js/dataTables.scroller.min.js')}}"></script>
-		
-		<!-- Inventory Table -->
+		<script src="{{url_for('static', filename='bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script> 
+
 		<script>
-		$(document).ready(function() {
-			$('#dataTables-inventory').DataTable({
-				responsive: true
+		/* Custom filtering function which will search data between two values */
+		$.fn.dataTable.ext.search.push(function(settings, data, dataIndex){
+			// time in datapicker
+			var startTimeIn = Date.parse($("#input_keg_timeIn_start").val());
+			var endTimeIn   = Date.parse($("#input_keg_timeIn_end").val());
+			var datesTimeIn = Date.parse(data[4]); 
+			var boolTimeIn  = false;
+
+			// time cleaned datapicker
+			var startTimeCleaned = Date.parse($("#input_keg_timeCleaned_start").val());
+			var endTimeCleaned   = Date.parse($("#input_keg_timeCleaned_end").val());
+			var datesTimeCleaned = Date.parse(data[5]); 
+			var boolTimeCleaned  = false;
+
+			// time filled datapicker
+			var startTimeFilled = Date.parse($("#input_keg_timeFilled_start").val());
+			var endTimeFilled   = Date.parse($("#input_keg_timeFilled_end").val());
+			var datesTimeFilled = Date.parse(data[6]); 
+			var boolTimeFilled  = false;
+			
+			// time shipped datapicker
+			var startTimeShipped = Date.parse($("#input_keg_timeShipped_start").val());
+			var endTimeShipped   = Date.parse($("#input_keg_timeShipped_end").val());
+			var datesTimeShipped = Date.parse(data[7]); 
+			var boolTimeShipped  = false;
+
+			// determine if inventory entry fulfills time in search criteria
+			if (( isNaN(startTimeIn) && isNaN(endTimeIn) ) ||
+			( !isNaN(datesTimeIn) && isNaN(startTimeIn) && datesTimeIn <= endTimeIn ) ||
+			( !isNaN(datesTimeIn) && startTimeIn <= datesTimeIn && isNaN(endTimeIn) ) ||
+			( !isNaN(datesTimeIn) && startTimeIn <= datesTimeIn && datesTimeIn <= endTimeIn ))
+			{
+				boolTimeIn = true;	
+			}
+			
+			// determine if inventory entry fulfills time cleaned search criteria
+			if (( isNaN(startTimeCleaned) && isNaN(endTimeCleaned) ) ||
+			( !isNaN(datesTimeCleaned) && isNaN(startTimeCleaned) && datesTimeCleaned <= endTimeCleaned ) ||
+			( !isNaN(datesTimeCleaned) && startTimeCleaned <= datesTimeCleaned && isNaN(endTimeCleaned) ) ||
+			( !isNaN(datesTimeCleaned) && startTimeCleaned <= datesTimeCleaned && datesTimeCleaned <= endTimeCleaned ))
+			{
+				boolTimeCleaned = true;	
+			}
+
+			// determine if inventory entry fulfills time filled search criteria
+			if (( isNaN(startTimeFilled) && isNaN(endTimeFilled) ) ||
+			( !isNaN(datesTimeFilled) && isNaN(startTimeFilled) && datesTimeFilled <= endTimeFilled ) ||
+			( !isNaN(datesTimeFilled) && startTimeFilled <= datesTimeFilled && isNaN(endTimeFilled) ) ||
+			( !isNaN(datesTimeFilled) && startTimeFilled <= datesTimeFilled && datesTimeFilled <= endTimeFilled ))
+			{
+				boolTimeFilled = true;	
+			}				
+
+			// determine if inventory entry fulfills time shipped search criteria
+			if (( isNaN(startTimeShipped) && isNaN(endTimeShipped) ) ||
+			( !isNaN(datesTimeShipped) && isNaN(startTimeShipped) && datesTimeShipped <= endTimeShipped ) ||
+			( !isNaN(datesTimeShipped) && startTimeShipped <= datesTimeShipped && isNaN(endTimeShipped) ) ||
+			( !isNaN(datesTimeShipped) && startTimeShipped <= datesTimeShipped && datesTimeShipped <= endTimeShipped ))
+			{
+				boolTimeShipped = true;	
+			}
+
+			return boolTimeIn && boolTimeCleaned && boolTimeFilled && boolTimeShipped;
+		});
+
+		// executes when document is done loading
+		$(document).ready(function(){
+			// builds an inventory datatable 
+			var table = $("#inventory_table").DataTable({
+				"responsive": true,
+				"pagingType": "full_numbers",
+				"initComplete": function()
+				{
+					// populates keg type search with available types
+					this.api().column(1).data().unique().sort().each(function(value, index){
+						if (value !== "") 
+						{
+							$("#input_keg_type").append("<option>" + value + "</option>");
+						}
+					});
+
+					// populates keg status search with available statuses
+					this.api().column(2).data().unique().sort().each(function(value, index){
+						if (value !== "") 
+						{
+							$("#input_keg_status").append("<option>" + value + "</option>");
+    					}
+    				});
+
+    				// populates keg beer brand search with available brands
+					this.api().column(3).data().unique().sort().each(function(value, index){
+						if (value !== "") 
+						{
+							$("#input_keg_brand").append("<option>" + value + "</option>");
+    					}
+    				});
+
+    				// populates customer search with available customers
+					this.api().column(8).data().unique().sort().each(function(value, index){
+						if (value !== "") 
+						{
+							$("#input_customer").append("<option>" + value + "</option>");
+						}
+    				});
+				}
+			});
+
+			// Time-In datepicker
+			$("#input_keg_timeIn").datepicker({
+				"format": "yyyy-mm-dd",
+				"autoclose": true,
+				"todayHighlight": true,
+				"disableTouchKeyboard": true,
+				"clearBtn": true
+			});
+
+			// Time-Cleaned datepicker
+			$("#input_keg_timeCleaned").datepicker({
+				"format": "yyyy-mm-dd",
+				"autoclose": true,
+				"todayHighlight": true,
+				"disableTouchKeyboard": true,
+				"clearBtn": true
+			});
+
+			// Time-Filled datepicker
+			$("#input_keg_timeFilled").datepicker({
+				"format": "yyyy-mm-dd",
+				"autoclose": true,
+				"todayHighlight": true,
+				"disableTouchKeyboard": true,
+				"clearBtn": true
+			});
+
+			// Time-Shipped datepicker
+			$("#input_keg_timeShipped").datepicker({
+				"format": "yyyy-mm-dd",
+				"autoclose": true,
+				"todayHighlight": true,
+				"disableTouchKeyboard": true,
+				"clearBtn": true
+			});
+
+			// search button functionality
+			var btn_count = 0;
+			$("#advanced_search_btn").click(function(event){
+				if((btn_count != 0) && (btn_count % 2 == 1))
+				{
+					// clear date pickers
+					$("#input_keg_timeIn_start").datepicker("update","");
+					$("#input_keg_timeIn_end").datepicker("update","");
+					$("#input_keg_timeCleaned_start").datepicker("update","");
+					$("#input_keg_timeCleaned_end").datepicker("update","");
+					$("#input_keg_timeFilled_start").datepicker("update","");
+					$("#input_keg_timeFilled_end").datepicker("update","");
+					$("#input_keg_timeShipped_start").datepicker("update","");
+					$("#input_keg_timeShipped_end").datepicker("update","");
+					
+					// clear 'id' and 'notes' text input
+					$("#input_keg_id").val("");
+					$("#input_keg_notes").val("");
+
+					// clears advanced search
+					table.search("").columns().search("").draw();
+				}
+
+				btn_count++;
+			});
+
+			// keyup event for id = input_keg_id
+			$("#input_keg_id").keyup(function(event){
+				// searches table according to value then redraws table
+				table.column(0).search($("#input_keg_id").val()).draw(); 
+			});
+
+			// change event for id = input_keg_type
+			$("#input_keg_type").change(function(event){
+				var val = $("#input_keg_type").val();
+				var searchCriteria = "";
+
+				// if non-empty
+				if(val)
+				{
+					searchCriteria += "^";
+
+					for (var i = 0; i < val.length; i++) 
+					{
+						if((i != 0))
+						{
+							searchCriteria += "|";
+						}
+
+						searchCriteria += val[i];
+					}
+
+					searchCriteria += "$";
+				}
+
+				// 'regex' but not 'smart' search
+				table.column(1).search(searchCriteria, true, false).draw();
+			});
+
+			// change event for id = input_keg_status
+			$("#input_keg_status").change(function(event){
+				var val = $("#input_keg_status").val();
+				var searchCriteria = "";
+
+				// if non-empty
+				if(val)
+				{
+					searchCriteria += "^";
+
+					for (var i = 0; i < val.length; i++) 
+					{
+						if((i != 0))
+						{
+							searchCriteria += "|";
+						}
+
+						searchCriteria += val[i];
+					}
+
+					searchCriteria += "$";
+				}
+
+				// 'regex' but not 'smart' search
+				table.column(2).search(searchCriteria, true, false).draw();
+			});
+
+			// change event for id = input_keg_brand
+			$("#input_keg_brand").change(function(event){
+				var val = $("#input_keg_brand").val();
+				var searchCriteria = "";
+
+				// if non-empty
+				if(val)
+				{
+					searchCriteria += "^";
+
+					for (var i = 0; i < val.length; i++) 
+					{
+						if((i != 0))
+						{
+							searchCriteria += "|";
+						}
+
+						searchCriteria += val[i];
+					}
+
+					searchCriteria += "$";
+				}
+
+				// 'regex' but not 'smart' search
+				table.column(3).search(searchCriteria, true, false).draw();
+			});
+
+			// date change event for id = input_keg_timeIn
+			$("#input_keg_timeIn").datepicker().on('changeDate', function (event){
+				table.draw();
+			});			
+
+			// date change event for id = input_keg_timeCleaned
+			$("#input_keg_timeCleaned").datepicker().on('changeDate', function (event){
+				table.draw();
+			});
+
+			// date change event for id = input_keg_timeFilled
+			$("#input_keg_timeFilled").datepicker().on('changeDate', function (event){
+				table.draw();
+			});	
+
+			// date change event for id = input_keg_timeShipped
+			$("#input_keg_timeShipped").datepicker().on('changeDate', function (event){
+				table.draw();
+			});
+
+			// change event for id = input_keg_brand
+			$("#input_customer").change(function(event){
+				var val = $("#input_customer").val();
+				var searchCriteria = "";
+
+				// if non-empty
+				if(val)
+				{
+					searchCriteria += "^";
+
+					for (var i = 0; i < val.length; i++) 
+					{
+						if((i != 0))
+						{
+							searchCriteria += "|";
+						}
+
+						searchCriteria += val[i];
+					}
+
+					searchCriteria += "$";
+				}
+
+				// 'regex' but not 'smart' search
+				table.column(8).search(searchCriteria, true, false).draw();
+			});
+
+			// keyup event for id = input_keg_id
+			$("#input_keg_notes").keyup(function(event){
+				// searches table according to value then redraws table
+				table.column(9).search($("#input_keg_notes").val()).draw(); 
 			});
 		});
 		</script>
 	{% endblock %}
+
+
+
+
+
