@@ -55,12 +55,13 @@
 					
 					<div class="panel-collapse collapse" id="collapsible_advanced_search">
 						<div class="panel-body">
-							<div class="row">
+							<div class="row" style="margin-bottom: 15px;">
 								<div class="col col-xs-12 col-sm-6">
 									<label>Keg ID</label>
 									<div class="input-group" id="input_group_id">
-										<span class="input-group-addon" id="addon_id">ID</span>
-										<input type="text" class="form-control" placeholder="Search ID" id="input_keg_id">
+										<input type="text" class="input-sm form-control" placeholder="Min ID" id="input_keg_id_min" style="text-align: center;">
+										<div class="input-group-addon">to</div>
+										<input type="text" class="input-sm form-control" placeholder="Max ID" id="input_keg_id_max" style="text-align: center;">
 									</div>
 									<!-- /.input-group -->
 								</div>
@@ -70,7 +71,7 @@
 									<label>Notes</label>
 									<div class="input-group" id="input_group_notes">
 										<span class="input-group-addon" id="addon_id">Notes</span>
-										<input type="text" class="form-control" placeholder="Search Notes" id="input_keg_notes">
+										<input type="text" class="input-sm form-control" placeholder="Search Notes" id="input_keg_notes" style="text-align: center;">
 									</div>
 									<!-- /.input-group -->
 								</div>
@@ -78,7 +79,7 @@
 							</div>
 							<!-- /.row -->
 
-							<div class="row">
+							<div class="row" style="margin-bottom: 15px;">
 								<div class="col col-xs-12 col-sm-6 col-lg-3">
 									<label>Time In</label>
 									<div class="input-daterange input-group" id="input_keg_timeIn">
@@ -433,6 +434,11 @@
 			var datesTimeShipped = Date.parse(data[7]); 
 			var boolTimeShipped  = false;
 
+			var id_min = parseInt($("#input_keg_id_min").val(), 10);
+			var id_max = parseInt($("#input_keg_id_max").val(), 10);
+			var ids    = parseInt(data[0], 10);
+			var boolID = false;
+
 			// determine if inventory entry fulfills time in search criteria
 			if (( isNaN(startTimeIn) && isNaN(endTimeIn) ) ||
 			( !isNaN(datesTimeIn) && isNaN(startTimeIn) && datesTimeIn <= endTimeIn ) ||
@@ -469,7 +475,16 @@
 				boolTimeShipped = true;	
 			}
 
-			return boolTimeIn && boolTimeCleaned && boolTimeFilled && boolTimeShipped;
+			// determine if inventory entry fulfills id search criteria
+			if (( isNaN(id_min) && isNaN(id_max) ) ||
+			( !isNaN(ids) && isNaN(id_min) && ids <= id_max ) ||
+			( !isNaN(ids) && id_min <= ids && isNaN(id_max) ) ||
+			( !isNaN(ids) && id_min <= ids && ids <= id_max ))
+			{
+				boolID = true;	
+			}
+
+			return boolTimeIn && boolTimeCleaned && boolTimeFilled && boolTimeShipped && boolID;
 		});
 
 		// executes when document is done loading
@@ -566,7 +581,8 @@
 					$("#input_keg_timeShipped_end").datepicker("update","");
 					
 					// clear 'id' and 'notes' text input
-					$("#input_keg_id").val("");
+					$("#input_keg_id_min").val("");
+					$("#input_keg_id_max").val("");
 					$("#input_keg_notes").val("");
 
 					// clears advanced search
@@ -576,10 +592,9 @@
 				btn_count++;
 			});
 
-			// keyup event for id = input_keg_id
-			$("#input_keg_id").keyup(function(event){
-				// searches table according to value then redraws table
-				table.column(0).search($("#input_keg_id").val()).draw(); 
+			// keyup event for id = input_keg_id_min and input_keg_id_max
+			$("#input_keg_id_min, #input_keg_id_max").keyup(function(event){
+				table.draw();
 			});
 
 			// change event for id = input_keg_type
