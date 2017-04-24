@@ -7,12 +7,14 @@
 	{% block stylesheets %}
  <!-- DataTables CSS -->
 		<link href="{{url_for('static', filename='DataTables/DataTables-1.10.13/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+  <!-- <link href="{{url_for('static', filename='DataTables/Buttons-1.2.4/css/buttons.bootstrap.min.css')}}" rel="stylesheet">-->
 		<link href="{{url_for('static', filename='DataTables/ColReorder-1.3.2/css/colReorder.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/Responsive-2.1.1/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/Scroller-1.4.2/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
+   <link href="{{url_for('static', filename='DataTables/Select-1.2.0/css/select.bootstrap.min.css')}}" rel="stylesheet">
+   
    <!-- style of textarea
-  <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
   {% endblock %}
  <!-- **************************************************************** -->  
 <!-- **************************************************************** -->
@@ -58,7 +60,7 @@
  <!-- **************************************************************** -->
  <!-- Body of hidden textbox and scan buttons -->
 	{% block body %}
-  <div class="row">
+  <div class="row1">
 				<div class="col-lg-12">
 					<div class="panel panel-default">
 						
@@ -178,6 +180,8 @@
 
 <!-- **************************************************************** -->
 <button type="button" id="delete" class="btn btn-danger">Delete</button>
+<button type="button" id="edit" class="btn btn-warning">Edit</button>
+<button type="button" id="add" class="btn btn-primary">Add</button>
 </div>
 <!-- /.panel -->
 				</div>
@@ -194,11 +198,13 @@
   		<!-- DataTables JavaScript -->
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/jquery.dataTables.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/dataTables.bootstrap.min.js')}}"></script>
+   <!--<script src="{{url_for('static', filename='DataTables/Buttons-1.2.4/js/dataTables.buttons.min.js')}}"></script>-->
 		<script src="{{url_for('static', filename='DataTables/ColReorder-1.3.2/js/dataTables.colReorder.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/dataTables.responsive.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/responsive.bootstrap.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Scroller-1.4.2/js/dataTables.scroller.min.js')}}"></script>
+   <script src="{{url_for('static', filename='DataTables/Select-1.2.0/js/dataTables.select.min.js')}}"></script>
  <!-------Added Scripts------------>
  
 <!-----  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -258,14 +264,28 @@ var rowValue="<td><input type='checkbox' name='record'></td>"
 <!-------Delete button------------>
 <!-------Deletes selected row from unidentified keg table ------------>
     $("#delete").click(function(){
-            $('#dataTables-inventory1').find('input[name="record"]').each(function(){
-            	if($(this).is(":checked")){
-                    $(this).closest("tr").remove();
-                }
-            });
+            ($('#dataTables-inventory1').DataTable()).row('.selected').remove().draw( false );
     });
 });<!-- noconflict -->
 </script> 
+<!-- <script> 
+$(document).ready(function() {
+ 
+    $('#dataTables-inventory1 tbody').on( 'click', 'tr', function () {
+        if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+        }
+        else {
+            ($('#dataTables-inventory1').DataTable()).$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    } );
+ 
+    $('#delete').click( function () {
+        ($('#dataTables-inventory1').DataTable()).row('.selected').remove().draw( false );
+    } );
+} );
+</script> -->
 <!--************************************************-->
 <!--************************************************-->
 	<!-- Inventory Table -->
@@ -278,7 +298,8 @@ var rowValue="<td><input type='checkbox' name='record'></td>"
             'margin-top': '20px'});
   
 			$('#dataTables-inventory').DataTable({
-				responsive: true
+				responsive: true,
+        select: true
 			});
       <!-- Unidentified Kegs Table -->
       $('.panel-heading1').css({
@@ -287,7 +308,8 @@ var rowValue="<td><input type='checkbox' name='record'></td>"
             'margin-top': '20px'});
   
 			$('#dataTables-inventory1').DataTable({
-				responsive: true
+				responsive: true,
+        select: true
 			});
 		});
 		</script>
