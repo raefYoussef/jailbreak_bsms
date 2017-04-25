@@ -10,6 +10,7 @@
 		<link href="{{url_for('static', filename='DataTables/Responsive-2.1.1/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/Scroller-1.4.2/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='bootstrap-multiselect/css/bootstrap-multiselect.css')}}" rel="stylesheet">
 	{% endblock %}
 	
 	{% block account_name %}{{ account_name }}{% endblock %}
@@ -55,8 +56,8 @@
 					
 					<div class="panel-collapse collapse" id="collapsible_advanced_search">
 						<div class="panel-body">
-							<div class="row" style="margin-bottom: 15px;">
-								<div class="col col-xs-12 col-sm-6">
+							<div class="row">
+								<div class="col col-xs-12 col-sm-6" style="margin-bottom: 15px;">
 									<label>Keg ID</label>
 									<div class="input-group" id="input_group_id">
 										<input type="text" class="input-sm form-control" placeholder="Min ID" id="input_keg_id_min" style="text-align: center;">
@@ -67,7 +68,7 @@
 								</div>
 								<!-- /.col -->
 
-								<div class="col col-xs-12 col-sm-6">
+								<div class="col col-xs-12 col-sm-6" style="margin-bottom: 15px;">
 									<label>Notes</label>
 									<div class="input-group" id="input_group_notes">
 										<span class="input-group-addon" id="addon_id">Notes</span>
@@ -79,51 +80,8 @@
 							</div>
 							<!-- /.row -->
 
-							<div class="row" style="margin-bottom: 15px;">
-								<div class="col col-xs-12 col-sm-6 col-lg-3">
-									<label>Time In</label>
-									<div class="input-daterange input-group" id="input_keg_timeIn">
-										<input type="text" class="input-sm form-control" id="input_keg_timeIn_start" placeholder="Start Date">
-										<div class="input-group-addon">to</div>
-										<input type="text" class="input-sm form-control" id="input_keg_timeIn_end" placeholder="End Date">
-									</div>
-								</div>
-								<!-- /.col -->
-
-								<div class="col col-xs-12 col-sm-6 col-lg-3">
-									<label>Time Cleaned</label>
-									<div class="input-daterange input-group" id="input_keg_timeCleaned">
-										<input type="text" class="input-sm form-control" id="input_keg_timeCleaned_start" placeholder="Start Date">
-										<div class="input-group-addon">to</div>
-										<input type="text" class="input-sm form-control" id="input_keg_timeCleaned_end" placeholder="End Date">
-									</div>
-								</div>
-								<!-- /.col -->
-
-								<div class="col col-xs-12 col-sm-6 col-lg-3">
-									<label>Time Filled</label>
-									<div class="input-daterange input-group" id="input_keg_timeFilled">
-										<input type="text" class="input-sm form-control" id="input_keg_timeFilled_start" placeholder="Start Date">
-										<div class="input-group-addon">to</div>
-										<input type="text" class="input-sm form-control" id="input_keg_timeFilled_end" placeholder="End Date">
-									</div>
-								</div>
-								<!-- /.col -->
-
-								<div class="col col-xs-12 col-sm-6 col-lg-3">
-									<label>Time Shipped</label>
-									<div class="input-daterange input-group" id="input_keg_timeShipped">
-										<input type="text" class="input-sm form-control" id="input_keg_timeShipped_start" placeholder="Start Date">
-										<div class="input-group-addon">to</div>
-										<input type="text" class="input-sm form-control" id="input_keg_timeShipped_end" placeholder="End Date">
-									</div>
-								</div>
-								<!-- /.col -->
-							</div>
-							<!-- /.row -->
-
 							<div class="row">
-								<div class="col col-xs-12 col-sm-6 col-lg-3">
+								<div class="col col-xs-12 col-sm-6 col-lg-3" style="margin-bottom: 15px;">
 									<label>Keg Type</label>
 									<div class="input-group" id="input_group_type">
 										<span class="input-group-addon" id="addon_type">Type</span>
@@ -134,7 +92,7 @@
 								</div>
 								<!-- /.col -->
 
-								<div class="col col-xs-12 col-sm-6 col-lg-3">
+								<div class="col col-xs-12 col-sm-6 col-lg-3" style="margin-bottom: 15px;">
 									<label>Keg Status</label>
 									<div class="input-group" id="input_group_status">
 										<span class="input-group-addon" id="addon_status">Status</span>
@@ -145,7 +103,7 @@
 								</div>
 								<!-- /.col -->
 
-								<div class="col col-xs-12 col-sm-6 col-lg-3">
+								<div class="col col-xs-12 col-sm-6 col-lg-3" style="margin-bottom: 15px;">
 									<label>Beer Brand</label>
 									<div class="input-group" id="input_group_brand">
 										<span class="input-group-addon" id="addon_brand">Brand</span>
@@ -156,7 +114,7 @@
 								</div>
 								<!-- /.col -->
 
-								<div class="col col-xs-12 col-sm-6 col-lg-3">
+								<div class="col col-xs-12 col-sm-6 col-lg-3" style="margin-bottom: 15px;">
 									<label>Customer</label>
 									<div class="input-group" id="input_group_brand">
 										<span class="input-group-addon" id="addon_brand">Name</span>
@@ -164,6 +122,49 @@
 										</select>
 									</div>
 									<!-- /.input-group -->
+								</div>
+								<!-- /.col -->
+							</div>
+							<!-- /.row -->
+
+							<div class="row">
+								<div class="col col-xs-12 col-sm-6 col-lg-3" style="margin-bottom: 15px;">
+									<label>Time In</label>
+									<div class="input-daterange input-group" id="input_keg_timeIn">
+										<input type="text" class="input-sm form-control" id="input_keg_timeIn_start" placeholder="Start Date">
+										<div class="input-group-addon">to</div>
+										<input type="text" class="input-sm form-control" id="input_keg_timeIn_end" placeholder="End Date">
+									</div>
+								</div>
+								<!-- /.col -->
+
+								<div class="col col-xs-12 col-sm-6 col-lg-3" style="margin-bottom: 15px;">
+									<label>Time Cleaned</label>
+									<div class="input-daterange input-group" id="input_keg_timeCleaned">
+										<input type="text" class="input-sm form-control" id="input_keg_timeCleaned_start" placeholder="Start Date">
+										<div class="input-group-addon">to</div>
+										<input type="text" class="input-sm form-control" id="input_keg_timeCleaned_end" placeholder="End Date">
+									</div>
+								</div>
+								<!-- /.col -->
+
+								<div class="col col-xs-12 col-sm-6 col-lg-3" style="margin-bottom: 15px;">
+									<label>Time Filled</label>
+									<div class="input-daterange input-group" id="input_keg_timeFilled">
+										<input type="text" class="input-sm form-control" id="input_keg_timeFilled_start" placeholder="Start Date">
+										<div class="input-group-addon">to</div>
+										<input type="text" class="input-sm form-control" id="input_keg_timeFilled_end" placeholder="End Date">
+									</div>
+								</div>
+								<!-- /.col -->
+
+								<div class="col col-xs-12 col-sm-6 col-lg-3" style="margin-bottom: 15px;">
+									<label>Time Shipped</label>
+									<div class="input-daterange input-group" id="input_keg_timeShipped">
+										<input type="text" class="input-sm form-control" id="input_keg_timeShipped_start" placeholder="Start Date">
+										<div class="input-group-addon">to</div>
+										<input type="text" class="input-sm form-control" id="input_keg_timeShipped_end" placeholder="End Date">
+									</div>
 								</div>
 								<!-- /.col -->
 							</div>
@@ -406,6 +407,7 @@
 		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/responsive.bootstrap.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Scroller-1.4.2/js/dataTables.scroller.min.js')}}"></script>
 		<script src="{{url_for('static', filename='bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script> 
+		<script src="{{url_for('static', filename='bootstrap-multiselect/js/bootstrap-multiselect.js')}}"></script> 
 
 		<script>
 		/* Custom filtering function which will search data between two values */
@@ -565,21 +567,50 @@
 				"clearBtn": true
 			});
 
+			// Keg Type Multiselect
+			$("#input_keg_type").multiselect({
+				"includeSelectAllOption": true,
+				"numberDisplayed": 1,
+				"buttonWidth": "100%"
+			});
+
+			// Keg Status Multiselect
+			$("#input_keg_status").multiselect({
+				"includeSelectAllOption": true,
+				"numberDisplayed": 1,
+				"buttonWidth": "100%"
+			});
+
+			// Beer Brand Multiselect
+			$("#input_keg_brand").multiselect({
+				"includeSelectAllOption": true,
+				"numberDisplayed": 1,
+				"buttonWidth": "100%"
+			});
+
+			// Customer Multiselect
+			$("#input_customer").multiselect({
+				"includeSelectAllOption": true,
+				"numberDisplayed": 1,
+				"buttonWidth": "100%"
+			});
+
 			// search button functionality
 			var btn_count = 0;
 			$("#advanced_search_btn").click(function(event){
 				if((btn_count != 0) && (btn_count % 2 == 1))
 				{
+					// button deselect
 					// clear date pickers
-					$("#input_keg_timeIn_start").datepicker("update","");
-					$("#input_keg_timeIn_end").datepicker("update","");
-					$("#input_keg_timeCleaned_start").datepicker("update","");
-					$("#input_keg_timeCleaned_end").datepicker("update","");
-					$("#input_keg_timeFilled_start").datepicker("update","");
-					$("#input_keg_timeFilled_end").datepicker("update","");
-					$("#input_keg_timeShipped_start").datepicker("update","");
-					$("#input_keg_timeShipped_end").datepicker("update","");
-					
+					$("#input_keg_timeIn_start").datepicker("clearDates");
+					$("#input_keg_timeIn_end").datepicker("clearDates");
+					$("#input_keg_timeCleaned_start").datepicker("clearDates");
+					$("#input_keg_timeCleaned_end").datepicker("clearDates");
+					$("#input_keg_timeFilled_start").datepicker("clearDates");
+					$("#input_keg_timeFilled_end").datepicker("clearDates");
+					$("#input_keg_timeShipped_start").datepicker("clearDates");
+					$("#input_keg_timeShipped_end").datepicker("clearDates");
+
 					// clear 'id' and 'notes' text input
 					$("#input_keg_id_min").val("");
 					$("#input_keg_id_max").val("");
@@ -587,6 +618,20 @@
 
 					// clears advanced search
 					table.search("").columns().search("").draw();
+				}
+
+				if(btn_count % 2 == 0)
+				{
+					// button select
+					// clear multiselect
+					$("#input_keg_type").multiselect("selectAll", false);
+					$("#input_keg_type").multiselect("updateButtonText");
+					$("#input_keg_status").multiselect("selectAll", false);
+					$("#input_keg_status").multiselect("updateButtonText");
+					$("#input_keg_brand").multiselect("selectAll", false);
+					$("#input_keg_brand").multiselect("updateButtonText");
+					$("#input_customer").multiselect("selectAll", false);
+					$("#input_customer").multiselect("updateButtonText");
 				}
 
 				btn_count++;
