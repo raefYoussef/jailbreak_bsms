@@ -1,0 +1,327 @@
+{% extends "blank_template.html" %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->	
+	{% block page_title %} Edit Inventory {% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->	
+	{% block stylesheets %}
+ <!-- DataTables CSS -->
+		<link href="{{url_for('static', filename='DataTables/DataTables-1.10.13/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/ColReorder-1.3.2/css/colReorder.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/Responsive-2.1.1/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/Scroller-1.4.2/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
+   <!-- style of textarea
+  <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+  {% endblock %}
+ <!-- **************************************************************** -->  
+<!-- **************************************************************** -->
+	
+	{% block account_name %} {{ account_name }} {% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->	
+	{% block sidebar %}
+		<li>
+			<a href="/dashboard/"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+		</li>
+		<li>
+			<a href="/view_inventory/"><i class="fa fa-fw fa-table"></i> View Inventory</a>
+		</li>
+		<li class="active">
+			<a href="/edit_inventory/"><i class="fa fa-fw fa-edit"></i> Edit Inventory</a>
+		</li>
+		<li>
+			<a href="/logistics/"><i class="fa fa-fw fa-bar-chart-o"></i> Logistics</a>
+		</li>
+	{% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->
+	{% block page_heading %} Edit Inventory {% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->	
+	{% block page_subheading %}{% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->	
+	{% block breadcrumbs %}
+		<li>
+			<i class="fa fa-dashboard"></i> <a href="/dashboard/">Dashboard</a>
+		</li>
+		<li class="active">
+			<i class="fa fa-edit"></i> Edit Inventory
+		</li>
+	{% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->
+	{% block alerts %}{% endblock %}
+ <!-- **************************************************************** -->  
+<!-- **************************************************************** -->
+ <!-- **************************************************************** -->
+ <!-- Body of hidden textbox and scan buttons -->
+	{% block body %}
+  <div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						
+<!-------Text area to enter tags------------>
+
+<h3>Please Scan Tags Here</h3>
+
+<textarea id="tag" disabled autofocus style="width:99%" col="5" placeholder="Scanned RFID tag numbers go here."></textarea>
+<!-------start scan button------------>
+<button type="button" id="start" class="btn btn-success">Start Scan</button>
+<!-------stop scan button------------>
+<button type="button" id="stop" class="btn btn-danger" disabled>Stop Scan</button>
+
+<!-- **********************Table*********************************** -->
+<div class="panel-heading">
+							Inventory
+						</div>
+						<!-- /.panel-heading -->
+<div class="panel-body">
+							<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-inventory">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Keg Type</th>
+										<th>Status</th>
+										<th>Beer Brand</th>
+										<th>Time In</th>
+										<th>Time Cleaned</th>
+										<th>Time Filled</th>
+										<th>Note</th>
+								    </tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>1</td>
+										<td>QB</td>
+										<td>FULL OUT</td>
+										<td>Feed the Monkey</td>
+										<td>03/25/2017</td>	
+										<td>03/26/2017</td>
+										<td>03/27/2017</td>
+										<td></th>
+									</tr>
+									<tr>
+										<td>3</td>
+										<td>HB</td>
+										<td>DIRTY</td>
+										<td>Poor Rigtheous</td>
+										<td>03/01/2017</td>
+										<td>03/02/2017</td>
+										<td>03/03/2017</td>
+										<td>Little Dented</td>
+									</tr>
+									<tr>
+										<td>4</td>
+										<td>QB</td>
+										<td>CLEAN</td>
+										<td>Feed the Monkey</td>
+										<td>02/01/2017</td>
+										<td>02/02/2017</td>
+										<td>02/03/2017</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>2</td>
+										<td>QB</td>
+										<td>DIRTY</td>
+										<td>Smoke</td>
+										<td>03/01/2017</td>
+										<td>03/02/2017</td>
+										<td>03/03/2017</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>10</td>
+										<td>HB</td>
+										<td>FULL INV</td>
+										<td>Poor Rigtheous</td>
+										<td>03/01/2016</td>
+										<td>03/02/2016</td>
+										<td>03/03/2016</td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+							<!-- /.table-responsive -->
+						</div>
+						<!-- /.panel-body -->
+
+<!-- **************************************************************** -->
+
+<!-- **********************Table for Raw Scanned RFIDs*********************************** -->
+<div class="panel-heading1">
+							Unidentified Kegs
+						</div>
+						<!-- /.panel-heading -->
+<div class="panel-body1">
+			<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-inventory1">
+								<thead>
+									<tr>
+                    <th>Select</th>
+										<th>#</th>
+										<th>Scanned RFID Tag Numbers</th>
+								    </tr>
+								</thead>
+								<tbody>
+									<tr>
+                    <td><input type="checkbox" name="record"></td>
+                    <td>0</td>
+                    <td>0123456789</td>
+                  </tr>
+								</tbody>
+							</table>
+							<!-- /.table-responsive1 -->
+						</div>
+						<!-- /.panel-body1 -->
+
+<!-- **************************************************************** -->
+<button type="button" id="delete" class="btn btn-danger">Delete</button>
+</div>
+<!-- /.panel -->
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+  
+
+  {% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->
+	{% block scripts %}
+ <!--Global var for counter -->
+  		<!-- DataTables JavaScript -->
+		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/jquery.dataTables.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/dataTables.bootstrap.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/ColReorder-1.3.2/js/dataTables.colReorder.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/dataTables.responsive.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/responsive.bootstrap.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/Scroller-1.4.2/js/dataTables.scroller.min.js')}}"></script>
+ <!-------Added Scripts------------>
+ 
+<!-----  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script> ---->
+ 
+ <script>
+ <!----jQuery.noConflict()(function ($) {--->
+$(document).ready(function(){  
+var counter = 1;
+var rowValue="<td><input type='checkbox' name='record'></td>"
+<!-------start scan button------------>
+<!-------start scan button------------>
+    $("#start").click(function(){
+    <!--  Clear text area-->     
+       <!--  Reset text area-->
+        $('#tag').val('');
+       $("#tag").removeAttr('disabled');
+         $("#stop").removeAttr('disabled');
+        $("#start").prop("disabled", true);
+        
+    <!--  $("#tag").hide("slow");-->     
+    });
+   
+<!-------stop scan button------------>    
+<!-------stop scan button------------>
+     
+      <!--get values from textarea, ignore if empty--> 
+  $("#stop").click(function(){ 
+   <!--Add a row if tag scanned is valid--> 
+    if ($.trim($('#tag').val()).length > 0) {
+      <!--add a new row to the table--> 
+      <!--Get line by line text from textarea--> 
+      var linesId = $('#tag').val().split('\n');
+      <!--add a new row to the table-->
+       for (var i = 0; i < linesId.length; i++){
+          $('#dataTables-inventory1').DataTable().row.add( [rowValue, counter, linesId[i]] ).draw( false );
+        
+            counter++;
+            }<!-- end for-->     
+        }
+        else {
+        <!--The scanned tag number is invalid--> 
+         alert("Invalid Input");
+        }
+        <!--Disable stop scan button and enable start scan button, disable textare again--> 
+       $("#tag").attr('disabled', ''); 
+        $("#start").removeAttr('disabled');
+        $("#stop").prop("disabled", true); 
+ 
+    }); 
+ <!-------Delete button------------>    
+<!-------Delete button------------>
+<!-------Deletes selected row from unidentified keg table ------------>
+    $("#delete").click(function(){
+            $('#dataTables-inventory1').find('input[name="record"]').each(function(){
+            	if($(this).is(":checked")){
+                    $(this).closest("tr").remove();
+                }
+            });
+    });
+});<!-- noconflict -->
+</script> 
+<!--************************************************-->
+<!--************************************************-->
+	<!-- Inventory Table -->
+		<script>
+		$(document).ready(function() {
+   
+       $('.panel-heading').css({
+            'color':'white',
+            'background-color': 'black',
+            'margin-top': '20px'});
+  
+			$('#dataTables-inventory').DataTable({
+				responsive: true
+			});
+      <!-- Unidentified Kegs Table -->
+      $('.panel-heading1').css({
+            'color':'white',
+            'background-color': 'red',
+            'margin-top': '20px'});
+  
+			$('#dataTables-inventory1').DataTable({
+				responsive: true
+			});
+		});
+		</script>
+   <!--************************************************-->
+  
+
+        <!-- Ajax -->
+
+
+	<script src="{{url_for('static', filename='jquery/jquery.js')}}"> </script>
+	<script>
+	  $(function() {
+	   $("#stop").click(function() {
+              var input = $('#tag').val();
+              $.ajax({
+                  url: '/edit_inventory/',
+                  data: $('form').serialize(),
+                  dataType: 'json',
+                  type: 'POST',
+                  success: function(response) {
+                    <!--  $("#paragraph").text("User: " + response.user + ", Password: " + response.pass);-->
+		    alert("ajax works");
+	  },
+                  error: function(error) {
+                      alert("error");
+                  }
+        });
+    });
+});
+
+ </script>
+
+  {% endblock %}
+
+<!--************************************************-->
+<!--************************************************-->
+
+
+
+	
+
