@@ -20,7 +20,7 @@ def signUpUser():
         return jsonify({'status':'OK','user':user,'pass':password})
 
 
-@app.route('/', methods=["POST"])
+@app.route('/', methods=["GET","POST"])
 def signin():
 	error = ''
 	try:

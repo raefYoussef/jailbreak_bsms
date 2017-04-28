@@ -66,7 +66,7 @@
 						
 <!-------Text area to enter tags------------>
 
-<h3 style="background-color:blue;color:white">Please Scan Tags Here</h3>
+<h3>Please Scan Tags Here</h3>
 
 <textarea id="tag" disabled autofocus style="width:99%" col="5" placeholder="Scanned RFID tag numbers go here."></textarea>
 <!-------start scan button------------>
@@ -81,7 +81,9 @@
 						<!-- /.panel-heading -->
 <div class="panel-body" id ="p1">
 							<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-inventory">
-								<thead>
+								
+								<tbody>
+									<thead>
 									<tr>
 										<th>ID</th>
 										<th>Keg Type</th>
@@ -90,71 +92,111 @@
 										<th>Time In</th>
 										<th>Time Cleaned</th>
 										<th>Time Filled</th>
+										<th>Time Shipped</th>
+										<th>Customer</th>
 										<th>Note</th>
 								    </tr>
 								</thead>
-								<tbody>
-									<tr>
-										<td>1</td>
-										<td>QB</td>
-										<td>FULL OUT</td>
-										<td>Feed the Monkey</td>
-										<td>03/25/2017</td>	
-										<td>03/26/2017</td>
-										<td>03/27/2017</td>
-										<td></th>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>HB</td>
-										<td>DIRTY</td>
-										<td>Poor Rigtheous</td>
-										<td>03/01/2017</td>
-										<td>03/02/2017</td>
-										<td>03/03/2017</td>
-										<td>Little Dented</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>QB</td>
-										<td>CLEAN</td>
-										<td>Feed the Monkey</td>
-										<td>02/01/2017</td>
-										<td>02/02/2017</td>
-										<td>02/03/2017</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>QB</td>
-										<td>DIRTY</td>
-										<td>Smoke</td>
-										<td>03/01/2017</td>
-										<td>03/02/2017</td>
-										<td>03/03/2017</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>10</td>
-										<td>HB</td>
-										<td>FULL INV</td>
-										<td>Poor Rigtheous</td>
-										<td>03/01/2016</td>
-										<td>03/02/2016</td>
-										<td>03/03/2016</td>
-										<td></td>
-									</tr>
 								</tbody>
 							</table>
 							<!-- /.table-responsive -->
 						</div>
 						<!-- /.panel-body -->
+<!-- **************************************************************** -->
+<button type="button" id="delete_inv" class="btn btn-danger" title="Delete from Database">Delete</button>
+<button type="button" id="edit_update" class="btn btn-warning" data-toggle="modal" data-target="#myModal1" title="Edit and update to Database">Edit & Update</button>
+<!-- *************************Modal1 code****************************** -->
+  <!-- Modal -->
+  <div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Please Edit Keg ID here</h4>
+        </div>
+        <div class="modal-body">
+
+          <label>ID:</label>
+          <input type = "text"
+                 id = "id_inv"
+                 value = ""></input>
+                 <p></p>
+           <label>Keg Type:</label>
+          <select id = "kegtype_inv">
+ 	 		<option value="HB">HB</option>
+ 			 <option value="QB">QB</option>
+			</select>		
+		<p></p>
+	<label>Status:</label>
+          <select id = "status_inv">
+ 	 		<option value="dirty">DIRTY</option>
+ 			 <option value="clean">CLEAN</option>
+ 			 <option value="fullout">FULL OUT</option>
+ 			 <option value="fullinv">FULL INV</option>
+		</select>		
+                 <p></p>
+    <label>Beer Brand:</label>
+         <select id = "beerbrand_inv">
+          	 <option value="punisher">Big Punisher</option>
+          	 <option value="cask">Cask Special</option>	
+          	 <option value="czech">Czech the Technique</option>
+          	 <option value="monkey">Feed The Monkey</option>
+          	 <option value="dark">Into The Dark</option>	 
+ 			 <option value="ruca">My Ruca</option>
+ 			 <option value="righteous">Poor Righteous</option>
+ 			 <option value="smoke">Smokehouse 54</option>
+ 	 		 <option value="infinite">The Infinite</option>
+ 			 <option value="is50">This Is 50</option>
+ 			 <option value="scoville">Welcome To Scoville</option>	 			 			 
+		</select>
+		<p></p>
+	<label>Time In:</label>
+          <input type = "date"
+                 id = "timein_inv"
+                 value = "" ></input>
+                 <p></p>
+           <label>Time Cleaned:</label>
+          <input type =  "date"
+                 id = "timecleaned_inv"
+                 value = "" >
+		<p></p>
+	<label>Time Filled:</label>
+          <input type =  "date"
+                 id = "timefilled_inv"
+                 value = "" ></input>
+                 <p></p>
+           <label>Time Shipped:</label>
+          <input type =  "date"
+                 id = "timeshipped_inv"
+                 value = "" ></input>
+	<p></p>
+	<label>Customer:</label>
+          <input type = "text"
+                 id = "customer_inv"
+                 value = "" ></input>
+                 <p></p>
+           <label>Notes:</label>
+          <input type = "text"
+                 id = "notes_inv"
+                 value = "" ></input>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+<!-- **************************************************************** -->
+
 </div>
 <!-- /.panel -->
-				</div>
-				<!-- /.col-lg-12 -->
-			</div>
-			<!-- /.row -->
+	</div>
+	<!-- /.col-lg-12 -->
+	</div>
+	<!-- /.row -->
 <!-- **************************************************************** -->
 
 <!-- **********************Table for Raw Scanned RFIDs*********************************** -->
@@ -174,10 +216,7 @@
 								    </tr>
 								</thead>
 								<tbody>
-									<tr>
-                    <td>0</td>
-                    <td>0123456789</td>
-                  </tr>
+								
 								</tbody>
 							</table>
 							<!-- /.table-responsive1 -->
@@ -185,9 +224,48 @@
 						<!-- /.panel-body1 -->
 
 <!-- **************************************************************** -->
-<button type="button" id="delete" class="btn btn-danger">Delete</button>
-<button type="button" id="edit" class="btn btn-warning">Edit</button>
-<button type="button" id="add" class="btn btn-primary">Add</button>
+<button type="button" id="delete" class="btn btn-danger" title="Temporarily delete tag ID" >Delete</button>
+<!-- Trigger the modal with a button -->
+  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" title ="Edit and Add to Database">Edit & Add</button>
+<!-- *************************Modal code****************************** -->
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Please Edit Keg ID here</h4>
+        </div>
+        <div class="modal-body">
+
+          <label>ID:      </label>
+          <input type = "text"
+                 id = "id_inv"
+                 value = ""></input>
+                 <p></p>
+           <label>Keg Type:</label>
+          <select id = "kegtype_inv">
+ 	 		<option value="HB">HB</option>
+ 			 <option value="QB">QB</option>
+			</select>				
+                 <p></p>
+           <label>Notes:   </label>
+          <input type = "text"
+                 id = "notes_inv"
+                 value = "" ></input>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+<!-- **************************************************************** -->
+
+
 </div>
 <!-- /.panel -->
 				</div>
@@ -211,63 +289,97 @@
 		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/responsive.bootstrap.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Scroller-1.4.2/js/dataTables.scroller.min.js')}}"></script>
    <script src="{{url_for('static', filename='DataTables/Select-1.2.0/js/dataTables.select.min.js')}}"></script>
- <!-------Added Scripts------------>
+ <!--Added Scripts -->
  
-<!-----  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script> ---->
  
  <script>
- <!----jQuery.noConflict()(function ($) {--->
-$(document).ready(function(){  
 var counter = 1;
-<!----var rowValue="<td><input type='checkbox' name='record'></td>"--->
-<!-------start scan button------------>
-<!-------start scan button------------>
+function doRow(i, newi, linesId){
+	var epcData = jQuery.param({epc: linesId[i]});
+
+	$.ajax({
+		url:"/compare_epc/",
+		data: epcData,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+			if(response["epc"].length != 0){
+          		// keg exists in database
+				$('#dataTables-inventory').DataTable().row.add([
+					response["epc"][0]["keg_id"],
+					response["epc"][0]["keg_type"],
+					response["epc"][0]["status"],
+					response["epc"][0]["beer_brand"],
+					response["epc"][0]["time_in"],
+					response["epc"][0]["time_cleaned"],
+					response["epc"][0]["time_filled"],
+					response["epc"][0]["time_shipped"],
+					response["epc"][0]["customer"],
+					response["epc"][0]["notes"]
+				]).draw( false );
+				//newi++;
+				// console.log(response["epc"][0]["keg_type"]);
+          	}
+			else 
+			{
+          		// keg is not in the database
+				$('#dataTables-inventory1').DataTable().row.add([
+					counter,
+					linesId[newi]             
+				]).draw( false );
+				//newi++;
+				counter++;
+			}
+			//newi++;
+			//newi++;
+			
+  		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+}
+$(document).ready(function(){  
+	
+	// start scan button
     $("#start").click(function(){
-    <!--  Clear text area-->     
-       <!--  Reset text area-->
+		// Clear text area     
+		// Reset text area
         $('#tag').val('');
-       $("#tag").removeAttr('disabled');
-         $("#stop").removeAttr('disabled');
-        $("#start").prop("disabled", true);
-        
-    <!--  $("#tag").hide("slow");-->     
+		$("#tag").removeAttr('disabled');
+		$("#stop").removeAttr('disabled');
+		$("#start").prop("disabled", true);
+		// $("#tag").hide("slow");     
     });
    
-<!-------stop scan button------------>    
-<!-------stop scan button------------>
-     
-      <!--get values from textarea, ignore if empty--> 
-  $("#stop").click(function(){ 
-   <!--Add a row if tag scanned is valid--> 
-    if ($.trim($('#tag').val()).length > 0) {
-      <!--add a new row to the table--> 
-      <!--Get line by line text from textarea--> 
-      var linesId = $('#tag').val().split('\n');
-      <!--add a new row to the table-->
-       for (var i = 0; i < linesId.length; i++){
-          $('#dataTables-inventory1').DataTable().row.add( [
-              counter,
-              linesId[i],
-            ] ).draw( false );
-        
-            counter++;
-            }<!-- end for-->     
-        }
+	// stop scan button   
+	// get values from textarea, ignore if empty 
+	$("#stop").click(function(){ 
+		//Add a row if tag scanned is valid
+		if ($.trim($('#tag').val()).length > 0) {
+			// add a new row to the table
+			// get line by line text from textarea
+			var linesId = $('#tag').val().split('\n');
+			
+			var newi = 0;
+			// add a new row to the table
+			for (var i = 0; i < linesId.length; i++){
+				doRow(i, newi, linesId);
+				newi++;
+			}
+		}
         else {
-        <!--The scanned tag number is invalid--> 
+        // The scanned tag number is invalid 
          alert("Invalid Input");
         }
-        <!--Disable stop scan button and enable start scan button, disable textare again--> 
-       $("#tag").attr('disabled', ''); 
-        $("#start").removeAttr('disabled');
-        $("#stop").prop("disabled", true); 
- 
+        // Disable stop scan button and enable start scan button, disable textare again--> 
+		$("#tag").attr('disabled', ''); 
+		$("#start").removeAttr('disabled');
+		$("#stop").prop("disabled", true); 
     }); 
- <!-------Delete button------------>    
-<!-------Multiple delete at once------------>
-<!-------Deletes selected row from unidentified keg table ------------>
+//<!-------Delete button------------>    
+//<!-------Multiple delete at once------------>
+//<!-------Deletes selected row from unidentified keg table ------------>
     $("#delete").click(function(){
             ($('#dataTables-inventory1').DataTable())
             .rows('.selected')
@@ -276,24 +388,6 @@ var counter = 1;
     });
 });<!-- noconflict -->
 </script> 
-<!-- <script> 
-$(document).ready(function() {
- 
-    $('#dataTables-inventory1 tbody').on( 'click', 'tr', function () {
-        if ( $(this).hasClass('selected') ) {
-            $(this).removeClass('selected');
-        }
-        else {
-            ($('#dataTables-inventory1').DataTable()).$('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
-        }
-    } );
- 
-    $('#delete').click( function () {
-        ($('#dataTables-inventory1').DataTable()).row('.selected').remove().draw( false );
-    } );
-} );
-</script> -->
 <!--************************************************-->
 <!--************************************************-->
 	<!-- Inventory Table -->
@@ -307,17 +401,18 @@ $(document).ready(function() {
   
 			$('#dataTables-inventory').DataTable({
 				responsive: true,
-        select: 'multi+shift'
+       			select: 'multi+shift'
 			});
-      <!-- Unidentified Kegs Table -->
+
+    //  <!-- Unidentified Kegs Table -->
       $('#ph2').css({
             'color':'white',
-            'background-color': 'red',
+            'background-color': 'black',
             'margin-top': '20px'});
-  <!-- make it responsive and multiple select at one time -->
+  //<!-- make it responsive and multiple select at one time -->
 			$('#dataTables-inventory1').DataTable({
 				responsive: true,
-        select: 'multi+shift'
+        		select: 'multi+shift'
 			});
 		});
 		</script>
