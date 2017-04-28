@@ -185,56 +185,6 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>Customer1</td>
-									<td>20</td>
-									<td>09/21/2013</td>
-								</tr>
-								<tr>
-									<td>Customer2</td>
-									<td>15</td>
-									<td>09/20/2013</td>
-								</tr>
-								<tr>
-									<td>Customer4</td>
-									<td>7</td>
-									<td>09/20/2012</td>
-								</tr>
-								<tr>
-									<td>Customer7</td>
-									<td>9</td>
-									<td>10/21/2013</td>
-								</tr>
-								<tr>
-									<td>Customer3</td>
-									<td>3</td>
-									<td>10/21/2013</td>
-								</tr>
-								<tr>
-									<td>Customer18</td>
-									<td>17</td>
-									<td>10/21/2013</td>
-								</tr>
-								<tr>
-									<td>Customer19</td>
-									<td>15</td>
-									<td>10/21/2013</td>
-								</tr>
-								<tr>
-									<td>Customer21</td>
-									<td>7</td>
-									<td>10/21/2013</td>
-								</tr>
-								<tr>
-									<td>Customer24</td>
-									<td>9</td>
-									<td>10/21/2013</td>
-								</tr>
-								<tr>
-									<td>Customer20</td>
-									<td>3</td>
-									<td>10/21/2013</td>
-								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -250,7 +200,6 @@
 		<!-- Morris Charts JavaScript -->
 		<script src="{{url_for('static', filename='raphael/raphael.min.js')}}"></script>
 		<script src="{{url_for('static', filename='morrisjs/morris.min.js')}}"></script>
-		<script src="{{url_for('static', filename='morrisjs/morris-data.js')}}"></script>
 		
 		<!-- DataTables JavaScript -->
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/jquery.dataTables.min.js')}}"></script>
@@ -263,13 +212,128 @@
 
 		<script>
 		$(document).ready(function() {
-			$('#customer_summary').DataTable({
+			//  Custome Table
+			var customers_table = $("#customer_summary").DataTable({
 				"responsive": true,
 				"searching": true,
-				"order": [[2, 'desc']],
-				"scrollY": '230px',
+				"order": [[2, "desc"]],
+				"scrollY": "230px",
 				"scrollCollapse": true,
 				"paging": true
+			});
+
+			// customers_table.rows.add([["Greene Turtle",3,"2017-04-27 04:55:04"],["Tubbys Diner",1,"2017-04-27 00:35:07"]]).draw();
+			// customers_table.rows.add([["Tiger Nixon","System Architect", "System Architect"],["Garrett Winters","Director", "$5,300"]]).draw();
+
+
+			// Beer Brand Donut Chart
+			var donut_chart = Morris.Donut({
+				element: 'dashboard_inventory_beers',
+				data: [{
+					label: "Kegs on Tap or in Inventory",
+					value: 0
+				}],
+				resize: true
+			});
+
+			// customers table ajax request
+			$.ajax({
+				url: "/dashboard_ajax_customers/",
+				dataType: "json",
+				type: "POST",
+				success: function(response) {
+					customers_table.clear();
+					customers_table.rows.add(response);
+					customers_table.draw();	
+				},
+				error: function(error) {
+					console.log("Ajax Request Error - Customers Table");
+				}
+			});
+
+			// beer brand chart ajax request
+			$.ajax({
+				url: "/dashboard_ajax_brands/",
+				dataType: "json",
+				type: "POST",
+				success: function(response) {
+					console.log(response);
+
+					if(response["brands_chart"].length != 0)
+					{
+						// there exist kegs on tap or in inventory
+						donut_chart.setData(response["brands_chart"]);
+					}
+					else
+					{
+						donut_chart.setData({label: "Kegs on Tap or in Inventory", value: 0 });
+					}
+				},
+				error: function(error) {
+					console.log("Ajax Request Error - Beer Brands Chart");
+				}
+			});
+
+			// Keg Status Line Chart
+			Morris.Line({
+			    element: 'dashboard_keg_status',
+			    data: [{
+			        date: '2017-03-26',
+			        dirty: 100,
+			        clean: 40,
+			        full_out: 150,
+			        full_tap: 10,
+			        full_inv: 50 
+			    }, {
+			        date: '2017-03-27',
+			        dirty: 80,
+			        clean: 45,
+			        full_out: 155,
+			        full_tap: 10,
+			        full_inv: 60
+			    }, {
+			        date: '2017-03-28',
+			        dirty: 90,
+			        clean: 40,
+			        full_out: 135,
+			        full_tap: 10,
+			        full_inv: 70
+			    }, {
+			        date: '2017-03-29',
+			        dirty: 70,
+			        clean: 50,
+			        full_out: 135,
+			        full_tap: 15,
+			        full_inv: 75
+			    }, {
+			        date: '2017-03-30',
+			        dirty: 75,
+			        clean: 55,
+			        full_out: 115,
+			        full_tap: 15,
+			        full_inv: 85
+			    }, {
+			        date: '2017-03-31',
+			        dirty: 55,
+			        clean: 65,
+			        full_out: 115,
+			        full_tap: 15,
+			        full_inv: 95
+			    }, {
+			        date: '2017-04-01',
+			        dirty: 55,
+			        clean: 65,
+			        full_out: 135,
+			        full_tap: 10,
+			        full_inv: 80
+			    }],
+			    xkey: 'date',
+			    ykeys: ['dirty', 'clean', 'full_out', 'full_tap', 'full_inv'],
+			    labels: ['Dirty', 'Clean', 'Full (Out)', 'Full (Tap)', 'Full (Inventory)'],
+			    lineColors: ['#DCA525', '#076BB6', '#E66665', '#AE70AF', '#9ECEB4'],
+			    pointSize: 4,
+			    resize: true,
+			    hideHover: 'auto'
 			});
 		});
 		</script>
