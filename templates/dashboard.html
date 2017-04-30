@@ -146,10 +146,10 @@
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"><i class="fa fa-line-chart fa-fw"></i> Keg Status</h3>
+						<h3 class="panel-title"><i class="fa fa-line-chart fa-fw"></i> Inventory Status</h3>
 					</div>
 					<div class="panel-body">
-						<div id="dashboard_keg_status"></div>
+						<div id="dashboard_inv_status"></div>
 					</div>
 				</div>
 			</div>
@@ -212,19 +212,72 @@
 
 		<script>
 		$(document).ready(function() {
-			//  Custome Table
-			var customers_table = $("#customer_summary").DataTable({
-				"responsive": true,
-				"searching": true,
-				"order": [[2, "desc"]],
-				"scrollY": "230px",
-				"scrollCollapse": true,
-				"paging": true
+			var now = new Date();
+			var year = (now.getFullYear()).toString();
+			var month = (now.getMonth() + 1).toString();
+			var day = (now.getDate()).toString();
+
+			// Inventory Status Line Chart
+			line_chart = Morris.Line({
+				element: 'dashboard_inv_status',
+				data: [{
+					date: year +"-"+ month +"-"+ parseInt(now.getDate()),
+					DIRTY: 0,
+					CLEAN: 0,
+					FULL_INV: 0,
+					FULL_TAP: 0,
+					FULL_OUT: 0 
+				}, {
+					date: year +"-"+ month +"-"+ parseInt(now.getDate() - 1),
+					DIRTY: 0,
+					CLEAN: 0,
+					FULL_INV: 0,
+					FULL_TAP: 0,
+					FULL_OUT: 0 
+				}, {
+					date: year +"-"+ month +"-"+ parseInt(now.getDate() - 2),
+					DIRTY: 0,
+					CLEAN: 0,
+					FULL_INV: 0,
+					FULL_TAP: 0,
+					FULL_OUT: 0 
+				}, {
+					date: year +"-"+ month +"-"+ parseInt(now.getDate() - 3),
+					DIRTY: 0,
+					CLEAN: 0,
+					FULL_INV: 0,
+					FULL_TAP: 0,
+					FULL_OUT: 0 
+				}, {
+					date: year +"-"+ month +"-"+ parseInt(now.getDate() - 4),
+					DIRTY: 0,
+					CLEAN: 0,
+					FULL_INV: 0,
+					FULL_TAP: 0,
+					FULL_OUT: 0 
+				}, {
+					date: year +"-"+ month +"-"+ parseInt(now.getDate() - 5),
+					DIRTY: 0,
+					CLEAN: 0,
+					FULL_INV: 0,
+					FULL_TAP: 0,
+					FULL_OUT: 0 
+				}, {
+					date: year +"-"+ month +"-"+ parseInt(now.getDate() - 6),
+					DIRTY: 0,
+					CLEAN: 0,
+					FULL_INV: 0,
+					FULL_TAP: 0,
+					FULL_OUT: 0 
+				}],
+				xkey: 'date',
+				ykeys: ['FULL_OUT', 'FULL_INV', 'FULL_TAP', 'CLEAN', 'DIRTY'],
+				labels: ['Full (Shipped)', 'Full (Inv)', 'Full (Tap)', 'Clean', 'Dirty',],
+				lineColors: ['#4285F4', '#00C851', '#ffbb33', '#aa66cc', '#ff4444'],
+				pointSize: 5,
+				resize: true,
+				hideHover: 'auto'
 			});
-
-			// customers_table.rows.add([["Greene Turtle",3,"2017-04-27 04:55:04"],["Tubbys Diner",1,"2017-04-27 00:35:07"]]).draw();
-			// customers_table.rows.add([["Tiger Nixon","System Architect", "System Architect"],["Garrett Winters","Director", "$5,300"]]).draw();
-
 
 			// Beer Brand Donut Chart
 			var donut_chart = Morris.Donut({
@@ -235,19 +288,29 @@
 				}],
 				resize: true
 			});
+			
+			//  Custome Table
+			var customers_table = $("#customer_summary").DataTable({
+				"responsive": true,
+				"searching": true,
+				"order": [[2, "desc"]],
+				"scrollY": "230px",
+				"scrollCollapse": true,
+				"paging": true
+			});
 
-			// customers table ajax request
+			// inventory status chart ajax request
 			$.ajax({
-				url: "/dashboard_ajax_customers/",
+				url: "/dashboard_ajax_invStatus/",
 				dataType: "json",
 				type: "POST",
 				success: function(response) {
-					customers_table.clear();
-					customers_table.rows.add(response);
-					customers_table.draw();	
+					console.log(response);
+
+					line_chart.setData(response);
 				},
 				error: function(error) {
-					console.log("Ajax Request Error - Customers Table");
+					console.log("Ajax Request Error - Inventory Statuses");
 				}
 			});
 
@@ -257,7 +320,6 @@
 				dataType: "json",
 				type: "POST",
 				success: function(response) {
-					console.log(response);
 
 					if(response["brands_chart"].length != 0)
 					{
@@ -274,66 +336,19 @@
 				}
 			});
 
-			// Keg Status Line Chart
-			Morris.Line({
-			    element: 'dashboard_keg_status',
-			    data: [{
-			        date: '2017-03-26',
-			        dirty: 100,
-			        clean: 40,
-			        full_out: 150,
-			        full_tap: 10,
-			        full_inv: 50 
-			    }, {
-			        date: '2017-03-27',
-			        dirty: 80,
-			        clean: 45,
-			        full_out: 155,
-			        full_tap: 10,
-			        full_inv: 60
-			    }, {
-			        date: '2017-03-28',
-			        dirty: 90,
-			        clean: 40,
-			        full_out: 135,
-			        full_tap: 10,
-			        full_inv: 70
-			    }, {
-			        date: '2017-03-29',
-			        dirty: 70,
-			        clean: 50,
-			        full_out: 135,
-			        full_tap: 15,
-			        full_inv: 75
-			    }, {
-			        date: '2017-03-30',
-			        dirty: 75,
-			        clean: 55,
-			        full_out: 115,
-			        full_tap: 15,
-			        full_inv: 85
-			    }, {
-			        date: '2017-03-31',
-			        dirty: 55,
-			        clean: 65,
-			        full_out: 115,
-			        full_tap: 15,
-			        full_inv: 95
-			    }, {
-			        date: '2017-04-01',
-			        dirty: 55,
-			        clean: 65,
-			        full_out: 135,
-			        full_tap: 10,
-			        full_inv: 80
-			    }],
-			    xkey: 'date',
-			    ykeys: ['dirty', 'clean', 'full_out', 'full_tap', 'full_inv'],
-			    labels: ['Dirty', 'Clean', 'Full (Out)', 'Full (Tap)', 'Full (Inventory)'],
-			    lineColors: ['#DCA525', '#076BB6', '#E66665', '#AE70AF', '#9ECEB4'],
-			    pointSize: 4,
-			    resize: true,
-			    hideHover: 'auto'
+			// customers table ajax request
+			$.ajax({
+				url: "/dashboard_ajax_customers/",
+				dataType: "json",
+				type: "POST",
+				success: function(response) {
+					customers_table.clear();
+					customers_table.rows.add(response);
+					customers_table.draw();	
+				},
+				error: function(error) {
+					console.log("Ajax Request Error - Customers Table");
+				}
 			});
 		});
 		</script>

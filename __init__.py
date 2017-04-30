@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, url_for, flash, redirect, jso
 from passlib.hash import sha256_crypt
 from dbconnect import connection
 from MySQLdb import escape_string as thwart
-import gc
+import gc, datetime
+
 
 app = Flask(__name__)
 
@@ -124,10 +125,13 @@ def dashboard_ajax_brand():
 			c, conn = connection()
 			
 			# Beer Brands 
-			brand_count = c.execute("SELECT beer_brand FROM inventory WHERE (status <=> 'FULL_INV' OR status <=> 'FULL_TAP') AND (beer_brand IS NOT NULL) ORDER BY beer_brand ASC") 
+			brand_count = c.execute("""	SELECT beer_brands.name FROM beer_brands 
+										INNER JOIN inventory ON beer_brands.id = inventory.beer_brand 
+										WHERE ((inventory.status <=> 'FULL_INV' OR inventory.status <=> 'FULL_TAP') AND (inventory.beer_brand IS NOT NULL)) 
+										ORDER BY inventory.beer_brand asc """) 
 			brands = c.fetchall()
 			# populate set with beer brands frequencies 
-			freq_set = {i["beer_brand"]: brands.count(i) for i in brands}
+			freq_set = {i["name"]: brands.count(i) for i in brands}
 			# format set into array required by morrisjs donut chart
 			freq_list = [{"label": freq_set.keys()[i], "value": freq_set.values()[i]} for i in range(len(freq_set))]
 
@@ -147,7 +151,7 @@ def dashboard_ajax_customers():
 		# Customers
 		cstr_count = c.execute("SELECT customer FROM inventory WHERE (customer IS NOT NULL) ORDER BY beer_brand ASC")
 		customers = c.fetchall()
-		# populate set with customers keg number for each 
+		# populate set with number of kegs for each customer
 		cust_set = {i["customer"]: customers.count(i) for i in customers}
 		cust_list = []
 
@@ -158,7 +162,7 @@ def dashboard_ajax_customers():
 
 			freq = cust_set[customer_name]
 
-			# compile and format data
+			# compile, and format, data
 			if actv_count != 0 :
 				cust_list.append([customer_name, freq, activity[0]["last_activity"]])
 			else :
@@ -169,6 +173,38 @@ def dashboard_ajax_customers():
 	except Exception as e:
 		# failed connection
 		return jsonify(e)
+
+
+@app.route('/dashboard_ajax_invStatus/', methods=["POST"])
+def dashboard_ajax_kegStatus():
+	try:
+		# establish a connection to database
+		c, conn = connection()
+		
+		# inventory status for past week
+		status_list = []
+
+		for i in xrange(7):
+			# obtain kegs status and freq 
+			sts_count = c.execute("""	SELECT activity_log.status AS status, COUNT(activity_log.status) As freq FROM activity_log 
+										INNER JOIN (SELECT keg_id, MAX(time) AS ts FROM activity_log WHERE time <= SUBDATE(NOW(),""" + str(i) + """) GROUP BY keg_id) maxt 
+										ON (activity_log.keg_id = maxt.keg_id AND activity_log.time = maxt.ts) GROUP BY activity_log.status """)
+			status = c.fetchall()
+
+			# accounts for non-existant statues
+			date = str(datetime.datetime.now().date() - datetime.timedelta(i))
+			status_dict = {"date": date, "DIRTY":0, "CLEAN":0, "FULL_INV":0, "FULL_TAP":0, "FULL_OUT":0}
+
+			for i in status:
+				status_dict[i["status"]]=i["freq"]
+
+			status_list.append(status_dict)
+
+		return jsonify(status_list)
+
+	except Exception as e:
+		# failed connection
+		return jsonify(e)	
 
 
 @app.route('/settings/')
