@@ -305,9 +305,11 @@
 				dataType: "json",
 				type: "POST",
 				success: function(response) {
-					console.log(response);
 
-					line_chart.setData(response);
+					if(response.length != 0)
+					{
+						line_chart.setData(response);	
+					}
 				},
 				error: function(error) {
 					console.log("Ajax Request Error - Inventory Statuses");
