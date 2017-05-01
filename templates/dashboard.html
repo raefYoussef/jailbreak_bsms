@@ -49,6 +49,158 @@
 	{% endblock %}
 
 	{% block body %} 
+		<!-- Shipped Kegs Modal -->
+		<div class="modal fade" id="shipped_kegs_modal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
+						<h4 class="modal-title">Shipped Kegs</h4>
+					</div>
+
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-xs-12">
+								<table width="100%" class="table table-bordered table-hover table-striped" id="shipped_kegs_table">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Time</th>
+											<th>Beer Brand</th>
+											<th>Customer</th>
+											<th>User</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!--  /.modal-dialog -->
+		</div>
+		<!--  /.modal -->
+
+		<!-- Filled Kegs Modal -->
+		<div class="modal fade" id="filled_kegs_modal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
+						<h4 class="modal-title">Filled Kegs</h4>
+					</div>
+
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-xs-12">
+								<table width="100%" class="table table-bordered table-hover table-striped" id="filled_kegs_table">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Time</th>
+											<th>Beer Brand</th>
+											<th>User</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!--  /.modal-dialog -->
+		</div>
+		<!--  /.modal -->
+
+		<!-- Filled Kegs Modal -->
+		<div class="modal fade" id="tapped_kegs_modal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
+						<h4 class="modal-title">Tapped Kegs</h4>
+					</div>
+
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-xs-12">
+								<table width="100%" class="table table-bordered table-hover table-striped" id="tapped_kegs_table">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Time</th>
+											<th>Beer Brand</th>
+											<th>User</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!--  /.modal-dialog -->
+		</div>
+		<!--  /.modal -->
+
+		<!-- Filled Kegs Modal -->
+		<div class="modal fade" id="added_kegs_modal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
+						<h4 class="modal-title">Added Kegs</h4>
+					</div>
+
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-xs-12">
+								<table width="100%" class="table table-bordered table-hover table-striped" id="added_kegs_table">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Time</th>
+											<th>User</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!--  /.modal-dialog -->
+		</div>
+		<!--  /.modal -->
+
 		<!-- Overview Panels -->
 		<div class="row">
 			<div class="col-md-6 col-lg-3">
@@ -59,13 +211,13 @@
 								<i class="fa fa-truck fa-5x"></i>
 							</div>
 							<div class="col-xs-9 text-right">
-								<div class="huge">26</div>
+								<div class="huge" id="shipped_kegs_panel">0</div>
 								<div>New Shipped Kegs!</div>
 							</div>
 						</div>
 					</div>
 					<a href="#">
-						<div class="panel-footer">
+						<div class="panel-footer" data-toggle="modal" data-target="#shipped_kegs_modal">
 							<span class="pull-left">View Details</span>
 							<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 							<div class="clearfix"></div>
@@ -81,13 +233,13 @@
 								<i class="fa fa-tint fa-5x"></i>
 							</div>
 							<div class="col-xs-9 text-right">
-								<div class="huge">12</div>
+								<div class="huge" id="filled_kegs_panel">0</div>
 								<div>New Filled Kegs!</div>
 							</div>
 						</div>
 					</div>
 					<a href="#">
-						<div class="panel-footer">
+						<div class="panel-footer" data-toggle="modal" data-target="#filled_kegs_modal">
 							<span class="pull-left">View Details</span>
 							<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 							<div class="clearfix"></div>
@@ -103,13 +255,13 @@
 								<i class="fa fa-beer fa-5x"></i>
 							</div>
 							<div class="col-xs-9 text-right">
-								<div class="huge">3</div>
+								<div class="huge" id="tapped_kegs_panel">0</div>
 								<div>New Kegs on Tap!</div>
 							</div>
 						</div>
 					</div>
 					<a href="#">
-						<div class="panel-footer">
+						<div class="panel-footer" data-toggle="modal" data-target="#tapped_kegs_modal">
 							<span class="pull-left">View Details</span>
 							<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 							<div class="clearfix"></div>
@@ -125,14 +277,14 @@
 								<i class="fa fa-plus-circle fa-5x"></i>
 							</div>
 							<div class="col-xs-9 text-right">
-								<div class="huge">13</div>
+								<div class="huge" id="added_kegs_panel">0</div>
 								<div>New Added Kegs!</div>
 							</div>
 						</div>
 					</div>
 					<a href="#">
 						<div class="panel-footer">
-							<span class="pull-left">View Details</span>
+							<span class="pull-left" data-toggle="modal" data-target="#added_kegs_modal">View Details</span>
 							<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 							<div class="clearfix"></div>
 						</div>
@@ -193,7 +345,7 @@
 			</div>
 			<!-- /.col-lg-4 (nested) -->
 		</div>
-
+		<!-- /.row -->
 	{% endblock %}
 
 	{% block scripts %}
@@ -289,7 +441,7 @@
 				resize: true
 			});
 			
-			//  Custome Table
+			// Custome Table
 			var customers_table = $("#customer_summary").DataTable({
 				"responsive": true,
 				"searching": true,
@@ -299,16 +451,51 @@
 				"paging": true
 			});
 
+			// Shipped Kegs Table
+			var shipped_table = $("#shipped_kegs_table").DataTable({
+				"responsive": true,
+				"searching": true,
+				"paging": true
+			});
+
+			// Filled Kegs Table
+			var filled_table = $("#filled_kegs_table").DataTable({
+				"responsive": true,
+				"searching": true,
+				"paging": true
+			});
+
+			// Tapped Kegs Table
+			var tapped_table = $("#tapped_kegs_table").DataTable({
+				"responsive": true,
+				"searching": true,
+				"paging": true
+			});
+
+			// Added Kegs Table
+			var added_table = $("#added_kegs_table").DataTable({
+				"responsive": true,
+				"searching": true,
+				"paging": true
+			});			
+
 			// inventory status chart ajax request
 			$.ajax({
 				url: "/dashboard_ajax_invStatus/",
 				dataType: "json",
 				type: "POST",
 				success: function(response) {
+					console.log(response);
 
 					if(response.length != 0)
 					{
-						line_chart.setData(response);	
+						line_chart.setData(response);
+
+						// update panels
+						$("#shipped_kegs_panel").text(response[0]["FULL_OUT"]);
+						$("#filled_kegs_panel").text(response[0]["FULL_INV"]);
+						$("#tapped_kegs_panel").text(response[0]["FULL_TAP"]);
+						$("#added_kegs_panel").text(response[0]["DIRTY"]);
 					}
 				},
 				error: function(error) {

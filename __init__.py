@@ -187,8 +187,8 @@ def dashboard_ajax_kegStatus():
 		for i in xrange(7):
 			# obtain kegs status and freq 
 			sts_count = c.execute("""	SELECT activity_log.status AS status, COUNT(activity_log.status) As freq FROM activity_log 
-										INNER JOIN (SELECT keg_id, MAX(time) AS ts FROM activity_log WHERE time <= SUBDATE(NOW(),""" + str(i) + """) GROUP BY keg_id) maxt 
-										ON (activity_log.keg_id = maxt.keg_id AND activity_log.time = maxt.ts) GROUP BY activity_log.status """)
+										INNER JOIN (SELECT keg_id, MAX(time) AS ts FROM activity_log WHERE time <= SUBDATE(NOW(), %s) GROUP BY keg_id) maxt 
+										ON (activity_log.keg_id = maxt.keg_id AND activity_log.time = maxt.ts) GROUP BY activity_log.status """ % str(i))
 			status = c.fetchall()
 
 			# accounts for non-existant statues
