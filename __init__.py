@@ -39,6 +39,14 @@ def signin():
 		return render_template("signin.html", error = error)
 
 
+@app.route('/signout/', methods=["GET","POST"])
+def signout():
+	session.pop("uid", None)
+	session.pop("username", None)
+
+	return redirect(url_for('signin'))
+
+
 @app.route('/compare_epc/', methods=["POST"])
 def compare_epc():
 	try:
