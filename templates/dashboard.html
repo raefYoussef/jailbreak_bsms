@@ -3,10 +3,10 @@
 	{% block page_title %} Dashboard {% endblock %}
 	
 	{% block stylesheets %}
-		<!-- Morris Charts CSS -->
+		<!-- Morris Charts -->
     	<link href="{{url_for('static', filename='morrisjs/morris.css')}}" rel="stylesheet">
 
-		<!-- DataTables CSS -->
+		<!-- DataTables -->
 		<link href="{{url_for('static', filename='DataTables/DataTables-1.10.13/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/ColReorder-1.3.2/css/colReorder.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
@@ -351,11 +351,11 @@
 	{% endblock %}
 
 	{% block scripts %}
-		<!-- Morris Charts JavaScript -->
+		<!-- Morris Charts -->
 		<script src="{{url_for('static', filename='raphael/raphael.min.js')}}"></script>
 		<script src="{{url_for('static', filename='morrisjs/morris.min.js')}}"></script>
 		
-		<!-- DataTables JavaScript -->
+		<!-- DataTables -->
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/jquery.dataTables.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/dataTables.bootstrap.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/ColReorder-1.3.2/js/dataTables.colReorder.min.js')}}"></script>
@@ -458,7 +458,8 @@
 				"responsive": true,
 				"searching": true,
 				"paging": true,
-				"order": [[1, "desc"]]
+				"order": [[1, "desc"]],
+				"scrollX": true
 			});
 
 			// Filled Kegs Table
@@ -466,7 +467,8 @@
 				"responsive": true,
 				"searching": true,
 				"paging": true,
-				"order": [[1, "desc"]]
+				"order": [[1, "desc"]],
+				"scrollX": true
 			});
 
 			// Tapped Kegs Table
@@ -474,7 +476,8 @@
 				"responsive": true,
 				"searching": true,
 				"paging": true,
-				"order": [[1, "desc"]]
+				"order": [[1, "desc"]],
+				"scrollX": true
 			});
 
 			// Returned Kegs Table
@@ -482,7 +485,8 @@
 				"responsive": true,
 				"searching": true,
 				"paging": true,
-				"order": [[1, "desc"]]
+				"order": [[1, "desc"]],
+				"scrollX": true
 			});			
 
 			// notification panels ajax request
@@ -491,7 +495,6 @@
 				dataType: "json",
 				type: "POST",
 				success: function(response) {
-					console.log(response);
 					
 					// update panels
 					$("#shipped_kegs_panel").text(response["shipped_count"]);
@@ -518,7 +521,6 @@
 				},
 				error: function(error) {
 					console.log("Ajax Request Error - Notification Panels Statuses");
-					console.log(error)
 				}
 			});
 
@@ -574,6 +576,26 @@
 				error: function(error) {
 					console.log("Ajax Request Error - Customers Table");
 				}
+			});
+
+			// Fixes head misalignment 
+			$("#shipped_kegs_modal").on('shown.bs.modal', function () {
+				shipped_table.columns.adjust().draw();
+			});
+
+			// Fixes head misalignment 
+			$("#filled_kegs_modal").on('shown.bs.modal', function () {
+				filled_table.columns.adjust().draw();
+			});
+
+			// Fixes head misalignment 
+			$("#tapped_kegs_modal").on('shown.bs.modal', function () {
+				tapped_table.columns.adjust().draw();
+			});
+
+			// Fixes head misalignment 
+			$("#returned_kegs_modal").on('shown.bs.modal', function () {
+				returned_table.columns.adjust().draw();
 			});
 		});
 		</script>
