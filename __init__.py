@@ -31,19 +31,19 @@ def signin():
 			attempted_email = request.form['email']
 			attempted_password = request.form['password']
 
-			data = c.execute("SELECT * FROM users WHERE email = ('"+ attempted_email + "')")
+			data_count = c.execute("SELECT * FROM users WHERE email = '"+ attempted_email + "'")
+			data = c.fetchone()
+			user_password = data["password"]
 
-			if data and sha256_crypt.verify(attempted_password, c.fetchone()["password"]):
-				#flash(attempted_username)
-				#flash(attempted_password)
-				#if attempted_username == "admin" and attempted_password == "password":
+			if data_count and sha256_crypt.verify(attempted_password, user_password):
+				
 				return redirect(url_for('dashboard'))
 			else:
 				error = "Invalid credentials. Try Again."
-        
-		gc.collect()
+				return render_template("signin.html")
 
-		return render_template("signin.html", error = error)
+		else:
+			return render_template("signin.html")
 
 	except Exception as e:
 		flash(e)
@@ -294,5 +294,5 @@ def logistics():
 
 if __name__ == "__main__":
 	# app.secret_key = 'some secret key'
-	app.run(debug=True)
-	#app.run()
+	# app.run(debug=True)
+	app.run()
