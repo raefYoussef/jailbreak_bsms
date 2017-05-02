@@ -128,7 +128,7 @@ def dashboard_ajax_brand():
 			brand_count = c.execute("""	SELECT beer_brands.name FROM beer_brands 
 										INNER JOIN inventory ON beer_brands.id = inventory.beer_brand 
 										WHERE ((inventory.status <=> 'FULL_INV' OR inventory.status <=> 'FULL_TAP') AND (inventory.beer_brand IS NOT NULL)) 
-										ORDER BY inventory.beer_brand asc """) 
+										ORDER BY inventory.beer_brand ASC """) 
 			brands = c.fetchall()
 			# populate set with beer brands frequencies 
 			freq_set = {i["name"]: brands.count(i) for i in brands}
@@ -205,6 +205,64 @@ def dashboard_ajax_kegStatus():
 	except Exception as e:
 		# failed connection
 		return jsonify(e)	
+
+
+@app.route('/dashboard_ajax_notifications/', methods=["POST"])
+def dashboard_ajax_notifications():
+		try:
+			# establish a connection to database
+			c, conn = connection()
+			
+			# Shipped Kegs
+			shipped_count = c.execute("""	SELECT activity_log.keg_id, activity_log.time, beer_brands.name AS beer_brand, activity_log.customer, users.username AS user FROM activity_log 
+											INNER JOIN beer_brands ON beer_brands.id = activity_log.beer_brand 
+											LEFT JOIN users ON activity_log.user=users.Uid 
+											WHERE activity_log.status="FULL_OUT" AND activity_log.time >= SUBDATE(NOW(),7) 
+											ORDER BY activity_log.time DESC """) 
+			shipped = c.fetchall()
+
+			shipped_list = [[i["keg_id"], str(i["time"]), i["beer_brand"], i["customer"], i["user"]] for i in shipped]
+
+
+			# Filled Kegs
+			filled_count = c.execute("""	SELECT activity_log.keg_id, activity_log.time, beer_brands.name AS beer_brand, users.username AS user FROM activity_log 
+											INNER JOIN beer_brands ON beer_brands.id = activity_log.beer_brand 
+											LEFT JOIN users ON activity_log.user=users.Uid 
+											WHERE activity_log.status="FULL_INV" AND activity_log.time >= SUBDATE(NOW(),7) 
+											ORDER BY activity_log.time DESC """) 
+			filled = c.fetchall()
+
+			filled_list = [[i["keg_id"], str(i["time"]), i["beer_brand"], i["user"]] for i in filled]
+
+
+			# Tapped Kegs
+			tapped_count = c.execute("""	SELECT activity_log.keg_id, activity_log.time, beer_brands.name AS beer_brand, users.username AS user FROM activity_log 
+											INNER JOIN beer_brands ON beer_brands.id = activity_log.beer_brand 
+											LEFT JOIN users ON activity_log.user=users.Uid 
+											WHERE activity_log.status="FULL_TAP" AND activity_log.time >= SUBDATE(NOW(),7) 
+											ORDER BY activity_log.time DESC """) 
+			tapped = c.fetchall()
+
+			tapped_list = [[i["keg_id"], str(i["time"]), i["beer_brand"], i["user"]] for i in tapped]
+
+
+			# Returned Kegs
+			returned_count = c.execute("""	SELECT activity_log.keg_id, activity_log.time, beer_brands.name AS beer_brand, activity_log.customer, users.username AS user FROM activity_log 
+											INNER JOIN beer_brands ON beer_brands.id = activity_log.beer_brand 
+											LEFT JOIN users ON activity_log.user=users.Uid 
+											WHERE activity_log.time >= SUBDATE(NOW(),7) AND activity_log.status="DIRTY" AND activity_log.customer IS NOT NULL AND activity_log.beer_brand IS NOT NULL
+											ORDER BY activity_log.time DESC """) 
+			returned = c.fetchall()
+
+			returned_list = [[i["keg_id"], str(i["time"]), i["beer_brand"], i["customer"], i["user"]] for i in returned]
+
+
+
+			return jsonify({"shipped": shipped_list, "shipped_count": shipped_count, "filled": filled_list, "filled_count": filled_count, "tapped": tapped_list, "tapped_count": tapped_count, "returned": returned_list, "returned_count": returned_count})
+
+		except Exception as e:
+			# failed connection
+			return e
 
 
 @app.route('/settings/')

@@ -43,7 +43,7 @@
 
 	{% block alerts %}
 		<div class="alert alert-danger alert-dismissable">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
 			<i class="fa fa-info-circle"></i>  <strong>Warning</strong> There were 2 failed signin attempts since the last successful signin
 		</div>
 	{% endblock %}
@@ -126,7 +126,7 @@
 		</div>
 		<!--  /.modal -->
 
-		<!-- Filled Kegs Modal -->
+		<!-- Tapped Kegs Modal -->
 		<div class="modal fade" id="tapped_kegs_modal" tabindex="-1">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -164,23 +164,25 @@
 		</div>
 		<!--  /.modal -->
 
-		<!-- Filled Kegs Modal -->
-		<div class="modal fade" id="added_kegs_modal" tabindex="-1">
+		<!-- Returned Kegs Modal -->
+		<div class="modal fade" id="returned_kegs_modal" tabindex="-1">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"><i class="fa fa-times"></i></button>
-						<h4 class="modal-title">Added Kegs</h4>
+						<h4 class="modal-title">Returned Kegs</h4>
 					</div>
 
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-xs-12">
-								<table width="100%" class="table table-bordered table-hover table-striped" id="added_kegs_table">
+								<table width="100%" class="table table-bordered table-hover table-striped" id="returned_kegs_table">
 									<thead>
 										<tr>
 											<th>ID</th>
 											<th>Time</th>
+											<th>Beer Brand</th>
+											<th>Customer</th>
 											<th>User</th>
 										</tr>
 									</thead>
@@ -274,17 +276,17 @@
 					<div class="panel-heading">
 						<div class="row">
 							<div class="col-xs-3">
-								<i class="fa fa-plus-circle fa-5x"></i>
+								<i class="fa fa-repeat fa-5x"></i>
 							</div>
 							<div class="col-xs-9 text-right">
-								<div class="huge" id="added_kegs_panel">0</div>
-								<div>New Added Kegs!</div>
+								<div class="huge" id="returned_kegs_panel">0</div>
+								<div>New Returned Kegs!</div>
 							</div>
 						</div>
 					</div>
 					<a href="#">
-						<div class="panel-footer">
-							<span class="pull-left" data-toggle="modal" data-target="#added_kegs_modal">View Details</span>
+						<div class="panel-footer" data-toggle="modal" data-target="#returned_kegs_modal">
+							<span class="pull-left">View Details</span>
 							<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 							<div class="clearfix"></div>
 						</div>
@@ -424,7 +426,7 @@
 				}],
 				xkey: 'date',
 				ykeys: ['FULL_OUT', 'FULL_INV', 'FULL_TAP', 'CLEAN', 'DIRTY'],
-				labels: ['Full (Shipped)', 'Full (Inv)', 'Full (Tap)', 'Clean', 'Dirty',],
+				labels: ['Full (Shipped)', 'Full (Inv)', 'Full (Tap)', 'Clean', 'Dirty'],
 				lineColors: ['#4285F4', '#00C851', '#ffbb33', '#aa66cc', '#ff4444'],
 				pointSize: 5,
 				resize: true,
@@ -455,29 +457,70 @@
 			var shipped_table = $("#shipped_kegs_table").DataTable({
 				"responsive": true,
 				"searching": true,
-				"paging": true
+				"paging": true,
+				"order": [[1, "desc"]]
 			});
 
 			// Filled Kegs Table
 			var filled_table = $("#filled_kegs_table").DataTable({
 				"responsive": true,
 				"searching": true,
-				"paging": true
+				"paging": true,
+				"order": [[1, "desc"]]
 			});
 
 			// Tapped Kegs Table
 			var tapped_table = $("#tapped_kegs_table").DataTable({
 				"responsive": true,
 				"searching": true,
-				"paging": true
+				"paging": true,
+				"order": [[1, "desc"]]
 			});
 
-			// Added Kegs Table
-			var added_table = $("#added_kegs_table").DataTable({
+			// Returned Kegs Table
+			var returned_table = $("#returned_kegs_table").DataTable({
 				"responsive": true,
 				"searching": true,
-				"paging": true
+				"paging": true,
+				"order": [[1, "desc"]]
 			});			
+
+			// notification panels ajax request
+			$.ajax({
+				url: "/dashboard_ajax_notifications/",
+				dataType: "json",
+				type: "POST",
+				success: function(response) {
+					console.log(response);
+					
+					// update panels
+					$("#shipped_kegs_panel").text(response["shipped_count"]);
+					$("#filled_kegs_panel").text(response["filled_count"]);
+					$("#tapped_kegs_panel").text(response["tapped_count"]);
+					$("#returned_kegs_panel").text(response["returned_count"]);
+
+					// update tables
+					shipped_table.clear();
+					shipped_table.rows.add(response["shipped"]);
+					shipped_table.draw();
+
+					filled_table.clear();
+					filled_table.rows.add(response["filled"]);
+					filled_table.draw();
+					
+					tapped_table.clear();
+					tapped_table.rows.add(response["tapped"]);
+					tapped_table.draw();
+
+					returned_table.clear();
+					returned_table.rows.add(response["returned"]);
+					returned_table.draw();
+				},
+				error: function(error) {
+					console.log("Ajax Request Error - Notification Panels Statuses");
+					console.log(error)
+				}
+			});
 
 			// inventory status chart ajax request
 			$.ajax({
@@ -485,17 +528,10 @@
 				dataType: "json",
 				type: "POST",
 				success: function(response) {
-					console.log(response);
-
+					
 					if(response.length != 0)
 					{
 						line_chart.setData(response);
-
-						// update panels
-						$("#shipped_kegs_panel").text(response[0]["FULL_OUT"]);
-						$("#filled_kegs_panel").text(response[0]["FULL_INV"]);
-						$("#tapped_kegs_panel").text(response[0]["FULL_TAP"]);
-						$("#added_kegs_panel").text(response[0]["DIRTY"]);
 					}
 				},
 				error: function(error) {
