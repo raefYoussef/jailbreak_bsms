@@ -26,6 +26,8 @@ def signin():
 				session["uid"] = data["uid"]
 				session["username"] = data["username"]
 
+				# c.execute("UPDATE users SET WHERE email = '"+ attempted_email + "'")
+
 				return redirect(url_for('dashboard'))
 			else:
 				error = "Invalid credentials. Try Again."
@@ -45,6 +47,11 @@ def signout():
 	session.pop("username", None)
 
 	return redirect(url_for('signin'))
+
+
+@app.route('/test/', methods=["GET","POST"])
+def test():
+	return render_template("test.html")
 
 
 @app.route('/compare_epc/', methods=["POST"])
@@ -284,15 +291,25 @@ def settings():
 def view_inventory():
 	if "uid" in session:
 		c, conn = connection()
-		inventory_items = c.execute("SELECT * FROM inventory")
-		inventory_items = c.fetchall()
+
+		# ("""	SELECT beer_brands.name FROM beer_brands 
+		# 							INNER JOIN inventory ON beer_brands.id = inventory.beer_brand 
+		# 							WHERE ((inventory.status <=> 'FULL_INV' OR inventory.status <=> 'FULL_TAP') AND (inventory.beer_brand IS NOT NULL)) 
+		# 							ORDER BY inventory.beer_brand ASC """) 
+#INNER JOIN beer_brands ON inventory.beer_brand = beer_brands.id
+		inventory_items = c.execute(""" SELECT * FROM inventory
+										
+										 """)
+		inventory = c.fetchall()
+		inv_list = [[i["keg_id"], i["keg_type"], i["status"], i["beer_brand"], str(i["time_in"]), str(i["time_cleaned"]), str(i["time_filled"]), str(i["time_tap"]),str(i["time_shipped"]), i["customer"], i["notes"]] for i in inventory]
 		# x = [{key_id: 1}, {keg_id: 2}, {key_id: 3}]
 		# x[0]["keg_id"]
 		#print("hello")
 		#print(inventory_items)
-		return render_template("view_inventory.html", inventory=inventory_items,  account_name = session["username"])
+		return render_template("view_inventory.html", inventory=inv_list,  account_name = session["username"])
 
 	return redirect(url_for('signin'))
+
 
 @app.route('/edit_inventory/', methods=["GET","POST"])
 def edit_inventory():
@@ -301,15 +318,16 @@ def edit_inventory():
 
 	return redirect(url_for('signin'))
 
-@app.route('/logistics/')
+
+@app.route('/logistics/', methods=["GET","POST"])
 def logistics():
 	if "uid" in session:
-		return render_template("logistics.html", methods=['POST'])
+		return render_template("logistics.html", account_name = session["username"])
 
 	return redirect(url_for('signin'))
 
 
 if __name__ == "__main__":
-	# app.secret_key = 'some secret key'
-	# app.run(debug=True)
-	app.run()
+	app.secret_key = 'some secret key'
+	app.run(debug=True)
+	# app.run()

@@ -83,29 +83,21 @@
 										<th>Time In</th>
 										<th>Time Cleaned</th>
 										<th>Time Filled</th>
-										<th>Time Tap</th>
-										<th>Time Shipped</th>
-										<th>Customer</th>
 										<th>Note</th>
 								    </tr>
 								</thead>
 								<tbody>
-								       {% for row in inventory %}
-								       <tr>
+									<tr>
 										
-									        <td>{{row["keg_id"]}}</td>
-										<td>{{row["keg_type"]}}</td>
-										<td>{{row["status"]}}</td>
-										<td>{{row["beer_brand"]}}</td>
-										<td>{{row["time_in"]}}</td>
-										<td>{{row[5]}}</td>
-										<td>{{row[6]}}</td>
-										<td>{{row[7]}}</td>
-										<td>{{row[7]}}</td>
-										<td>{{row[7]}}</td>
-										<td>{{row[7]}}</td>
+									        <td>{{inventory[0][0]}}</td>
+										<td>{{inventory[0][1]}}</td>
+										<td>{{inventory[0]}}</td>
+										<td>{{inventory[0]}}</td>
+										<td>{{inventory[0]}}</td>
+										<td>{{inventory[0]}}</td>
+										<td>{{inventory[0]}}</td>
+										<td>{{inventory[0]}}</td>
 									</tr>
-									{% endfor %}
 									
 								</tbody>
 							</table>

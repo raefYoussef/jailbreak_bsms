@@ -200,6 +200,39 @@
 										<th>Time In</th>
 										<th>Time Cleaned</th>
 										<th>Time Filled</th>
+										<th>Time Tap</th>
+										<th>Time Shipped</th>
+										<th>Customer</th>
+										<th>Notes</th>
+									</tr>
+								</thead>
+									<tbody>
+								       {% for row in inventory %}
+								       <tr>
+										
+									    <td>{{row[0]}}</td>
+										<td>{{row[1]}}</td>
+										<td>{{row[2]}}</td>
+										<td>{{row[3]}}</td>
+										<td>{{row[4]}}</td>
+										<td>{{row[5]}}</td>
+										<td>{{row[6]}}</td>
+										<td>{{row[7]}}</td>
+										<td>{{row[8]}}</td>
+										<td>{{row[9]}}</td>
+										<td>{{row[10]}}</td>
+										</tr>
+									{% endfor %}
+									
+									</tbody>
+									<!-- <tr>
+										<th>ID</th>
+										<th>Keg Type</th>
+										<th>Status</th>
+										<th>Beer Brand</th>
+										<th>Time In</th>
+										<th>Time Cleaned</th>
+										<th>Time Filled</th>
 										<th>Time Shipped</th>
 										<th>Customer</th>
 										<th>Notes</th>
@@ -385,8 +418,8 @@
 										<td>2016-03-16</td>
 										<td>Greene Turtle</td>
 										<td></td>
-									</tr>
-								</tbody>
+									</tr> -->
+								
 							</table>
 							<!-- /.table-responsive -->
 						</div>
