@@ -362,7 +362,7 @@
     				});
 
     				// populates customer search with available customers
-					this.api().column(8).data().unique().sort().each(function(value, index){
+					this.api().column(9).data().unique().sort().each(function(value, index){
 						if (value !== "") 
 						{
 							$("#input_customer").append("<option>" + value + "</option>");
@@ -607,7 +607,7 @@
 				}
 
 				// 'regex' but not 'smart' search
-				table.column(8).search(searchCriteria, true, false).draw();
+				table.column(9).search(searchCriteria, true, false).draw();
 			});
 
 			// keyup event for id = input_keg_id
