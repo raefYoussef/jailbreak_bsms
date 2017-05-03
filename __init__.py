@@ -26,8 +26,6 @@ def signin():
 				session["uid"] = data["uid"]
 				session["username"] = data["username"]
 
-				# c.execute("UPDATE users SET WHERE email = '"+ attempted_email + "'")
-
 				return redirect(url_for('dashboard'))
 			else:
 				error = "Invalid credentials. Try Again."
@@ -290,23 +288,36 @@ def settings():
 @app.route('/view_inventory/', methods=["GET","POST"])
 def view_inventory():
 	if "uid" in session:
+		
 		c, conn = connection()
 
-		# ("""	SELECT beer_brands.name FROM beer_brands 
-		# 							INNER JOIN inventory ON beer_brands.id = inventory.beer_brand 
-		# 							WHERE ((inventory.status <=> 'FULL_INV' OR inventory.status <=> 'FULL_TAP') AND (inventory.beer_brand IS NOT NULL)) 
-		# 							ORDER BY inventory.beer_brand ASC """) 
-#INNER JOIN beer_brands ON inventory.beer_brand = beer_brands.id
-		inventory_items = c.execute(""" SELECT * FROM inventory
-										
-										 """)
+		inventory_items = c.execute(""" SELECT 	inventory.keg_id, inventory.keg_type, inventory.status, beer_brands.name AS beer_brand, 
+												inventory.time_in, inventory.time_cleaned, inventory.time_filled, inventory.time_tapped, 
+												inventory.time_shipped, inventory.customer, inventory.notes FROM inventory 
+										LEFT JOIN beer_brands ON beer_brands.id = inventory.beer_brand 
+										ORDER BY keg_id ASC""")
+		
 		inventory = c.fetchall()
-		inv_list = [[i["keg_id"], i["keg_type"], i["status"], i["beer_brand"], str(i["time_in"]), str(i["time_cleaned"]), str(i["time_filled"]), str(i["time_tap"]),str(i["time_shipped"]), i["customer"], i["notes"]] for i in inventory]
-		# x = [{key_id: 1}, {keg_id: 2}, {key_id: 3}]
-		# x[0]["keg_id"]
-		#print("hello")
-		#print(inventory_items)
+		
+		inv_list = []
+
+		for i in inventory:
+			keg_id = i["keg_id"]
+			keg_type = i["keg_type"]
+			status = i["status"]
+			beer_brand = i["beer_brand"] if i["beer_brand"] else ""
+			time_in = str(i["time_in"]) if i["time_in"] else ""
+			time_cleaned = str(i["time_cleaned"]) if i["time_cleaned"] else ""		
+			time_filled = str(i["time_filled"]) if i["time_filled"] else ""	
+			time_tapped = str(i["time_tapped"]) if i["time_tapped"] else ""
+			time_shipped = str(i["time_shipped"]) if i["time_shipped"] else ""
+			customer = str(i["customer"]) if i["customer"] else ""
+			notes = str(i["notes"]) if i["notes"] else ""
+
+			inv_list.append([keg_id, keg_type, status, beer_brand, time_in, time_cleaned, time_filled, time_tapped, time_shipped, customer, notes])
+		
 		return render_template("view_inventory.html", inventory=inv_list,  account_name = session["username"])
+
 
 	return redirect(url_for('signin'))
 
