@@ -104,11 +104,11 @@
 						<!-- /.panel-body -->
 <!-- **************************************************************** -->
 <button type="button" id="delete_inv" class="btn btn-danger" title="Delete from Database">Delete</button>
-<button type="button" id="edit_update" class="btn btn-warning" data-toggle="modal" data-target="#myModal1" title="Edit and update to Database">Edit & Update</button>
+<button type="button" id="edit_update" class="btn btn-warning"  title="Edit and update to Database">Edit & Update</button>
 <!-- *************************Modal1 code****************************** -->
   <!-- Modal -->
   <div class="modal fade" id="myModal1" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-sm">
     
       <!-- Modal content-->
       <div class="modal-content">
@@ -116,74 +116,127 @@
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Please Edit Keg ID here</h4>
         </div>
+        
+        <!-- **************************************************************** -->
+        <!-- Use grid on Modal-->
         <div class="modal-body">
+        	<div class="container-fluid">
+	         <!-- Id row-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>ID:      </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		<input type = "text" id = "id_inv" value = ""></input>
+	        	</div> 
+			</div> <!-- row for ID-->
+	         <!-- Keg Type-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Keg Type:</label>
+	        	</div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		<select id = "kegtype_inv">
+		 	 			<option value="HB">HB</option>
+		 			 	<option value="QB">QB</option>
+					</select>				
+	        	</div> 
+			</div> <!-- row for Keg Type-->	   
+	         <!-- Status-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Status:</label>
+	        	</div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		<select id = "status_inv">
+				         <option value="dirty">DIRTY</option>
+			 			 <option value="clean">CLEAN</option>
+			 			 <option value="fullout">FULL OUT</option>
+			 			 <option value="fullinv">FULL INV</option>
+					</select>				
+	        	</div> 
+			</div> <!-- row Status-->	
+	         <!-- Beer Brand-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Breer Brand:</label>
+	        	</div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		      <select id = "beerbrand_inv">
+				          	 <option value="punisher">Big Punisher</option>
+				          	 <option value="cask">Cask Special</option>	
+				          	 <option value="czech">Czech the Technique</option>
+				          	 <option value="monkey">Feed The Monkey</option>
+				          	 <option value="dark">Into The Dark</option>	 
+				 			 <option value="ruca">My Ruca</option>
+				 			 <option value="righteous">Poor Righteous</option>
+				 			 <option value="smoke">Smokehouse 54</option>
+				 	 		 <option value="infinite">The Infinite</option>
+				 			 <option value="is50">This Is 50</option>
+				 			 <option value="scoville">Welcome To Scoville</option>		 	 
+						</select>
+	        	</div> 
+			</div> <!-- row Beer Brand-->	
+			 <!-- Time in-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Time In:   </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        	      <input type = "date" id = "timein_inv" value = "" ></input>
+	        	</div> 
+			</div> <!-- Time in-->
+			 <!-- Time Cleaned-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Time Cleaned:   </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        	      <input type = "date" id = "timecleaned_inv" value = "" ></input>
+	        	</div> 
+			</div> <!-- Time Cleaned-->
+			 <!-- Time Filled-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Time Filled:   </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        	      <input type = "date" id = "timefilled_inv" value = "" ></input>
+	        	</div> 
+			</div> <!-- Time Filled-->
+			 <!-- Time Shipped-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Time Shipped:   </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        	      <input type = "date" id = "timeshipped_inv" value = "" ></input>
+	        	</div> 
+			</div> <!-- Time Shipped-->	
+			 <!-- Customer-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Customer:   </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		<input type = "text" id = "customer_inv" value = "" ></input>
+	        	</div> 
+			</div> <!-- Customer-->		
+	         <!-- Notes-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Notes:   </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		<input type = "text" id = "notes_inv" value = "" ></input>
+	        	</div> 
+			</div> <!-- Notes-->
+			</div> <!-- container-fluid-->
+        </div><!-- Modal-body-->
+<!-- **************************************************************** -->
 
-          <label>ID:</label>
-          <input type = "text"
-                 id = "id_inv"
-                 value = ""></input>
-                 <p></p>
-           <label>Keg Type:</label>
-          <select id = "kegtype_inv">
- 	 		<option value="HB">HB</option>
- 			 <option value="QB">QB</option>
-			</select>		
-		<p></p>
-	<label>Status:</label>
-          <select id = "status_inv">
- 	 		<option value="dirty">DIRTY</option>
- 			 <option value="clean">CLEAN</option>
- 			 <option value="fullout">FULL OUT</option>
- 			 <option value="fullinv">FULL INV</option>
-		</select>		
-                 <p></p>
-    <label>Beer Brand:</label>
-         <select id = "beerbrand_inv">
-          	 <option value="punisher">Big Punisher</option>
-          	 <option value="cask">Cask Special</option>	
-          	 <option value="czech">Czech the Technique</option>
-          	 <option value="monkey">Feed The Monkey</option>
-          	 <option value="dark">Into The Dark</option>	 
- 			 <option value="ruca">My Ruca</option>
- 			 <option value="righteous">Poor Righteous</option>
- 			 <option value="smoke">Smokehouse 54</option>
- 	 		 <option value="infinite">The Infinite</option>
- 			 <option value="is50">This Is 50</option>
- 			 <option value="scoville">Welcome To Scoville</option>	 			 			 
-		</select>
-		<p></p>
-	<label>Time In:</label>
-          <input type = "date"
-                 id = "timein_inv"
-                 value = "" ></input>
-                 <p></p>
-           <label>Time Cleaned:</label>
-          <input type =  "date"
-                 id = "timecleaned_inv"
-                 value = "" >
-		<p></p>
-	<label>Time Filled:</label>
-          <input type =  "date"
-                 id = "timefilled_inv"
-                 value = "" ></input>
-                 <p></p>
-           <label>Time Shipped:</label>
-          <input type =  "date"
-                 id = "timeshipped_inv"
-                 value = "" ></input>
-	<p></p>
-	<label>Customer:</label>
-          <input type = "text"
-                 id = "customer_inv"
-                 value = "" ></input>
-                 <p></p>
-           <label>Notes:</label>
-          <input type = "text"
-                 id = "notes_inv"
-                 value = "" ></input>
-        </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
+          <button type="button" id="submit1" class="btn btn-default" >Submit</button>
         </div>
       </div>
       
@@ -226,11 +279,11 @@
 <!-- **************************************************************** -->
 <button type="button" id="delete" class="btn btn-danger" title="Temporarily delete tag ID" >Delete</button>
 <!-- Trigger the modal with a button -->
-  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" title ="Edit and Add to Database">Edit & Add</button>
+  <button type="button" id="editadd" class="btn btn-info" title ="Edit and Add to Database">Edit & Add</button>
 <!-- *************************Modal code****************************** -->
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-sm">
     
       <!-- Modal content-->
       <div class="modal-content">
@@ -238,31 +291,50 @@
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Please Edit Keg ID here</h4>
         </div>
+<!-- **************************************************************** -->
+        <!-- Use grid on Modal-->
         <div class="modal-body">
-
-          <label>ID:      </label>
-          <input type = "text"
-                 id = "id_inv"
-                 value = ""></input>
-                 <p></p>
-           <label>Keg Type:</label>
-          <select id = "kegtype_inv">
- 	 		<option value="HB">HB</option>
- 			 <option value="QB">QB</option>
-			</select>				
-                 <p></p>
-           <label>Notes:   </label>
-          <input type = "text"
-                 id = "notes_inv"
-                 value = "" ></input>
-        </div>
+        	<div class="container-fluid">
+	         <!-- Id row-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:15px; background-color:lightgray;">
+	        		<label>ID:      </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:15px;" >
+	        		<input type = "text" id = "id_inv" value = ""></input>
+	        	</div> 
+			</div> <!-- row for ID-->
+	         <!-- Keg Type-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:15px; background-color:lightgray;">
+	        		<label>Keg Type:</label>
+	        	</div>
+	        	<div class="col col-xm-6" style="margin-bottom:15px;" >
+	        		<select id = "kegtype_inv">
+		 	 			<option value="HB">HB</option>
+		 			 	<option value="QB">QB</option>
+					</select>				
+	        	</div> 
+			</div> <!-- row for Keg Type-->	          
+	         <!-- Notes-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:15px; background-color:lightgray;">
+	        		<label>Notes:   </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:15px;" >
+	        		<input type = "text" id = "notes_inv" value = "" ></input>
+	        	</div> 
+			</div> <!-- Notes-->
+			</div> <!-- container-fluid-->
+        </div><!-- Modal-body-->
+<!-- **************************************************************** -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
+          <button type="button" id="submit1" class="btn btn-default">Submit</button>
         </div>
-      </div>
+      </div><!-- Modal-content-->
       
-    </div>
-  </div>
+    </div><!-- Modal-dialog-->
+  </div><!-- Modal-fade-->
 <!-- **************************************************************** -->
 
 
@@ -352,6 +424,16 @@ $(document).ready(function(){
 		//$("#tag").hide("slow");   
 		$('#tag').focus();
 
+		//reset datatables everytime start scan is pressed
+		//reset inventory datatable
+		($('#dataTables-inventory').DataTable())
+            .clear()
+            .draw();
+        //reset unidentified keg datatable
+		($('#dataTables-inventory1').DataTable())
+            .clear()
+            .draw();
+
   
     });
    
@@ -389,6 +471,31 @@ $(document).ready(function(){
             .remove()
             .draw();
     });
+//<!-------Open pop up modal when edit & update button is pressed------------>    
+//<!-------Works when row selected on table inventory------------>
+//<!-------open myModal1 ------------>
+    $("#edit_update").click(function(){
+    	if(($('#dataTables-inventory').DataTable()).rows('.selected').any()){
+    		$("#myModal1").modal("show");
+    	}
+    	else{
+    		$("#myModal1").modal("hide");
+    		alert("Nothing Selected or Empty Table");
+    	}   	
+
+    });
+    //edit and add button pressed
+//<!-------open myModal, unidentified keg modal ------------>
+    $("#editadd").click(function(){
+     	if(($('#dataTables-inventory1').DataTable()).rows('.selected').any()){
+    		$("#myModal").modal("show");
+    	}
+    	else{
+    		$("#myModal").modal("hide");
+    		alert("Nothing Selected or Empty Table");
+    	}
+    });
+
 });<!-- noconflict -->
 </script> 
 <!--************************************************-->
