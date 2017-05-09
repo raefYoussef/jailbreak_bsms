@@ -25,12 +25,17 @@ def signin():
 			if data_count and sha256_crypt.verify(attempted_password, user_password):
 				session["uid"] = data["uid"]
 				session["username"] = data["username"]
-
+				c.execute("UPDATE users SET signin_time = NOW() WHERE email = '"+ attempted_email +"'") 
+				conn.commit()
+    			#c.close()
+    			#conn.close()
 				return redirect(url_for('dashboard'))
 			else:
 				error = "Invalid credentials. Try Again."
+				c.execute("UPDATE users SET failed_signin = failed_signin + 1 WHERE email = '"+ attempted_email +"'") 
+				conn.commit()
 				return render_template("signin.html")
-
+				
 		else:
 			return render_template("signin.html")
 
@@ -41,6 +46,10 @@ def signin():
 
 @app.route('/signout/', methods=["GET","POST"])
 def signout():
+	#attempted_email = request.form['email']
+	c, conn = connection()
+	c.execute("UPDATE users SET signout_time = NOW()") #WHERE email = '"+  + "'") 
+	conn.commit()
 	session.pop("uid", None)
 	session.pop("username", None)
 
@@ -56,8 +65,17 @@ def test():
 def compare_epc():
 	try:
 		c, conn = connection()
-		data_count = c.execute("SELECT * FROM inventory WHERE internal_id = ('"+ request.form["epc"] + "')")
+		#"SELECT * FROM inventory WHERE internal_id = ('"+ request.form["epc"] + "')"
+		
+		data_count = c.execute(""" SELECT inventory.keg_id, inventory.keg_type, inventory.status, beer_brands.name AS beer_brand, 
+								inventory.time_in, inventory.time_cleaned, inventory.time_filled, inventory.time_tapped, 
+								inventory.time_shipped, inventory.customer, inventory.notes FROM inventory 
+								LEFT JOIN beer_brands ON beer_brands.id = inventory.beer_brand 
+								WHERE inventory.internal_id = ('"""+ request.form["epc"] + """')
+								ORDER BY inventory.keg_id ASC """)
 		data = c.fetchall()
+
+		
 		return jsonify({"epc": data})
 	except Exception as e:
 		return jsonify({"error": e})
@@ -67,10 +85,21 @@ def compare_epc():
 def add_epc():
 	try:
 		c, conn = connection()
-		c.execute("INSERT INTO inventory (keg_type, internal_id) VALUES (%s, %s)", (thwart(keg_type), thwart(internal_id)))
+		#keg_type = request.form["epc"]
+		data = request.form
+
+		keg_type = data["kegtype_und"]
+		internal_id = data["rawId_und"]
+		notes = data["notes_und"]
+
+		c.execute("INSERT INTO inventory (keg_type, internal_id, notes) VALUES ('"+thwart(keg_type)+ "', "+thwart(internal_id)+", '"+thwart(notes)+"')")
 		conn.commit()
-		c.close()
-		conn.close()
+		# data = request.form["epc"]
+		# data = data.split("^")
+		#data = request.form
+
+
+		return jsonify({"epc": data})
 	except Exception as e:
 		return jsonify({"error": e})
 
@@ -90,7 +119,7 @@ def signin_temp():
 
 				#data = c.fetchone()[2]
 
-
+				
 				if data and sha256_crypt.verify(request.form['password'], c.fetchone()["password"]):
 					#flash(attempted_username)
 					#flash(attempted_password)
@@ -147,6 +176,7 @@ def dashboard_ajax_brand():
 		# format set into array required by morrisjs donut chart
 		freq_list = [{"label": freq_set.keys()[i], "value": freq_set.values()[i]} for i in range(len(freq_set))]
 
+		
 		return jsonify({"brands_chart":freq_list})
 
 	except Exception as e:
@@ -179,7 +209,7 @@ def dashboard_ajax_customers():
 				cust_list.append([customer_name, freq, activity[0]["last_activity"]])
 			else :
 				cust_list.append([customer_name, freq, None])
-
+	
 		return jsonify(cust_list)
 
 	except Exception as e:
@@ -211,7 +241,7 @@ def dashboard_ajax_kegStatus():
 				status_dict[i["status"]]=i["freq"]
 
 			status_list.append(status_dict)
-
+			
 		return jsonify(status_list)
 
 	except Exception as e:
@@ -337,6 +367,66 @@ def logistics():
 
 	return redirect(url_for('signin'))
 
+
+@app.route('/logistics_ajax_brands/', methods=["POST"])
+def logistics_ajax_brands():
+	try:
+		# establish a connection to database
+		c, conn = connection()
+		
+		# beer brands which has been shipped 
+		brand_count = c.execute("""	SELECT activity_log.beer_brand AS `id`, beer_brands.name FROM `activity_log` 
+									INNER JOIN `beer_brands` ON activity_log.beer_brand = beer_brands.id  
+									WHERE (activity_log.status='FULL_OUT') 
+									GROUP BY activity_log.beer_brand """) 
+
+		brands = c.fetchall()
+
+		brands_shipped = [brand["name"] for brand in brands]
+		freq_shipped = []
+		
+		for month in xrange(1,13):
+			month_freq = {}
+			month_freq["date"] = str(datetime.datetime.today().year) + "-" + str(month)
+
+			for brand in brands:
+				freq_count = c.execute("SELECT count(*) As `count` FROM activity_log WHERE beer_brand= %s AND month(time)= %s"
+										%(str(brand["id"]), str(month)))
+				freq = c.fetchone()
+				month_freq[brand["name"]] = freq["count"]
+
+			freq_shipped.append(month_freq)		
+
+
+		# beer brands which has been shipped 
+		brand_count = c.execute("""	SELECT activity_log.beer_brand AS `id`, beer_brands.name FROM `activity_log` 
+									INNER JOIN `beer_brands` ON activity_log.beer_brand = beer_brands.id  
+									WHERE (activity_log.status='FULL_TAP') 
+									GROUP BY activity_log.beer_brand """) 
+
+		brands = c.fetchall()
+
+		brands_tapped = [brand["name"] for brand in brands]
+		freq_tapped = []
+		
+		for month in xrange(1,13):
+			month_freq = {}
+			month_freq["date"] = str(datetime.datetime.today().year) + "-" + str(month)
+
+			for brand in brands:
+				freq_count = c.execute("SELECT count(*) As `count` FROM activity_log WHERE beer_brand= %s AND month(time)= %s"
+										%(str(brand["id"]), str(month)))
+				freq = c.fetchone()
+				month_freq[brand["name"]] = freq["count"]
+
+			freq_tapped.append(month_freq)		
+				
+
+		return jsonify({"freq_shipped": freq_shipped, "brands_shipped": brands_shipped, "freq_tapped": freq_tapped, "brands_tapped": brands_tapped})
+
+	except Exception as e:
+		# failed connection
+		return jsonify(e)
 
 if __name__ == "__main__":
 	app.secret_key = 'some secret key'

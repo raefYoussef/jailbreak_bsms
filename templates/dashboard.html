@@ -365,239 +365,241 @@
 		<script src="{{url_for('static', filename='DataTables/Scroller-1.4.2/js/dataTables.scroller.min.js')}}"></script>
 
 		<script>
-		$(document).ready(function() {
-			var now = new Date();
-			var year = (now.getFullYear()).toString();
-			var month = (now.getMonth() + 1).toString();
-			var day = (now.getDate()).toString();
+			$(document).ready(function() {
+				var now = new Date();
+				var year = (now.getFullYear()).toString();
+				var month = (now.getMonth() + 1).toString();
+				var day = (now.getDate()).toString();
 
-			// Inventory Status Line Chart
-			line_chart = Morris.Line({
-				element: 'dashboard_inv_status',
-				data: [{
-					date: year +"-"+ month +"-"+ parseInt(now.getDate()),
-					DIRTY: 0,
-					CLEAN: 0,
-					FULL_INV: 0,
-					FULL_TAP: 0,
-					FULL_OUT: 0 
-				}, {
-					date: year +"-"+ month +"-"+ parseInt(now.getDate() - 1),
-					DIRTY: 0,
-					CLEAN: 0,
-					FULL_INV: 0,
-					FULL_TAP: 0,
-					FULL_OUT: 0 
-				}, {
-					date: year +"-"+ month +"-"+ parseInt(now.getDate() - 2),
-					DIRTY: 0,
-					CLEAN: 0,
-					FULL_INV: 0,
-					FULL_TAP: 0,
-					FULL_OUT: 0 
-				}, {
-					date: year +"-"+ month +"-"+ parseInt(now.getDate() - 3),
-					DIRTY: 0,
-					CLEAN: 0,
-					FULL_INV: 0,
-					FULL_TAP: 0,
-					FULL_OUT: 0 
-				}, {
-					date: year +"-"+ month +"-"+ parseInt(now.getDate() - 4),
-					DIRTY: 0,
-					CLEAN: 0,
-					FULL_INV: 0,
-					FULL_TAP: 0,
-					FULL_OUT: 0 
-				}, {
-					date: year +"-"+ month +"-"+ parseInt(now.getDate() - 5),
-					DIRTY: 0,
-					CLEAN: 0,
-					FULL_INV: 0,
-					FULL_TAP: 0,
-					FULL_OUT: 0 
-				}, {
-					date: year +"-"+ month +"-"+ parseInt(now.getDate() - 6),
-					DIRTY: 0,
-					CLEAN: 0,
-					FULL_INV: 0,
-					FULL_TAP: 0,
-					FULL_OUT: 0 
-				}],
-				xkey: 'date',
-				ykeys: ['FULL_OUT', 'FULL_INV', 'FULL_TAP', 'CLEAN', 'DIRTY'],
-				labels: ['Full (Shipped)', 'Full (Inv)', 'Full (Tap)', 'Clean', 'Dirty'],
-				lineColors: ['#4285F4', '#00C851', '#ffbb33', '#aa66cc', '#ff4444'],
-				pointSize: 5,
-				resize: true,
-				hideHover: 'auto'
-			});
+				// Inventory Status Line Chart
+				line_chart = Morris.Line({
+					element: 'dashboard_inv_status',
+					data: [{
+						date: year +"-"+ month +"-"+ parseInt(now.getDate()),
+						DIRTY: 0,
+						CLEAN: 0,
+						FULL_INV: 0,
+						FULL_TAP: 0,
+						FULL_OUT: 0 
+					}, {
+						date: year +"-"+ month +"-"+ parseInt(now.getDate() - 1),
+						DIRTY: 0,
+						CLEAN: 0,
+						FULL_INV: 0,
+						FULL_TAP: 0,
+						FULL_OUT: 0 
+					}, {
+						date: year +"-"+ month +"-"+ parseInt(now.getDate() - 2),
+						DIRTY: 0,
+						CLEAN: 0,
+						FULL_INV: 0,
+						FULL_TAP: 0,
+						FULL_OUT: 0 
+					}, {
+						date: year +"-"+ month +"-"+ parseInt(now.getDate() - 3),
+						DIRTY: 0,
+						CLEAN: 0,
+						FULL_INV: 0,
+						FULL_TAP: 0,
+						FULL_OUT: 0 
+					}, {
+						date: year +"-"+ month +"-"+ parseInt(now.getDate() - 4),
+						DIRTY: 0,
+						CLEAN: 0,
+						FULL_INV: 0,
+						FULL_TAP: 0,
+						FULL_OUT: 0 
+					}, {
+						date: year +"-"+ month +"-"+ parseInt(now.getDate() - 5),
+						DIRTY: 0,
+						CLEAN: 0,
+						FULL_INV: 0,
+						FULL_TAP: 0,
+						FULL_OUT: 0 
+					}, {
+						date: year +"-"+ month +"-"+ parseInt(now.getDate() - 6),
+						DIRTY: 0,
+						CLEAN: 0,
+						FULL_INV: 0,
+						FULL_TAP: 0,
+						FULL_OUT: 0 
+					}],
+					xkey: 'date',
+					ykeys: ['FULL_OUT', 'FULL_INV', 'FULL_TAP', 'CLEAN', 'DIRTY'],
+					labels: ['Full (Shipped)', 'Full (Inv)', 'Full (Tap)', 'Clean', 'Dirty'],
+					lineColors: ['#4285F4', '#00C851', '#ffbb33', '#aa66cc', '#ff4444'],
+					pointSize: 5,
+					resize: true,
+					hideHover: 'auto'
+				});
 
-			// Beer Brand Donut Chart
-			var donut_chart = Morris.Donut({
-				element: 'dashboard_inventory_beers',
-				data: [{
-					label: "Kegs on Tap or in Inventory",
-					value: 0
-				}],
-				resize: true
-			});
-			
-			// Custome Table
-			var customers_table = $("#customer_summary").DataTable({
-				"responsive": true,
-				"searching": true,
-				"order": [[2, "desc"]],
-				"scrollY": "230px",
-				"scrollCollapse": true,
-				"paging": true
-			});
+				// Beer Brand Donut Chart
+				var donut_chart = Morris.Donut({
+					element: 'dashboard_inventory_beers',
+					data: [{
+						label: "Kegs on Tap or in Inventory",
+						value: 0
+					}],
+					resize: true
+				});
+				
+				// Custome Table
+				var customers_table = $("#customer_summary").DataTable({
+					"responsive": true,
+					"searching": true,
+					"order": [[2, "desc"]],
+					"scrollY": "230px",
+					"scrollCollapse": true,
+					"paging": true
+				});
 
-			// Shipped Kegs Table
-			var shipped_table = $("#shipped_kegs_table").DataTable({
-				"responsive": true,
-				"searching": true,
-				"paging": true,
-				"order": [[1, "desc"]],
-				"scrollX": true
-			});
+				// Shipped Kegs Table
+				var shipped_table = $("#shipped_kegs_table").DataTable({
+					"responsive": true,
+					"searching": true,
+					"paging": true,
+					"order": [[1, "desc"]],
+					"scrollX": true
+				});
 
-			// Filled Kegs Table
-			var filled_table = $("#filled_kegs_table").DataTable({
-				"responsive": true,
-				"searching": true,
-				"paging": true,
-				"order": [[1, "desc"]],
-				"scrollX": true
-			});
+				// Filled Kegs Table
+				var filled_table = $("#filled_kegs_table").DataTable({
+					"responsive": true,
+					"searching": true,
+					"paging": true,
+					"order": [[1, "desc"]],
+					"scrollX": true
+				});
 
-			// Tapped Kegs Table
-			var tapped_table = $("#tapped_kegs_table").DataTable({
-				"responsive": true,
-				"searching": true,
-				"paging": true,
-				"order": [[1, "desc"]],
-				"scrollX": true
-			});
+				// Tapped Kegs Table
+				var tapped_table = $("#tapped_kegs_table").DataTable({
+					"responsive": true,
+					"searching": true,
+					"paging": true,
+					"order": [[1, "desc"]],
+					"scrollX": true
+				});
 
-			// Returned Kegs Table
-			var returned_table = $("#returned_kegs_table").DataTable({
-				"responsive": true,
-				"searching": true,
-				"paging": true,
-				"order": [[1, "desc"]],
-				"scrollX": true
-			});			
+				// Returned Kegs Table
+				var returned_table = $("#returned_kegs_table").DataTable({
+					"responsive": true,
+					"searching": true,
+					"paging": true,
+					"order": [[1, "desc"]],
+					"scrollX": true
+				});			
 
-			// notification panels ajax request
-			$.ajax({
-				url: "/dashboard_ajax_notifications/",
-				dataType: "json",
-				type: "POST",
-				success: function(response) {
-					
-					// update panels
-					$("#shipped_kegs_panel").text(response["shipped_count"]);
-					$("#filled_kegs_panel").text(response["filled_count"]);
-					$("#tapped_kegs_panel").text(response["tapped_count"]);
-					$("#returned_kegs_panel").text(response["returned_count"]);
+				// notification panels ajax request
+				$.ajax({
+					url: "/dashboard_ajax_notifications/",
+					dataType: "json",
+					type: "POST",
+					success: function(response) {
+						
+						// update panels
+						$("#shipped_kegs_panel").text(response["shipped_count"]);
+						$("#filled_kegs_panel").text(response["filled_count"]);
+						$("#tapped_kegs_panel").text(response["tapped_count"]);
+						$("#returned_kegs_panel").text(response["returned_count"]);
 
-					// update tables
-					shipped_table.clear();
-					shipped_table.rows.add(response["shipped"]);
-					shipped_table.draw();
+						// update tables
+						shipped_table.clear();
+						shipped_table.rows.add(response["shipped"]);
+						shipped_table.draw();
 
-					filled_table.clear();
-					filled_table.rows.add(response["filled"]);
-					filled_table.draw();
-					
-					tapped_table.clear();
-					tapped_table.rows.add(response["tapped"]);
-					tapped_table.draw();
+						filled_table.clear();
+						filled_table.rows.add(response["filled"]);
+						filled_table.draw();
+						
+						tapped_table.clear();
+						tapped_table.rows.add(response["tapped"]);
+						tapped_table.draw();
 
-					returned_table.clear();
-					returned_table.rows.add(response["returned"]);
-					returned_table.draw();
-				},
-				error: function(error) {
-					console.log("Ajax Request Error - Notification Panels Statuses");
-				}
-			});
-
-			// inventory status chart ajax request
-			$.ajax({
-				url: "/dashboard_ajax_invStatus/",
-				dataType: "json",
-				type: "POST",
-				success: function(response) {
-					
-					if(response.length != 0)
-					{
-						line_chart.setData(response);
+						returned_table.clear();
+						returned_table.rows.add(response["returned"]);
+						returned_table.draw();
+					},
+					error: function(error) {
+						console.log("Ajax Request Error - Notification Panels Statuses");
 					}
-				},
-				error: function(error) {
-					console.log("Ajax Request Error - Inventory Statuses");
-				}
-			});
+				});
 
-			// beer brand chart ajax request
-			$.ajax({
-				url: "/dashboard_ajax_brands/",
-				dataType: "json",
-				type: "POST",
-				success: function(response) {
-
-					if(response["brands_chart"].length != 0)
-					{
-						// there exist kegs on tap or in inventory
-						donut_chart.setData(response["brands_chart"]);
+				// inventory status chart ajax request
+				$.ajax({
+					url: "/dashboard_ajax_invStatus/",
+					dataType: "json",
+					type: "POST",
+					success: function(response) {
+						
+						console.log(response);
+						
+						if(response.length != 0)
+						{
+							line_chart.setData(response);
+						}
+					},
+					error: function(error) {
+						console.log("Ajax Request Error - Inventory Statuses");
 					}
-					else
-					{
-						donut_chart.setData({label: "Kegs on Tap or in Inventory", value: 0 });
+				});
+
+				// beer brand chart ajax request
+				$.ajax({
+					url: "/dashboard_ajax_brands/",
+					dataType: "json",
+					type: "POST",
+					success: function(response) {
+
+						if(response["brands_chart"].length != 0)
+						{
+							// there exist kegs on tap or in inventory
+							donut_chart.setData(response["brands_chart"]);
+						}
+						else
+						{
+							donut_chart.setData({label: "Kegs on Tap or in Inventory", value: 0 });
+						}
+					},
+					error: function(error) {
+						console.log("Ajax Request Error - Beer Brands Chart");
 					}
-				},
-				error: function(error) {
-					console.log("Ajax Request Error - Beer Brands Chart");
-				}
-			});
+				});
 
-			// customers table ajax request
-			$.ajax({
-				url: "/dashboard_ajax_customers/",
-				dataType: "json",
-				type: "POST",
-				success: function(response) {
-					customers_table.clear();
-					customers_table.rows.add(response);
-					customers_table.draw();	
-				},
-				error: function(error) {
-					console.log("Ajax Request Error - Customers Table");
-				}
-			});
+				// customers table ajax request
+				$.ajax({
+					url: "/dashboard_ajax_customers/",
+					dataType: "json",
+					type: "POST",
+					success: function(response) {
+						customers_table.clear();
+						customers_table.rows.add(response);
+						customers_table.draw();	
+					},
+					error: function(error) {
+						console.log("Ajax Request Error - Customers Table");
+					}
+				});
 
-			// Fixes head misalignment 
-			$("#shipped_kegs_modal").on('shown.bs.modal', function () {
-				shipped_table.columns.adjust().draw();
-			});
+				// Fixes head misalignment 
+				$("#shipped_kegs_modal").on('shown.bs.modal', function () {
+					shipped_table.columns.adjust().draw();
+				});
 
-			// Fixes head misalignment 
-			$("#filled_kegs_modal").on('shown.bs.modal', function () {
-				filled_table.columns.adjust().draw();
-			});
+				// Fixes head misalignment 
+				$("#filled_kegs_modal").on('shown.bs.modal', function () {
+					filled_table.columns.adjust().draw();
+				});
 
-			// Fixes head misalignment 
-			$("#tapped_kegs_modal").on('shown.bs.modal', function () {
-				tapped_table.columns.adjust().draw();
-			});
+				// Fixes head misalignment 
+				$("#tapped_kegs_modal").on('shown.bs.modal', function () {
+					tapped_table.columns.adjust().draw();
+				});
 
-			// Fixes head misalignment 
-			$("#returned_kegs_modal").on('shown.bs.modal', function () {
-				returned_table.columns.adjust().draw();
+				// Fixes head misalignment 
+				$("#returned_kegs_modal").on('shown.bs.modal', function () {
+					returned_table.columns.adjust().draw();
+				});
 			});
-		});
 		</script>
 	{% endblock %}
 
