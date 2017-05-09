@@ -428,6 +428,68 @@ def logistics_ajax_brands():
 		# failed connection
 		return jsonify(e)
 
+
+@app.route('/logistics_ajax_customers/', methods=["POST"])
+def logistics_ajax_customers():
+	try:
+		# establish a connection to database
+		c, conn = connection()
+		
+		customers_count = c.execute("SELECT customer FROM activity_log WHERE customer IS NOT NULL GROUP BY customer")
+		customers = freq = c.fetchall()
+
+		customers_info = []
+
+		for customer in customers:
+			name = customer["customer"]
+
+			activity_count = c.execute("SELECT max(time) AS `last_activity` FROM activity_log WHERE (status='DIRTY' OR status='FULL_OUT') AND customer='%s'" %(name))
+			activity = c.fetchone()
+			last_activity = str(activity["last_activity"])
+
+			keg_out_count = c.execute("SELECT count(*) AS `lifetime_total` FROM activity_log WHERE status='FULL_OUT' AND customer='%s'" %(name))
+			keg_out = c.fetchone()
+			lifetime_total = keg_out["lifetime_total"]
+
+			returned_count = c.execute("SELECT count(*) AS `returned_total` FROM activity_log WHERE status='DIRTY' AND customer='%s'" %(name))
+			returned = c.fetchone()
+			returned_total = returned["returned_total"]
+			current_total = lifetime_total - returned_total
+
+			oldest_count = c.execute("""	SELECT min(self2_t.time) AS `oldest_shipped`
+												FROM (
+													SELECT time  FROM activity_log 
+													INNER JOIN (
+														SELECT keg_id, max(time) As `max` FROM activity_log 
+														WHERE customer='%s' 
+														GROUP BY keg_id
+														) self_t 
+													ON activity_log.keg_id=self_t.keg_id AND time=self_t.max 
+													WHERE customer='%s' AND status='FULL_OUT' 
+													GROUP BY activity_log.keg_id
+													) As self2_t""" 
+												%(name, name))
+			oldest = c.fetchone()
+			oldest_shipped = str(oldest["oldest_shipped"]) if oldest["oldest_shipped"] else '' 
+
+			popular_count = c.execute(" SELECT beer_brands.name, count(*) AS freq FROM activity_log INNER JOIN beer_brands ON activity_log.beer_brand = beer_brands.id WHERE status='FULL_OUT' AND customer='%s' GROUP BY beer_brand ORDER BY freq DESC" %(name))
+			popular = c.fetchall()
+			popular_brands = ['', '', '']
+
+			for i in xrange(min(len(popular),3)):
+				popular_brands[i] = popular[i]["name"] 
+
+
+			customers_info.append([name, lifetime_total, current_total, last_activity, oldest_shipped, popular_brands[0], popular_brands[1], popular_brands[2]]) 
+				
+	
+		return jsonify(customers_info)
+
+	except Exception as e:
+		# failed connection
+		return jsonify(e)	
+
+
 if __name__ == "__main__":
 	app.secret_key = 'some secret key'
 	app.run(debug=True)

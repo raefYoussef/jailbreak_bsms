@@ -51,6 +51,35 @@
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
+						<h3 class="panel-title"><i class="fa fa-table fa-fw"></i> Customers</h3>
+					</div>
+					<div class="panel-body">
+						<table width="100%" class="table table-bordered table-hover table-striped" id="customers_table">
+							<thead>
+								<tr>
+									<th>Customer</th>
+									<th>Lifetime Keg Total</th>
+									<th>Current Keg Total</th>
+									<th>Last Activity</th>
+									<th>Least Recent Shipment</th>
+									<th>Popular Brand #1</th>
+									<th>Popular Brand #2</th>
+									<th>Popular Brand #3</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
 						<h3 class="panel-title"><i class="fa fa-line-chart fa-fw"></i> Beer Brand Demand (Shipped)</h3>
 					</div>
 					<div class="panel-body">
@@ -94,6 +123,34 @@
 		<script>
 			$(document).ready(function() {
 
+				// Custome Table
+				var customers_table = $("#customers_table").DataTable({
+					"responsive": true,
+					"searching": true,
+					"order": [[3, "desc"]],
+					"paging": true
+				});
+
+
+				// customers table ajax request
+				$.ajax({
+					url: "/logistics_ajax_customers/",
+					dataType: "json",
+					type: "POST",
+					success: function(response) {
+
+						console.log(response);
+
+						customers_table.clear();
+						customers_table.rows.add(response);
+						customers_table.draw();	
+					},
+					error: function(error) {
+						console.log("Ajax Request Error - Customers Table");
+					}
+				});
+
+				// beer brands ajax request
 				$.ajax({
 					url: "/logistics_ajax_brands/",
 					dataType: "json",
@@ -103,7 +160,7 @@
 						console.log(response);
 
 						// Beer Brand Demand (Shipped) 
-						Morris.Line({
+						demand_shipped = Morris.Line({
 							element: "brand_demand_shipped",
 							data: response["freq_shipped"],
 							xkey: 'date',
@@ -131,7 +188,7 @@
 						});
 
 						// Beer Brand Demand (Tapped) 
-						Morris.Line({
+						demand_tapped = Morris.Line({
 							element: "brand_demand_tapped",
 							data: response["freq_tapped"],
 							xkey: 'date',
