@@ -92,14 +92,13 @@ def add_epc():
 		internal_id = data["rawId_und"]
 		notes = data["notes_und"]
 
-		c.execute("INSERT INTO inventory (keg_type, internal_id, notes) VALUES ('"+thwart(keg_type)+ "', "+thwart(internal_id)+", '"+thwart(notes)+"')")
+		idarray = internal_id.split(',')
+
+		for element in idarray:
+			c.execute("INSERT INTO inventory (keg_type, internal_id, notes) VALUES ('"+thwart(keg_type)+ "', '"+thwart(element)+"', '"+thwart(notes)+"')")
 		conn.commit()
-		# data = request.form["epc"]
-		# data = data.split("^")
-		#data = request.form
-
-
-		return jsonify({"epc": data})
+		
+		return jsonify({"epc": idarray})
 	except Exception as e:
 		return jsonify({"error": e})
 

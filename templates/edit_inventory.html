@@ -532,19 +532,21 @@ function add_Row(rawId_und, kegtype_und, notes_und){
 	//var param_obj = {id : $.trim(rawId_und), kt :$.trim(kegtype_und), notes : $.trim(notes_und)}
 	// var epcData = jQuery.param({epc: paramstring});
 
+	var temp0 = rawId_und;
+	var temp = temp0.split(/(\s+)/);
+
 	const epcData = {"rawId_und": params[0], "kegtype_und": params[1], "notes_und": params[2]}
 
 	//alert(params);
-	alert(epcData);
+	
+	alert(temp[0]);
 	$.ajax({
 		url:"/add_epc/",
 		data: epcData,
 		dataType: "json",
 		type: "POST",
 		success: function(response){
-			alert(response["epc"]);
-			console.log(response["epc"]);
-			
+			alert("Kegs with IDs "+ response["epc"] +" have been added succesfully!");
   		},
 		error: function(error){
 			alert("Error!!");
@@ -582,10 +584,8 @@ $(document).ready(function(){
         $(document).pos();
      
 		$(document).off('scan.pos.barcode').on('scan.pos.barcode', function(event){	
-			alert(current + " " + event.code);
 			if (current != event.code){
-				$("#tag").val($("#tag").val() + event.code + "\n");
-				//current = event.code;	
+				$("#tag").val($("#tag").val() + event.code + "\n");	
 			}
 			current = event.code;
 		});
@@ -697,7 +697,10 @@ $(document).ready(function(){
      		var all_data = $('#dataTables-inventory1').DataTable().rows({selected : true}).data();
      		for (var i = 0; i < all_data.length; i++){
 				var my_id = all_data[i][1];
-				string += my_id + "	";
+				string += $.trim(my_id);
+				if (i != all_data.length - 1){
+					string += ',';
+				}
      			$userName=$("#myModal").find('#id_inv');
     			$userName.val(string);	
     		} 
