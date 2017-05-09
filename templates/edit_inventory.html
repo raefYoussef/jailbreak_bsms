@@ -5,15 +5,27 @@
 <!-- **************************************************************** -->  
 <!-- **************************************************************** -->	
 	{% block stylesheets %}
- <!-- DataTables CSS -->
+		<!-- Bootstrap Core CSS -->
+		<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+			<!-- Custom CSS -->
+		<link href="/static/sb-admin/sb-admin.css" rel="stylesheet">
+		<link href="/static/custom/css/blank_template.css" rel="stylesheet">
+
+		<!-- Custom Fonts -->
+		<link href="/static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	 	<!-- DataTables CSS -->
 		<link href="{{url_for('static', filename='DataTables/DataTables-1.10.13/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
-  <!-- <link href="{{url_for('static', filename='DataTables/Buttons-1.2.4/css/buttons.bootstrap.min.css')}}" rel="stylesheet">-->
+	  	<!-- <link href="{{url_for('static', filename='DataTables/Buttons-1.2.4/css/buttons.bootstrap.min.css')}}" rel="stylesheet">-->
 		<link href="{{url_for('static', filename='DataTables/ColReorder-1.3.2/css/colReorder.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/Responsive-2.1.1/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/Scroller-1.4.2/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
-   <link href="{{url_for('static', filename='DataTables/Select-1.2.0/css/select.bootstrap.min.css')}}" rel="stylesheet">
-   
+	   	<link href="{{url_for('static', filename='DataTables/Select-1.2.0/css/select.bootstrap.min.css')}}" rel="stylesheet">
+	   	<link href="/static/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet">
+	   	<link href="/static/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
+	   
    <!-- style of textarea
   {% endblock %}
  <!-- **************************************************************** -->  
@@ -60,26 +72,36 @@
  <!-- **************************************************************** -->
  <!-- Body of hidden textbox and scan buttons -->
 	{% block body %}
-  <div class="row1">
-				<div class="col-lg-12">
-					<div class="panel panel-default">
-						
-<!-------Text area to enter tags------------>
+  	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading" id = "ph0">
+					Please Scan tags Here
+				</div>
+						<!-- /.panel-heading -->
+				<div class="panel-body" id ="p0">						
+				<!-------Text area to enter tags------------>
 
-<h3>Please Scan Tags Here</h3>
+				<textarea id="tag"  style="width:99%" col="5" placeholder="placeholder" readonly>Scan Kegs Here</textarea>
+				<!-------start scan button------------>
+				<button type="button" id="start" class="btn btn-success">Start Scan</button>
+				<!-------stop scan button------------>
+				<button type="button" id="stop" class="btn btn-danger" disabled>Stop Scan</button>
+				</div><!-- /.panel-body -->
+			</div><!-- /.panel- -->
+		</div><!-- /.col-lg-12 -->
+	</div><!-- /row -->
 
-<textarea id="tag" disabled  style="width:99%" col="5" placeholder="Scanned RFID tag numbers go here."></textarea>
-<!-------start scan button------------>
-<button type="button" id="start" class="btn btn-success">Start Scan</button>
-<!-------stop scan button------------>
-<button type="button" id="stop" class="btn btn-danger" disabled>Stop Scan</button>
 
 <!-- **********************Table*********************************** -->
-<div class="panel-heading" id = "ph1">
+<div class="row">
+	<div class ="col-lg-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading" id = "ph1">
 							Inventory
 						</div>
 						<!-- /.panel-heading -->
-<div class="panel-body" id ="p1">
+			<div class="panel-body" id ="p1">
 							<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-inventory">
 								
 								<tbody>
@@ -92,6 +114,7 @@
 										<th>Time In</th>
 										<th>Time Cleaned</th>
 										<th>Time Filled</th>
+										<th>Time Tapped</th>
 										<th>Time Shipped</th>
 										<th>Customer</th>
 										<th>Note</th>
@@ -127,7 +150,7 @@
 	        		<label>ID:      </label>
 	        	 </div>
 	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
-	        		<input type = "text" id = "id_inv" value = ""></input>
+	        		<input type = "text" id = "id_inv" value = "" readonly></input>
 	        	</div> 
 			</div> <!-- row for ID-->
 	         <!-- Keg Type-->
@@ -139,6 +162,7 @@
 	        		<select id = "kegtype_inv">
 		 	 			<option value="HB">HB</option>
 		 			 	<option value="QB">QB</option>
+
 					</select>				
 	        	</div> 
 			</div> <!-- row for Keg Type-->	   
@@ -149,31 +173,32 @@
 	        	</div>
 	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
 	        		<select id = "status_inv">
-				         <option value="dirty">DIRTY</option>
-			 			 <option value="clean">CLEAN</option>
-			 			 <option value="fullout">FULL OUT</option>
-			 			 <option value="fullinv">FULL INV</option>
+				         <option value="DIRTY">DIRTY</option>
+			 			 <option value="CLEAN">CLEAN</option>
+			 			 <option value="FULL_OUT">FULL_OUT</option>
+			 			 <option value="FULL_INV">FULL_INV</option>
+			 			 <option value="FULL_TAP">FULL_TAP</option>
 					</select>				
 	        	</div> 
 			</div> <!-- row Status-->	
 	         <!-- Beer Brand-->
 	        <div class "row">
 	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
-	        		<label>Breer Brand:</label>
+	        		<label>Beer Brand:</label>
 	        	</div>
 	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
 	        		      <select id = "beerbrand_inv">
-				          	 <option value="punisher">Big Punisher</option>
-				          	 <option value="cask">Cask Special</option>	
-				          	 <option value="czech">Czech the Technique</option>
-				          	 <option value="monkey">Feed The Monkey</option>
-				          	 <option value="dark">Into The Dark</option>	 
-				 			 <option value="ruca">My Ruca</option>
-				 			 <option value="righteous">Poor Righteous</option>
-				 			 <option value="smoke">Smokehouse 54</option>
-				 	 		 <option value="infinite">The Infinite</option>
-				 			 <option value="is50">This Is 50</option>
-				 			 <option value="scoville">Welcome To Scoville</option>		 	 
+				          	 <option value="Big Punisher">Big Punisher</option>
+				          	 <option value="Cask Special">Cask Special</option>	
+				          	 <option value="Czech the Technique">Czech the Technique</option>
+				          	 <option value="Feed The Monkey">Feed The Monkey</option>
+				          	 <option value="Into The Dark">Into The Dark</option>	 
+				 			 <option value="My Ruca">My Ruca</option>
+				 			 <option value="Poor Righteous">Poor Righteous</option>
+				 			 <option value="Smokehouse 54">Smokehouse 54</option>
+				 	 		 <option value="The Infinite">The Infinite</option>
+				 			 <option value="This Is 50">This Is 50</option>
+				 			 <option value="Welcome To Scoville">Welcome To Scoville</option>		 	 
 						</select>
 	        	</div> 
 			</div> <!-- row Beer Brand-->	
@@ -182,17 +207,33 @@
 	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
 	        		<label>Time In:   </label>
 	        	 </div>
-	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
-	        	      <input type = "date" id = "timein_inv" value = "" ></input>
-	        	</div> 
-			</div> <!-- Time in-->
+	        		<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		<div class="form-group">
+                	<div class="input-group date" id="datetimepicker1">
+                    	<input type="text" id ="timein_inv" class="form-control" />
+                    	<span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    	</span>
+                	</div>
+            		</div>
+            		</div>
+
+	        	    <!--  <input type = "datetime-local" id = "timein_inv" value = "" ></input>-->
+	        </div> <!-- Time in-->
 			 <!-- Time Cleaned-->
 	        <div class "row">
 	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
 	        		<label>Time Cleaned:   </label>
 	        	 </div>
 	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
-	        	      <input type = "date" id = "timecleaned_inv" value = "" ></input>
+	        	    <div class="form-group">
+                	<div class="input-group date" id="datetimepicker2">
+                    	<input type="text" id ="timecleaned_inv" class="form-control" />
+                    	<span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    	</span>
+                	</div>
+            		</div>
 	        	</div> 
 			</div> <!-- Time Cleaned-->
 			 <!-- Time Filled-->
@@ -201,16 +242,46 @@
 	        		<label>Time Filled:   </label>
 	        	 </div>
 	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
-	        	      <input type = "date" id = "timefilled_inv" value = "" ></input>
+	        	    <div class="form-group">
+                	<div class="input-group date" id="datetimepicker3">
+                    	<input type="text" id ="timefilled_inv" class="form-control" />
+                    	<span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    	</span>
+                	</div>
+            		</div>
 	        	</div> 
 			</div> <!-- Time Filled-->
+			<!-- Time Tap-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Time Tapped:   </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        	    <div class="form-group">
+                	<div class="input-group date" id="datetimepicker4">
+                    	<input type="text" id ="timetapped_inv" class="form-control" />
+                    	<span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    	</span>
+                	</div>
+            		</div>
+	        	</div> 
+			</div> <!-- Time Tap-->
 			 <!-- Time Shipped-->
 	        <div class "row">
 	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
 	        		<label>Time Shipped:   </label>
 	        	 </div>
 	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
-	        	      <input type = "date" id = "timeshipped_inv" value = "" ></input>
+	        	    <div class="form-group">
+                	<div class="input-group date" id="datetimepicker5">
+                    	<input type="text" id ="timeshipped_inv" class="form-control" />
+                    	<span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    	</span>
+                	</div>
+            		</div>
 	        	</div> 
 			</div> <!-- Time Shipped-->	
 			 <!-- Customer-->
@@ -236,7 +307,7 @@
 <!-- **************************************************************** -->
 
         <div class="modal-footer">
-          <button type="button" id="submit1" class="btn btn-default" >Submit</button>
+          <button type="button" id="submit" class="btn btn-default" >Submit</button>
         </div>
       </div>
       
@@ -253,9 +324,9 @@
 <!-- **************************************************************** -->
 
 <!-- **********************Table for Raw Scanned RFIDs*********************************** -->
-  <div class="row2">
+  <div class="row">
 				<div class="col-lg-12">
-					<div class="panel panel-default">
+					<div class="panel panel-primary">
             <div class="panel-heading" id ="ph2">
 							Unidentified Kegs
 						</div>
@@ -279,7 +350,7 @@
 <!-- **************************************************************** -->
 <button type="button" id="delete" class="btn btn-danger" title="Temporarily delete tag ID" >Delete</button>
 <!-- Trigger the modal with a button -->
-  <button type="button" id="editadd" class="btn btn-info" title ="Edit and Add to Database">Edit & Add</button>
+  <button type="button" id="editadd" class="btn btn-warning" title ="Edit and Add to Database">Edit & Add</button>
 <!-- *************************Modal code****************************** -->
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
@@ -301,7 +372,7 @@
 	        		<label>ID:      </label>
 	        	 </div>
 	        	<div class="col col-xm-6" style="margin-bottom:15px;" >
-	        		<input type = "text" id = "id_inv" value = ""></input>
+	        		<input type = "text" id = "id_inv" value = "" readonly></input>
 	        	</div> 
 			</div> <!-- row for ID-->
 	         <!-- Keg Type-->
@@ -329,7 +400,7 @@
         </div><!-- Modal-body-->
 <!-- **************************************************************** -->
         <div class="modal-footer">
-          <button type="button" id="submit1" class="btn btn-default">Submit</button>
+          <button type="button" id="submit1" class="btn btn-default" data-dismiss="modal">Submit</button>
         </div>
       </div><!-- Modal-content-->
       
@@ -350,20 +421,55 @@
 <!-- **************************************************************** -->  
 <!-- **************************************************************** -->
 	{% block scripts %}
- <!--Global var for counter -->
+
+ 		<!--Global var for counter -->
+ 		<!-- jQuery -->
+		<script src="/static/jquery/jquery.js"></script>
+
+		<!-- Bootstrap Core JavaScript -->
+		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
   		<!-- DataTables JavaScript -->
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/jquery.dataTables.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/dataTables.bootstrap.min.js')}}"></script>
-   <!--<script src="{{url_for('static', filename='DataTables/Buttons-1.2.4/js/dataTables.buttons.min.js')}}"></script>-->
+   		<!--<script src="{{url_for('static', filename='DataTables/Buttons-1.2.4/js/dataTables.buttons.min.js')}}"></script>-->
 		<script src="{{url_for('static', filename='DataTables/ColReorder-1.3.2/js/dataTables.colReorder.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/dataTables.responsive.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/responsive.bootstrap.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Scroller-1.4.2/js/dataTables.scroller.min.js')}}"></script>
-   <script src="{{url_for('static', filename='DataTables/Select-1.2.0/js/dataTables.select.min.js')}}"></script>
+   		<script src="{{url_for('static', filename='DataTables/Select-1.2.0/js/dataTables.select.min.js')}}"></script>
+   		<script src="{{url_for('static', filename='custom/js/jquery.pos.js')}}"></script> 
+   		<script src="/static/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+   		<script src="/static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+   		<script src="/static/moment/moment.js"></script>
+
  <!--Added Scripts -->
- 
- 
+ <!--******************************************************** -->
+
+
+
+<script>
+function mysqlTimeStampToDate(timestamp) {
+    //function parses mysql datetime string and returns javascript Date object
+    //input has to be in this format: 2007-06-05 15:26:02
+    //var regex=/^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9]) (?:([0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$/;
+   // var parts=timestamp.replace(regex,"$1 $2 $3 $4 $5 $6").split(' ');
+   // return new Date(parts[0],parts[1]-1,parts[2],parts[3],parts[4],parts[5]);
+   var data =Date.parse(timestamp);
+   var d = new Date(timestamp);
+   var n = d.toLocaleString();
+   if(!isNaN(data)){
+
+   		n=n;
+
+   }
+   else{
+   		n=timestamp;
+   }
+ return n;
+  }
+</script>
+<!--******************************************************** -->
  <script>
 var counter = 1;
 function doRow(i, newi, linesId){
@@ -376,16 +482,24 @@ function doRow(i, newi, linesId){
 		type: "POST",
 		success: function(response){
 			if(response["epc"].length != 0){
+				var t_in = mysqlTimeStampToDate(response["epc"][0]["time_in"]);
+				var t_cl = mysqlTimeStampToDate(response["epc"][0]["time_cleaned"]);
+				var t_fi = mysqlTimeStampToDate(response["epc"][0]["time_filled"]);
+				var t_ta = mysqlTimeStampToDate(response["epc"][0]["time_tapped"]);
+				var t_sh = mysqlTimeStampToDate(response["epc"][0]["time_shipped"]);
+
+
           		// keg exists in database
 				$('#dataTables-inventory').DataTable().row.add([
 					response["epc"][0]["keg_id"],
 					response["epc"][0]["keg_type"],
 					response["epc"][0]["status"],
 					response["epc"][0]["beer_brand"],
-					response["epc"][0]["time_in"],
-					response["epc"][0]["time_cleaned"],
-					response["epc"][0]["time_filled"],
-					response["epc"][0]["time_shipped"],
+					t_in,
+					t_cl,
+					t_fi,
+					t_ta,
+					t_sh,
 					response["epc"][0]["customer"],
 					response["epc"][0]["notes"]
 				]).draw( false );
@@ -411,14 +525,41 @@ function doRow(i, newi, linesId){
 		}
 	});
 }
+
+function add_Row(rawId_und, kegtype_und, notes_und){
+	var params = [$.trim(rawId_und), $.trim(kegtype_und), $.trim(notes_und)];
+	var paramstring = params[0] + "^" + params[1] + "^" + params[2];
+	//var param_obj = {id : $.trim(rawId_und), kt :$.trim(kegtype_und), notes : $.trim(notes_und)}
+	// var epcData = jQuery.param({epc: paramstring});
+
+	const epcData = {"rawId_und": params[0], "kegtype_und": params[1], "notes_und": params[2]}
+
+	//alert(params);
+	alert(epcData);
+	$.ajax({
+		url:"/add_epc/",
+		data: epcData,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+			alert(response["epc"]);
+			console.log(response["epc"]);
+			
+  		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+}
+
 $(document).ready(function(){  
-	
 	// start scan button
     $("#start").click(function(){
+    	counter =1;
 		// Clear text area     
 		// Reset text area
         $('#tag').val('');
-		$("#tag").removeAttr('disabled');
+		//$("#tag").removeAttr('disabled');
 		$("#stop").removeAttr('disabled');
 		$("#start").prop("disabled", true);
 		//$("#tag").hide("slow");   
@@ -434,23 +575,39 @@ $(document).ready(function(){
             .clear()
             .draw();
 
+    	// Handle scan event and append to scan field
+        $(document).pos();
+		$(document).on('scan.pos.barcode', function(event){
+			$("#tag").val($("#tag").val() + event.code + "\n");
+		});
+
   
     });
    
 	// stop scan button   
 	// get values from textarea, ignore if empty 
-	$("#stop").click(function(){ 
+	$("#stop").click(function(){
+		$("#tag").val($.trim($("#tag").val()));
 		//Add a row if tag scanned is valid
 		if ($.trim($('#tag').val()).length > 0) {
 			// add a new row to the table
 			// get line by line text from textarea
 			var linesId = $('#tag').val().split('\n');
-			
+			var linesId2 = [];
+
+			$.each(linesId, function(i, e1){
+				if($.inArray(e1, linesId2) === -1) linesId2.push(e1);
+			});
+
 			var newi = 0;
 			// add a new row to the table
-			for (var i = 0; i < linesId.length; i++){
-				doRow(i, newi, linesId);
-				newi++;
+			//check if id already exists in datatable, if it is there, dont add
+
+			for (var i = 0; i < linesId2.length; i++){
+				
+					doRow(i, newi, linesId2);
+					newi++;
+				
 			}
 		}
         else {
@@ -476,6 +633,45 @@ $(document).ready(function(){
 //<!-------open myModal1 ------------>
     $("#edit_update").click(function(){
     	if(($('#dataTables-inventory').DataTable()).rows('.selected').any()){
+    		var string = "";
+     		var all_data = $('#dataTables-inventory').DataTable().rows({selected : true}).data();
+     		for (var i = 0; i < all_data.length; i++){
+				var my_id = all_data[i][0];
+				var my_type = all_data[i][1];
+				var my_status = all_data[i][2];
+				var my_brand = all_data[i][3];
+				var my_in = all_data[i][4];
+				var my_cleaned = all_data[i][5];
+				var my_filled = all_data[i][6];
+				var my_tapped = all_data[i][7];
+				var my_shipped = all_data[i][8];
+				var my_customer = all_data[i][9];
+				var my_note = all_data[i][10];
+
+     			$id=$("#myModal1").find('#id_inv');
+    			$id.val(my_id);	
+    			$type=$("#myModal1").find('#kegtype_inv');
+    			$type.val(my_type);
+    			$status=$("#myModal1").find('#status_inv');
+    			$status.val(my_status);
+    			$brand=$("#myModal1").find('#beerbrand_inv');
+    			$brand.val(my_brand);
+    			$in=$("#myModal1").find('#timein_inv');
+    			$in.val(my_in);
+    			$cleaned=$("#myModal1").find('#timecleaned_inv');
+    			$cleaned.val(my_cleaned);
+    			$filled=$("#myModal1").find('#timefilled_inv');
+    			$filled.val(my_filled);
+    			$tapped=$("#myModal1").find('#timetapped_inv');
+    			$tapped.val(my_tapped);
+    			$shipped=$("#myModal1").find('#timeshipped_inv');
+    			$shipped.val(my_shipped);
+    			$customer=$("#myModal1").find('#customer_inv');
+    			$customer.val(my_customer);
+    			$note=$("#myModal1").find('#notes_inv');
+    			$note.val(my_note);
+    		}
+
     		$("#myModal1").modal("show");
     	}
     	else{
@@ -484,47 +680,73 @@ $(document).ready(function(){
     	}   	
 
     });
-    //edit and add button pressed
+    //edit&add button pressed
 //<!-------open myModal, unidentified keg modal ------------>
-    $("#editadd").click(function(){
+    $("#editadd").click(function(){ 	
      	if(($('#dataTables-inventory1').DataTable()).rows('.selected').any()){
-    		$("#myModal").modal("show");
+     		var string = "";
+     		var all_data = $('#dataTables-inventory1').DataTable().rows({selected : true}).data();
+     		for (var i = 0; i < all_data.length; i++){
+				var my_id = all_data[i][1];
+				string += my_id + "	";
+     			$userName=$("#myModal").find('#id_inv');
+    			$userName.val(string);	
+    		} 
+     		$("#myModal").modal("show");
     	}
     	else{
     		$("#myModal").modal("hide");
     		alert("Nothing Selected or Empty Table");
     	}
-    });
+    });//editadd
+    //submit button for unidentified keg table modal
+    $("#submit1").click(function(){
+     	$id=$("#myModal").find('#id_inv');
+    	my_id = $id.val();	
+    	$kegtype=$("#myModal").find('#kegtype_inv');
+    	my_kegtype = $kegtype.val();
+    	$note=$("#myModal").find('#notes_inv');
+    	my_note = $note.val();
 
-});<!-- noconflict -->
+    	add_Row(my_id, my_kegtype, my_note);
+
+    });//submit1
+
+});//<!-- noconflict -->
 </script> 
 <!--************************************************-->
 <!--************************************************-->
 	<!-- Inventory Table -->
 		<script>
 		$(document).ready(function() {
-   
-       $('#ph1').css({
-            'color':'white',
-            'background-color': 'black',
-            'margin-top': '20px'});
   
 			$('#dataTables-inventory').DataTable({
 				responsive: true,
        			select: 'multi+shift'
 			});
-
-    //  <!-- Unidentified Kegs Table -->
-      $('#ph2').css({
-            'color':'white',
-            'background-color': 'black',
-            'margin-top': '20px'});
   //<!-- make it responsive and multiple select at one time -->
 			$('#dataTables-inventory1').DataTable({
 				responsive: true,
         		select: 'multi+shift',
         		unique:true
 			});
+			
+			$('#datetimepicker1').datetimepicker({
+    			format: 'mm/dd/yyyy, hh:ii:ss P'
+			});
+			$('#datetimepicker2').datetimepicker({
+    			format: 'mm/dd/yyyy, hh:ii:ss P'
+			});
+			$('#datetimepicker3').datetimepicker({
+    			format: 'mm/dd/yyyy, hh:ii:ss P'
+			});
+			$('#datetimepicker4').datetimepicker({
+    			format: 'mm/dd/yyyy, hh:ii:ss P'
+			});
+			$('#datetimepicker5').datetimepicker({
+    			format: 'mm/dd/yyyy, hh:ii:ss P'
+			});
+
 		});
 		</script>
    <!--************************************************-->

@@ -10,7 +10,7 @@
         //set default options
         defaults = {
             scan: true,
-	    submit_on_scan: false,
+	    submit_on_scan: true,
             swipe: false,
 	    submit_on_swipe: false,
             events: {
@@ -23,7 +23,7 @@
             },
             regexp: {
                 scan: {
-                    barcode: '\\d+'
+                    barcode: "[0-9a-f]+"
                 },
                 swipe: {
                     card: '\\%B(\\d+)\\^(\\w+)\\/(\\w+)\\^\\d+\\?;\\d+=(\\d\\d)(\\d\\d)\\d+\\?'
