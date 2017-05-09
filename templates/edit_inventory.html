@@ -81,8 +81,8 @@
 						<!-- /.panel-heading -->
 				<div class="panel-body" id ="p0">						
 				<!-------Text area to enter tags------------>
-
 				<textarea id="tag"  style="width:99%" col="5" placeholder="placeholder" readonly>Scan Kegs Here</textarea>
+
 				<!-------start scan button------------>
 				<button type="button" id="start" class="btn btn-success">Start Scan</button>
 				<!-------stop scan button------------>
@@ -556,6 +556,7 @@ $(document).ready(function(){
 	// start scan button
     $("#start").click(function(){
     	counter =1;
+    	var current = ""
 		// Clear text area     
 		// Reset text area
         $('#tag').val('');
@@ -576,9 +577,17 @@ $(document).ready(function(){
             .draw();
 
     	// Handle scan event and append to scan field
+    	// Turn off all 'scan.pos.barcode' event handlers. Turn one on.
+    	// Check previous entry, only append if different.	
         $(document).pos();
-		$(document).on('scan.pos.barcode', function(event){
-			$("#tag").val($("#tag").val() + event.code + "\n");
+     
+		$(document).off('scan.pos.barcode').on('scan.pos.barcode', function(event){	
+			alert(current + " " + event.code);
+			if (current != event.code){
+				$("#tag").val($("#tag").val() + event.code + "\n");
+				//current = event.code;	
+			}
+			current = event.code;
 		});
 
   
