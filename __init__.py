@@ -46,10 +46,10 @@ def signin():
 
 @app.route('/signout/', methods=["GET","POST"])
 def signout():
-	#attempted_email = request.form['email']
-	c, conn = connection()
-	c.execute("UPDATE users SET signout_time = NOW()") #WHERE email = '"+  + "'") 
-	conn.commit()
+	#attempted_email = request.form['email"]
+	#c, conn = connection()
+	#c.execute("UPDATE users SET signout_time = NOW()) WHERE email = '" +  + "'") 
+	#\conn.commit()
 	session.pop("uid", None)
 	session.pop("username", None)
 
@@ -81,6 +81,24 @@ def compare_epc():
 		return jsonify({"error": e})
 
 
+@app.route('/delete_kegs/', methods=["POST"])
+def delete_kegs():
+	try:
+		c, conn = connection()
+		#keg_type = request.form["epc"]
+		data = request.form["keg_ids"]
+
+		idarray = data.split(',')
+
+		for element in idarray:
+			c.execute("DELETE FROM inventory WHERE keg_id=" + element)
+		conn.commit()
+		
+		return jsonify({"epc": idarray})
+	except Exception as e:
+		return jsonify({"error": e})
+
+
 @app.route('/add_epc/', methods=["POST"])
 def add_epc():
 	try:
@@ -101,7 +119,6 @@ def add_epc():
 		return jsonify({"epc": idarray})
 	except Exception as e:
 		return jsonify({"error": e})
-
 
 
 @app.route('/signin_temp/', methods=["GET","POST"])
@@ -365,6 +382,86 @@ def logistics():
 		return render_template("logistics.html", account_name = session["username"])
 
 	return redirect(url_for('signin'))
+
+@app.route('/setting/', methods=["GET","POST"])
+def setting():
+	if "uid" in session:
+
+		c, conn = connection()
+
+		beer_count = c.execute("""SELECT * FROM beer_brands""")
+		
+		beers = c.fetchall()
+		
+		beer_list = []
+
+		for i in beers:
+			beer_id = i["id"]
+			beer_name = i["name"]
+			active = i["active"]
+			
+			beer_list.append([beer_id, beer_name, active])
+		
+		#return render_template("view_inventory.html", inventory=inv_list,  account_name = session["username"])
+		return render_template("setting.html", account_name = session["username"], beers=beer_list)
+
+	return redirect(url_for('signin'))
+
+@app.route('/get_beer_data/', methods=["POST"])
+def get_beer_data():
+	try:
+		c, conn = connection()
+		
+		beer_count = c.execute("SELECT * FROM beer_brands")
+
+		brands = c.fetchall()
+		
+		return jsonify({"epc": brands})
+	except Exception as e:
+		return jsonify({"error": e})
+
+@app.route('/deactivate_brands/', methods=["POST"])
+def deactivate_brands():
+	try:
+		c, conn = connection()
+		idstring = request.form["beer_ids"]
+
+		idarray = idstring.split(",")
+		for element in idarray:
+			beer_count = c.execute("UPDATE beer_brands SET active=0 WHERE id=" + element);
+		conn.commit();
+
+		return jsonify({"epc": idarray})
+	except Exception as e:
+		return jsonify({"error": e})
+
+@app.route('/activate_brands/', methods=["POST"])
+def activate_brands():
+	try:
+		c, conn = connection()
+		idstring = request.form["beer_ids"]
+
+		idarray = idstring.split(",")
+		for element in idarray:
+			beer_count = c.execute("UPDATE beer_brands SET active=1 WHERE id=" + element);
+		conn.commit();
+		
+		return jsonify({"epc": idarray})
+	except Exception as e:
+		return jsonify({"error": e})
+
+@app.route('/add_brand/', methods=["POST"])
+def add_brand():
+	try:
+		c, conn = connection()
+		string = request.form["name"]
+
+		c.execute("INSERT INTO beer_brands active=1 name=" + string);
+		conn.commit();
+		
+		return jsonify({"epc": string})
+	except Exception as e:
+		return jsonify({"error": e})
 
 
 @app.route('/logistics_ajax_brands/', methods=["POST"])

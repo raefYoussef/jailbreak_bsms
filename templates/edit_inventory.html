@@ -5,14 +5,6 @@
 <!-- **************************************************************** -->  
 <!-- **************************************************************** -->	
 	{% block stylesheets %}
-		<!-- Bootstrap Core CSS -->
-		<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-			<!-- Custom CSS -->
-		<link href="/static/sb-admin/sb-admin.css" rel="stylesheet">
-		<link href="/static/custom/css/blank_template.css" rel="stylesheet">
-
-		<!-- Custom Fonts -->
-		<link href="/static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 	 	<!-- DataTables CSS -->
 		<link href="{{url_for('static', filename='DataTables/DataTables-1.10.13/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
@@ -26,7 +18,7 @@
 	   	<link href="/static/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
 	   
-   <!-- style of textarea
+   <!-- style of textareavv-->  
   {% endblock %}
  <!-- **************************************************************** -->  
 <!-- **************************************************************** -->
@@ -188,8 +180,9 @@
 	        	</div>
 	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
 	        		      <select id = "beerbrand_inv">
+	        		      	 <option value="Big Punisher">B.Limey</option>
 				          	 <option value="Big Punisher">Big Punisher</option>
-				          	 <option value="Cask Special">Cask Special</option>	
+				          	 <option value="Cask Special">Carrot Conspiracys</option>	
 				          	 <option value="Czech the Technique">Czech the Technique</option>
 				          	 <option value="Feed The Monkey">Feed The Monkey</option>
 				          	 <option value="Into The Dark">Into The Dark</option>	 
@@ -423,11 +416,6 @@
 	{% block scripts %}
 
  		<!--Global var for counter -->
- 		<!-- jQuery -->
-		<script src="/static/jquery/jquery.js"></script>
-
-		<!-- Bootstrap Core JavaScript -->
-		<script src="/static/bootstrap/js/bootstrap.min.js"></script>
   		<!-- DataTables JavaScript -->
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/jquery.dataTables.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/dataTables.bootstrap.min.js')}}"></script>
@@ -526,20 +514,29 @@ function doRow(i, newi, linesId){
 	});
 }
 
+function delete_Row(idstring){
+
+	const keg_ids = {"keg_ids": idstring}
+
+	$.ajax({
+		url:"/delete_kegs/",
+		data: keg_ids,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+			alert(response["epc"] +" have been deleted succesfully!");
+  		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+}
+
 function add_Row(rawId_und, kegtype_und, notes_und){
 	var params = [$.trim(rawId_und), $.trim(kegtype_und), $.trim(notes_und)];
-	var paramstring = params[0] + "^" + params[1] + "^" + params[2];
-	//var param_obj = {id : $.trim(rawId_und), kt :$.trim(kegtype_und), notes : $.trim(notes_und)}
-	// var epcData = jQuery.param({epc: paramstring});
-
-	var temp0 = rawId_und;
-	var temp = temp0.split(/(\s+)/);
 
 	const epcData = {"rawId_und": params[0], "kegtype_und": params[1], "notes_und": params[2]}
 
-	//alert(params);
-	
-	alert(temp[0]);
 	$.ajax({
 		url:"/add_epc/",
 		data: epcData,
@@ -632,10 +629,10 @@ $(document).ready(function(){
 //<!-------Multiple delete at once------------>
 //<!-------Deletes selected row from unidentified keg table ------------>
     $("#delete").click(function(){
-            ($('#dataTables-inventory1').DataTable())
-            .rows('.selected')
-            .remove()
-            .draw();
+        ($('#dataTables-inventory1').DataTable())
+        .rows('.selected')
+        .remove()
+        .draw();
     });
 //<!-------Open pop up modal when edit & update button is pressed------------>    
 //<!-------Works when row selected on table inventory------------>
@@ -689,6 +686,25 @@ $(document).ready(function(){
     	}   	
 
     });
+    		
+     $("#delete_inv").click(function(){
+     	var mydata = ($('#dataTables-inventory').DataTable()).rows('.selected').data()
+		var idstring = "";
+		for (var i = 0; i < mydata.length; i++){
+			var my_id = mydata[i][0];
+			idstring = idstring + my_id;
+			if (i != mydata.length - 1){
+				idstring += ","
+			}
+		} 
+
+		delete_Row(idstring);
+
+	    ($('#dataTables-inventory').DataTable())
+	    .rows('.selected')
+	    .remove()
+	    .draw();
+    });
     //edit&add button pressed
 //<!-------open myModal, unidentified keg modal ------------>
     $("#editadd").click(function(){ 	
@@ -705,6 +721,10 @@ $(document).ready(function(){
     			$userName.val(string);	
     		} 
      		$("#myModal").modal("show");
+     		($('#dataTables-inventory1').DataTable())
+	    	.rows('.selected')
+	    	.remove()
+	    	.draw();
     	}
     	else{
     		$("#myModal").modal("hide");
