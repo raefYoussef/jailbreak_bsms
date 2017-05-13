@@ -322,13 +322,88 @@ def dashboard_ajax_notifications():
 		# failed connection
 		return e
 
+@app.route('/change_password/', methods=["POST"])
+def change_password():
+	try:
+		c, conn = connection()
+		idstring = request.form["data_str"]
 
-@app.route('/settings/')
+		array = idstring.split(",")
+		
+		email = array[0]
+		current_pwd = array[1]
+		new_pwd = array[2]
+		#co_pwd = new_pwd.split(",")
+
+		data_count = c.execute("SELECT * FROM users WHERE email = '"+ email + "'")
+		
+		if data_count and sha256_crypt.verify(current_pwd, user_password):
+			data = c.fetchone()
+			user_password = data["password"]
+			enc_password = sha256_crypt.encrypt(new_pwd)
+			c.execute("UPDATE users SET password ='" + enc_password +"' WHERE email = '"+ email +"'")
+			conn.commit();
+			string = "Password changed successfully"
+		else:
+			string = "Invalid credentials"
+		
+		return jsonify({"epc": string})
+	except Exception as e:
+		return jsonify({"error": e})
+
+@app.route('/settings/', methods=["GET","POST"])
 def settings():
 	if "uid" in session:
-		return render_template("settings.html")
+		
+		#return render_template("settings.html")
 
-	return redirect(url_for('signin'))
+		error = ''
+		success = ''
+	 	try:
+			c, conn = connection()
+
+			if request.method == "POST":
+				#current_pwd= request.form['cu_pwd']
+				#new_pwd= request.form['new_pwd']
+				#confirm_pwd= request.form['co_pwd']
+				new_email = request.form['email']
+				new_username = request.form['name']
+				new_password = request.form['pwd']
+				confirm_password = request.form['pwd1']
+				#tracking = "Account Created"
+
+				data_count = c.execute("SELECT * FROM users WHERE email = '"+ new_email + "'")
+				if data_count == 0:
+					if new_password == confirm_password:
+						enc_password = sha256_crypt.encrypt(new_password)
+						c.execute("INSERT INTO users (username, password, email) VALUES ('"+thwart(new_username)+ "', '"+thwart(enc_password)+"', '"+thwart(new_email)+"')")
+						#c.execute("INSERT INTO users (username, password, email, tracking) VALUES (%s, %s, %s, %s)", (thwart(new_username), thwart(enc_password), thwart(new_email), thwart(tracking)))
+						conn.commit()
+						success = "New account " + new_username + " was successfully created!"
+						return render_template("settings.html", success =success)
+						#flash("New User Added.")
+					#c.close()
+					#conn.close()
+					else:
+						error = "Inserted passwords did not match"
+						flash(error)
+						return render_template("settings.html", error = error)
+				else:
+					error = "Email already exists!"
+					return render_template("settings.html", error = error)
+			else:
+				return render_template("settings.html")
+
+	 	except Exception as e:
+			flash(e)
+			return render_template("settings.html", error = error)
+
+
+
+		#return render_template("settings.html")
+	else:
+
+		return redirect(url_for('signin'))
 
 
 @app.route('/view_inventory/', methods=["GET","POST"])
@@ -383,30 +458,6 @@ def logistics():
 
 	return redirect(url_for('signin'))
 
-@app.route('/setting/', methods=["GET","POST"])
-def setting():
-	if "uid" in session:
-
-		c, conn = connection()
-
-		beer_count = c.execute("""SELECT * FROM beer_brands""")
-		
-		beers = c.fetchall()
-		
-		beer_list = []
-
-		for i in beers:
-			beer_id = i["id"]
-			beer_name = i["name"]
-			active = i["active"]
-			
-			beer_list.append([beer_id, beer_name, active])
-		
-		#return render_template("view_inventory.html", inventory=inv_list,  account_name = session["username"])
-		return render_template("setting.html", account_name = session["username"], beers=beer_list)
-
-	return redirect(url_for('signin'))
-
 @app.route('/get_beer_data/', methods=["POST"])
 def get_beer_data():
 	try:
@@ -456,7 +507,7 @@ def add_brand():
 		c, conn = connection()
 		string = request.form["name"]
 
-		c.execute("INSERT INTO beer_brands active=1 name=" + string);
+		c.execute("INSERT INTO beer_brands (active, name) VALUES (1,'" + thwart(string) + "')");
 		conn.commit();
 		
 		return jsonify({"epc": string})
