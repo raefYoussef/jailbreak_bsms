@@ -179,19 +179,7 @@
 	        		<label>Beer Brand:</label>
 	        	</div>
 	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
-	        		      <select id = "beerbrand_inv">
-	        		      	 <option value="Big Punisher">B.Limey</option>
-				          	 <option value="Big Punisher">Big Punisher</option>
-				          	 <option value="Cask Special">Carrot Conspiracys</option>	
-				          	 <option value="Czech the Technique">Czech the Technique</option>
-				          	 <option value="Feed The Monkey">Feed The Monkey</option>
-				          	 <option value="Into The Dark">Into The Dark</option>	 
-				 			 <option value="My Ruca">My Ruca</option>
-				 			 <option value="Poor Righteous">Poor Righteous</option>
-				 			 <option value="Smokehouse 54">Smokehouse 54</option>
-				 	 		 <option value="The Infinite">The Infinite</option>
-				 			 <option value="This Is 50">This Is 50</option>
-				 			 <option value="Welcome To Scoville">Welcome To Scoville</option>		 	 
+	        		      <select id = "beerbrand_inv">	 	 
 						</select>
 	        	</div> 
 			</div> <!-- row Beer Brand-->	
@@ -433,8 +421,30 @@
 
  <!--Added Scripts -->
  <!--******************************************************** -->
-
-
+ <!--Function to add beer brands to dropdown list on modal for inventery table -->
+ <script>
+function all_beersBrand(){
+	const empty = {"keg_ids": ""};
+	$.ajax({
+		url:"/get_beer_data/",
+		data: empty,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+			for (var i = response["epc"].length - 1; i >= 0; i--) {
+				var v=response["epc"][i]["name"];
+				$('#beerbrand_inv').append($("<option></option>")
+                    .attr("value",v)
+                    .text(v)); 
+			}
+  		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+	
+}
+</script>
 
 <script>
 function mysqlTimeStampToDate(timestamp) {
@@ -455,11 +465,27 @@ function mysqlTimeStampToDate(timestamp) {
    		n=timestamp;
    }
  return n;
-  }
+}
 </script>
 <!--******************************************************** -->
  <script>
 var counter = 1;
+
+function edit_keg(my_keg_data){
+	const keg_data = {"string" :my_keg_data};
+	$.ajax({
+		url:"/edit_kegs/",
+		data: keg_data,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+}
+
 function doRow(i, newi, linesId){
 	var epcData = jQuery.param({epc: linesId[i]});
 
@@ -552,6 +578,7 @@ function add_Row(rawId_und, kegtype_und, notes_und){
 }
 
 $(document).ready(function(){  
+	all_beersBrand();
 	// start scan button
     $("#start").click(function(){
     	counter =1;
@@ -638,6 +665,7 @@ $(document).ready(function(){
 //<!-------Works when row selected on table inventory------------>
 //<!-------open myModal1 ------------>
     $("#edit_update").click(function(){
+    	
     	if(($('#dataTables-inventory').DataTable()).rows('.selected').any()){
     		var string = "";
      		var all_data = $('#dataTables-inventory').DataTable().rows({selected : true}).data();
@@ -654,31 +682,36 @@ $(document).ready(function(){
 				var my_customer = all_data[i][9];
 				var my_note = all_data[i][10];
 
-     			$id=$("#myModal1").find('#id_inv');
-    			$id.val(my_id);	
-    			$type=$("#myModal1").find('#kegtype_inv');
-    			$type.val(my_type);
-    			$status=$("#myModal1").find('#status_inv');
-    			$status.val(my_status);
-    			$brand=$("#myModal1").find('#beerbrand_inv');
-    			$brand.val(my_brand);
-    			$in=$("#myModal1").find('#timein_inv');
-    			$in.val(my_in);
-    			$cleaned=$("#myModal1").find('#timecleaned_inv');
-    			$cleaned.val(my_cleaned);
-    			$filled=$("#myModal1").find('#timefilled_inv');
-    			$filled.val(my_filled);
-    			$tapped=$("#myModal1").find('#timetapped_inv');
-    			$tapped.val(my_tapped);
-    			$shipped=$("#myModal1").find('#timeshipped_inv');
-    			$shipped.val(my_shipped);
-    			$customer=$("#myModal1").find('#customer_inv');
-    			$customer.val(my_customer);
-    			$note=$("#myModal1").find('#notes_inv');
-    			$note.val(my_note);
+     			string = string + my_id;
+     			if(i != all_data.length - 1){
+     				string = string + "`";
+     			}
     		}
 
+    		$id=$("#myModal1").find('#id_inv');
+			$id.val(string);	
+			$type=$("#myModal1").find('#kegtype_inv');
+			$type.val(my_type);
+			$status=$("#myModal1").find('#status_inv');
+			$status.val(my_status);
+			$brand=$("#myModal1").find('#beerbrand_inv');
+			$brand.val(my_brand);
+			$in=$("#myModal1").find('#timein_inv');
+			$in.val(my_in);
+			$cleaned=$("#myModal1").find('#timecleaned_inv');
+			$cleaned.val(my_cleaned);
+			$filled=$("#myModal1").find('#timefilled_inv');
+			$filled.val(my_filled);
+			$tapped=$("#myModal1").find('#timetapped_inv');
+			$tapped.val(my_tapped);
+			$shipped=$("#myModal1").find('#timeshipped_inv');
+			$shipped.val(my_shipped);
+			$customer=$("#myModal1").find('#customer_inv');
+			$customer.val(my_customer);
+			$note=$("#myModal1").find('#notes_inv');
+    		$note.val(my_note);
     		$("#myModal1").modal("show");
+
     	}
     	else{
     		$("#myModal1").modal("hide");
@@ -742,8 +775,40 @@ $(document).ready(function(){
 
     	add_Row(my_id, my_kegtype, my_note);
 
-    });//submit1
+    });//submit
 
+    $("#submit").click(function(){
+
+     	$id=$("#myModal1").find('#id_inv');
+		string = $id.val();	
+		$type=$("#myModal1").find('#kegtype_inv');
+		my_type = $type.val();
+		$status=$("#myModal1").find('#status_inv');
+		my_status = $status.val();
+		$brand=$("#myModal1").find('#beerbrand_inv');
+		my_brand = $brand.val();
+		$in=$("#myModal1").find('#timein_inv');
+		my_in = $in.val();
+		$cleaned=$("#myModal1").find('#timecleaned_inv');
+		my_cleaned = $cleaned.val();
+		$filled=$("#myModal1").find('#timefilled_inv');
+		my_filled = $filled.val();
+		$tapped=$("#myModal1").find('#timetapped_inv');
+		my_tapped = $tapped.val();
+		$shipped=$("#myModal1").find('#timeshipped_inv');
+		my_shipped = $shipped.val();
+		$customer=$("#myModal1").find('#customer_inv');
+		my_customer = $customer.val();
+		$note=$("#myModal1").find('#notes_inv');
+		my_note = $note.val();    	
+
+    	//write ajax that takes in string, my_type, my_status, my_brand, my_in,
+		// my_cleaned, my_filled, my_tapped, my_shipped, my_customer, my_note
+		edit_string = string + "|||" + my_type + "`" + my_status + "`" + my_brand + "`" + my_in + "`" + my_cleaned + "`" + my_filled + "`" + my_tapped + "`" + my_shipped + "`" + my_customer + "`" + my_note;
+		alert(edit_string);
+		edit_keg(edit_string);
+
+    });//submit
 });//<!-- noconflict -->
 </script> 
 <!--************************************************-->

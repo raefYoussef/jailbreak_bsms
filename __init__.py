@@ -442,6 +442,35 @@ def view_inventory():
 
 	return redirect(url_for('signin'))
 
+@app.route('/edit_kegs/', methods=["POST"])
+def edit_kegs():
+	try:
+		c, conn = connection()
+		string = request.form["string"]
+		data = string.split("|||")
+		ids = data[0].split("`")
+		info = data[1].split("`")
+		time_in = datetime.datetime.strptime('Jan 1 2005 1:33PM', '%b %d %Y %I:%M%p')
+		ts= time_in.strftime("%Y-%m-%d %H:%M:%S")
+
+		for element in ids:
+			if (info[1] == 'DIRTY'):
+				c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_in = NOW(), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element);
+			elif (info[1] == 'CLEAN'):
+				c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_cleaned = NOW(), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element);
+			elif (info[1] == 'FULL_OUT'):
+				c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_shipped = NOW(), time_tapped = '', customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element);
+			elif (info[1] == 'FULL_TAP'):
+				c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_tapped = NOW(), time_shipped = '',customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element);
+			elif (info[1] == 'FULL_INV'):
+				c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_filled = NOW(), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element);
+			
+
+		conn.commit();
+		
+		return jsonify({"epc": string})
+	except Exception as e:
+		return jsonify({"error": e})
 
 @app.route('/edit_inventory/', methods=["GET","POST"])
 def edit_inventory():
