@@ -455,6 +455,8 @@ function mysqlTimeStampToDate(timestamp) {
    // return new Date(parts[0],parts[1]-1,parts[2],parts[3],parts[4],parts[5]);
    var data =Date.parse(timestamp);
    var d = new Date(timestamp);
+   //Adjust for timezone
+   d.setHours(d.getHours()+4);
    var n = d.toLocaleString();
    if(!isNaN(data)){
 
@@ -479,6 +481,7 @@ function edit_keg(my_keg_data){
 		dataType: "json",
 		type: "POST",
 		success: function(response){
+			location.reload();
 		},
 		error: function(error){
 			alert("Error!!");
@@ -502,18 +505,17 @@ function doRow(i, newi, linesId){
 				var t_ta = mysqlTimeStampToDate(response["epc"][0]["time_tapped"]);
 				var t_sh = mysqlTimeStampToDate(response["epc"][0]["time_shipped"]);
 
-
           		// keg exists in database
 				$('#dataTables-inventory').DataTable().row.add([
 					response["epc"][0]["keg_id"],
 					response["epc"][0]["keg_type"],
 					response["epc"][0]["status"],
 					response["epc"][0]["beer_brand"],
-					t_in,
-					t_cl,
-					t_fi,
-					t_ta,
-					t_sh,
+					response["epc"][0]["time_in"],
+					response["epc"][0]["time_cleaned"],
+					response["epc"][0]["time_filled"],
+					response["epc"][0]["time_tapped"],
+					response["epc"][0]["time_shipped"],
 					response["epc"][0]["customer"],
 					response["epc"][0]["notes"]
 				]).draw( false );
