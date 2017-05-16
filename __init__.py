@@ -46,10 +46,12 @@ def signin():
 
 @app.route('/signout/', methods=["GET","POST"])
 def signout():
-	#attempted_email = request.form['email"]
-	#c, conn = connection()
-	#c.execute("UPDATE users SET signout_time = NOW()) WHERE email = '" +  + "'") 
-	#\conn.commit()
+	
+	c, conn = connection()
+	uid = str(session["uid"])
+	c.execute("UPDATE users SET signout_time = NOW() WHERE uid = '" + uid + "'") 
+	c.execute("UPDATE users SET failed_signin = 0 WHERE uid = '"+ uid +"'")
+	conn.commit()
 	session.pop("uid", None)
 	session.pop("username", None)
 
@@ -75,12 +77,12 @@ def compare_epc():
 								ORDER BY inventory.keg_id ASC """)
 		data = c.fetchall()
 
-
-		data[0]["time_in"] = str(data[0]["time_in"]) if data[0]["time_in"] else ""
-		data[0]["time_cleaned"] = str(data[0]["time_cleaned"]) if data[0]["time_cleaned"] else ""
-		data[0]["time_filled"] = str(data[0]["time_filled"]) if data[0]["time_filled"] else ""
-		data[0]["time_shipped"] = str(data[0]["time_shipped"]) if data[0]["time_shipped"] else ""
-		data[0]["time_tapped"] = str(data[0]["time_tapped"]) if data[0]["time_tapped"] else ""
+		if(data_count):
+			data[0]["time_in"] = str(data[0]["time_in"]) if data[0]["time_in"] else ""
+			data[0]["time_cleaned"] = str(data[0]["time_cleaned"]) if data[0]["time_cleaned"] else ""
+			data[0]["time_filled"] = str(data[0]["time_filled"]) if data[0]["time_filled"] else ""
+			data[0]["time_shipped"] = str(data[0]["time_shipped"]) if data[0]["time_shipped"] else ""
+			data[0]["time_tapped"] = str(data[0]["time_tapped"]) if data[0]["time_tapped"] else ""
 				
 
 		return jsonify({"epc": data})
@@ -177,7 +179,13 @@ def home():
 @app.route('/dashboard/')
 def dashboard():
 	if "uid" in session:
-		return render_template("dashboard.html", account_name = session["username"])
+		c, conn = connection()
+		uid = str(session["uid"])
+		c.execute("SELECT * FROM users WHERE uid = '"+ uid+"'")
+		data = c.fetchone()
+		failed_signin = data["failed_signin"]
+
+		return render_template("dashboard.html", account_name = session["username"], failed = failed_signin)
 
 	return redirect(url_for('signin'))
 
@@ -464,44 +472,53 @@ def edit_kegs():
 			inventory = c.fetchall()
 			current = inventory[0]["status"]
 
+			info[8] = info[8] if info[8] else "NULL"
+			info[9] = info[9] if info[9] else "NULL"
+
+			# beer brand name query
+			c.execute("SELECT id FROM beer_brands WHERE name ='" + info[2] +"'")
+			id_tuple = c.fetchone()
+			brand_id = str(id_tuple["id"])
+
 			if (info[1] == 'DIRTY'):
-				c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_in = NOW(), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+				c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_in = NOW(), customer='"+ info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
 			
 			elif (info[1] == 'CLEAN'):
 				if (current == 'DIRTY'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_cleaned = NOW(), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=NULL, time_cleaned = NOW(), customer= NULL, notes ='"+info[9] +"' WHERE keg_id=" + element)
 				else:
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_cleaned = NOW(), time_in=DATE_SUB(NOW(), INTERVAL 1 MINUTE), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=NULL, time_cleaned = NOW(), time_in=DATE_SUB(NOW(), INTERVAL 1 MINUTE), customer= NULL, notes ='"+info[9] +"' WHERE keg_id=" + element)
 					
 			elif (info[1] == 'FULL_OUT'):
 				if (current == 'FULL_INV'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_shipped = NOW(), time_tapped = '', customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_shipped = NOW(), time_tapped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
 				elif (current == 'CLEAN'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_shipped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_tapped = '', customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_shipped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_tapped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
 				elif (current == 'DIRTY'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_in=DATE_SUB(NOW(), INTERVAL 2 MINUTE) ,time_shipped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_tapped = '', customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_in=DATE_SUB(NOW(), INTERVAL 2 MINUTE) ,time_shipped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_tapped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
 				else:
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_shipped = NOW(), time_tapped = '', customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)	
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_shipped = NOW(), time_tapped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)	
 			
 			elif (info[1] == 'FULL_TAP'):
 				if (current == 'FULL_INV'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_tapped = NOW(), time_shipped = '', customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_tapped = NOW(), time_shipped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
 				elif (current == 'CLEAN'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_tapped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_shipped = '', customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_tapped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_shipped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
 				elif (current == 'DIRTY'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_cleaned=DATE_SUB(NOW(), INTERVAL 2 MINUTE) ,time_tapped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_shipped = '', customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_cleaned=DATE_SUB(NOW(), INTERVAL 2 MINUTE) ,time_tapped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_shipped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
 				else:
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_tapped = NOW(), time_shipped = '', customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)	
-			
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_tapped = NOW(), time_shipped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)	
+					pass
+
 			elif (info[1] == 'FULL_INV'):
 				if (current == 'CLEAN'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_filled = NOW(), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_filled = NOW(), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
 				elif (current == 'DIRTY'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_filled = NOW(), time_cleaned=DATE_SUB(NOW(), INTERVAL 1 MINUTE), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_filled = NOW(), time_cleaned=DATE_SUB(NOW(), INTERVAL 1 MINUTE), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
 				elif (current == 'FULL_OUT' or current == 'FULL_TAP'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_filled = NOW(), time_cleaned=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_in=DATE_SUB(NOW(), INTERVAL 2 MINUTE), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_filled = NOW(), time_cleaned=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_in=DATE_SUB(NOW(), INTERVAL 2 MINUTE), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
 				else:
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=1, time_filled = NOW(), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_filled = NOW(), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
 					
 
 		conn.commit();

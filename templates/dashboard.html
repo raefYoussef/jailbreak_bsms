@@ -42,10 +42,12 @@
 	{% endblock %}
 
 	{% block alerts %}
+		{% if failed > 0 %}
 		<div class="alert alert-danger alert-dismissable">
 			<button type="button" class="close" data-dismiss="alert"><i class="fa fa-times"></i></button>
-			<i class="fa fa-info-circle"></i>  <strong>Warning</strong> There were 2 failed signin attempts since the last successful signin
+			<i class="fa fa-info-circle"></i>  <strong>Warning</strong> There were {{ failed }} failed signin attempts since the last successful signin
 		</div>
+		{%endif%}
 	{% endblock %}
 
 	{% block body %} 
