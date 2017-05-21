@@ -121,10 +121,21 @@ def add_epc():
 
 		idarray = internal_id.split(',')
 
+		user_id = str(session["uid"])
+
 		for element in idarray:
 			c.execute("INSERT INTO inventory (keg_type, internal_id, notes) VALUES ('"+thwart(keg_type)+ "', '"+thwart(element)+"', '"+thwart(notes)+"')")
+		
 		conn.commit()
 		
+		for element in idarray:
+			data = c.execute("SELECT keg_id FROM inventory WHERE internal_id='"+thwart(element)+"'")
+			k_id_t = c.fetchone()
+			k_id = str(k_id_t["keg_id"])
+
+			c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES ('"+k_id+"','DIRTY',NOW(), NULL, NULL,'"+user_id+"')")
+			
+		conn.commit()
 		return jsonify({"epc": idarray})
 	except Exception as e:
 		return jsonify({"error": e})
@@ -230,7 +241,7 @@ def dashboard_ajax_customers():
 
 		for customer_name in cust_set.keys():
 			# obtain last activity for each customer
-			actv_count = c.execute("SELECT GREATEST(IFNULL(MAX(time_in), 0), IFNULL(MAX(time_shipped), 0)) AS last_activity FROM inventory WHERE customer = '" + customer_name + "'")
+			actv_count = c.execute("""SELECT GREATEST(IFNULL(MAX(time_in), 0), IFNULL(MAX(time_shipped), 0)) AS last_activity FROM inventory WHERE customer = "%s" """ %(customer_name))
 			activity = c.fetchall()
 
 			freq = cust_set[customer_name]
@@ -351,10 +362,10 @@ def change_password():
 		#co_pwd = new_pwd.split(",")
 
 		data_count = c.execute("SELECT * FROM users WHERE email = '"+ email + "'")
-		
-		if data_count and sha256_crypt.verify(current_pwd, user_password):
+		if data_count:
 			data = c.fetchone()
 			user_password = data["password"]
+		if data_count and sha256_crypt.verify(current_pwd, user_password):
 			enc_password = sha256_crypt.encrypt(new_pwd)
 			c.execute("UPDATE users SET password ='" + enc_password +"' WHERE email = '"+ email +"'")
 			conn.commit();
@@ -386,32 +397,36 @@ def settings():
 				new_password = request.form['pwd']
 				confirm_password = request.form['pwd1']
 				#tracking = "Account Created"
-
+				uid = session["uid"]
 				data_count = c.execute("SELECT * FROM users WHERE email = '"+ new_email + "'")
-				if data_count == 0:
-					if new_password == confirm_password:
-						enc_password = sha256_crypt.encrypt(new_password)
-						c.execute("INSERT INTO users (username, password, email) VALUES ('"+thwart(new_username)+ "', '"+thwart(enc_password)+"', '"+thwart(new_email)+"')")
-						#c.execute("INSERT INTO users (username, password, email, tracking) VALUES (%s, %s, %s, %s)", (thwart(new_username), thwart(enc_password), thwart(new_email), thwart(tracking)))
-						conn.commit()
-						success = "New account " + new_username + " was successfully created!"
-						return render_template("settings.html", success =success)
-						#flash("New User Added.")
-					#c.close()
-					#conn.close()
+				if uid == 4:
+					if data_count == 0:
+						if new_password == confirm_password:
+							enc_password = sha256_crypt.encrypt(new_password)
+							c.execute("INSERT INTO users (username, password, email) VALUES ('"+thwart(new_username)+ "', '"+thwart(enc_password)+"', '"+thwart(new_email)+"')")
+							#c.execute("INSERT INTO users (username, password, email, tracking) VALUES (%s, %s, %s, %s)", (thwart(new_username), thwart(enc_password), thwart(new_email), thwart(tracking)))
+							conn.commit()
+							success = "New account " + new_username + " was successfully created!"
+							return render_template("settings.html", account_name = session["username"], success =success)
+							#flash("New User Added.")
+						#c.close()
+						#conn.close()
+						else:
+							error = "Inserted passwords did not match"
+							flash(error)
+							return render_template("settings.html" , account_name = session["username"] , error = error)
 					else:
-						error = "Inserted passwords did not match"
-						flash(error)
-						return render_template("settings.html", error = error)
+						error = "Email already exists!"
+						return render_template("settings.html", account_name = session["username"], error = error)
 				else:
-					error = "Email already exists!"
-					return render_template("settings.html", error = error)
+					error = "Only Admin can add new user!"
+					return render_template("settings.html", account_name = session["username"], error = error)
 			else:
-				return render_template("settings.html")
+				return render_template("settings.html", account_name = session["username"])
 
 	 	except Exception as e:
 			flash(e)
-			return render_template("settings.html", error = error)
+			return render_template("settings.html", account_name = session["username"], error = error)
 
 
 
@@ -472,55 +487,123 @@ def edit_kegs():
 			inventory = c.fetchall()
 			current = inventory[0]["status"]
 
+
+			#info[2] = info[2] if info[2] else "NULL"
 			info[8] = info[8] if info[8] else "NULL"
 			info[9] = info[9] if info[9] else "NULL"
 
 			# beer brand name query
-			c.execute("SELECT id FROM beer_brands WHERE name ='" + info[2] +"'")
-			id_tuple = c.fetchone()
-			brand_id = str(id_tuple["id"])
+			if (info[2] != ""):
+				c.execute("SELECT id FROM beer_brands WHERE name ='" + info[2] +"'")
+				id_tuple = c.fetchone()
+				brand_id = str(id_tuple["id"])
+			else:
+				brand_id ="NULL"
+
+			user_id = str(session["uid"])
 
 			if (info[1] == 'DIRTY'):
-				c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_in = NOW(), customer='"+ info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
-			
+				if (brand_id == "NULL"):
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=NULL, time_in = NOW(), customer=%s, notes =%s WHERE keg_id=%s", (str(info[0]), str(info[1]), str(info[8]), str(info[9]), element ))
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(),NULL,%s,%s)",  (str(element), str(info[1]), str(info[8]), str(user_id)))
+				else:
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=%s, time_in = NOW(), customer=%s, notes =%s WHERE keg_id=%s", (str(info[0]), str(info[1]), brand_id, str(info[8]), str(info[9]), element ))
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(),%s,%s,%s)",  (str(element), str(info[1]), brand_id, str(info[8]), str(user_id)))
+				
 			elif (info[1] == 'CLEAN'):
 				if (current == 'DIRTY'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=NULL, time_cleaned = NOW(), customer= NULL, notes ='"+info[9] +"' WHERE keg_id=" + element)
-				else:
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand=NULL, time_cleaned = NOW(), time_in=DATE_SUB(NOW(), INTERVAL 1 MINUTE), customer= NULL, notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=NULL, time_cleaned = NOW(), customer=NULL, notes =%s WHERE keg_id=%s",(str(info[0]), str(info[1]), str(info[9]), element ))
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(),NULL,NULL,%s)", (str(element), str(info[1]), str(user_id)))
 					
+				else:
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=NULL, time_cleaned = NOW(), time_in=DATE_SUB(NOW(), INTERVAL 1 MINUTE), customer=NULL, notes=%s WHERE keg_id=%s",(str(info[0]), str(info[1]), str(info[9]), element))
+					
+					if (brand_id != "NULL"):
+						c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,'DIRTY' ,DATE_SUB(NOW(), INTERVAL 1 MINUTE), %s,%s,%s)",(str(element),str(brand_id),str(info[8]),str(user_id)))
+						c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(), %s,%s,%s)", (str(element), str(info[1]), str(brand_id), str(info[8]), str(user_id)))
+					else:
+						c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,'DIRTY' ,DATE_SUB(NOW(), INTERVAL 1 MINUTE), NULL,%s,%s)",(str(element),str(info[8]),str(user_id)))
+						c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(),NULL,NULL,%s)", (str(element), str(info[1]), str(user_id)))
+						
 			elif (info[1] == 'FULL_OUT'):
 				if (current == 'FULL_INV'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_shipped = NOW(), time_tapped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type=%s , status=%s, beer_brand=%s, time_shipped = NOW(), time_tapped = NULL, customer=%s, notes =%s WHERE keg_id=%s", (str(info[0]), str(info[1]), str(brand_id), str(info[8]), str(info[9]), str(element)))
+				
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(),%s,%s ,%s)", (str(element), str(info[1]), str(brand_id), str(info[8]), str(user_id)))
+
 				elif (current == 'CLEAN'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_shipped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_tapped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=%s, time_shipped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_tapped = NULL, customer=%s, notes =%s WHERE keg_id=%s", (str(info[0]), str(info[1]), str(brand_id), str(info[8]), str(info[9]), str(element)))
+				
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,'FULL_INV',DATE_SUB(NOW(), INTERVAL 1 MINUTE), %s,%s,%s)", (str(element), str(brand_id), str(info[8]), str(user_id)))
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(), %s,%s,%s)", (str(element), str(info[1]), str(brand_id), str(info[8]), str(user_id)))
+
 				elif (current == 'DIRTY'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_in=DATE_SUB(NOW(), INTERVAL 2 MINUTE) ,time_shipped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_tapped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
-				else:
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_shipped = NOW(), time_tapped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)	
-			
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=%s, time_cleaned=DATE_SUB(NOW(), INTERVAL 2 MINUTE) ,time_shipped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_tapped = NULL, customer=%s, notes =%s WHERE keg_id=%s", (str(info[0]), str(info[1]), str(brand_id), str(info[8]), str(info[9]), str(element)))
+				
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,'CLEAN',DATE_SUB(NOW(), INTERVAL 2 MINUTE), %s,%s,%s)", (str(element), str(brand_id), str(info[8]), str(user_id)))
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,'FULL_INV',DATE_SUB(NOW(), INTERVAL 1 MINUTE), %s,%s,%s)", (str(element), str(brand_id), str(info[8]), str(user_id)))
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(), %s,%s,%s)", (str(element),str(info[1]), str(brand_id), str(info[8]), str(user_id)))
+
+				else:					
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=%s, time_shipped=NOW(), time_tapped=NULL, customer=%s, notes=%s WHERE keg_id=%s", (str(info[0]), str(info[1]), str(brand_id), str(info[8]), str(info[9]), element ) )
+	
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(),%s,%s,%s)", (str(element), str(info[1]), str(brand_id), str(info[8]), str(user_id)))
+
 			elif (info[1] == 'FULL_TAP'):
 				if (current == 'FULL_INV'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_tapped = NOW(), time_shipped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=%s, time_tapped = NOW(), time_shipped = NULL, customer=%s, notes =%s WHERE keg_id=%s", (str(info[0]), str(info[1]), str(brand_id), str(info[8]), str(info[9]), str(element)))
+					
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(), %s,%s,%s)", (str(element), str(info[1]), str(brand_id), str(info[8]), str(user_id)))
+
 				elif (current == 'CLEAN'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_tapped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_shipped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=%s, time_tapped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_shipped = NULL, customer=%s, notes =%s WHERE keg_id=%s",(str(info[0]), str(info[1]), str(brand_id), str(info[8]), str(info[9]), element ))
+				
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,'FULL_INV',DATE_SUB(NOW(), INTERVAL 1 MINUTE), %s,%s,%s)", (str(element), str(brand_id), str(info[8]), str(user_id)))
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(), %s,%s,%s)", (str(element), str(info[1]), str(brand_id), str(info[8]), str(user_id)) )
+
 				elif (current == 'DIRTY'):
 					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_cleaned=DATE_SUB(NOW(), INTERVAL 2 MINUTE) ,time_tapped = NOW(), time_filled=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_shipped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+				
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,'CLEAN',DATE_SUB(NOW(), INTERVAL 2 MINUTE), %s,%s,%s)", (str(element), str(brand_id), str(info[8]), str(user_id)))
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,'FULL_INV',DATE_SUB(NOW(), INTERVAL 1 MINUTE), %s,%s,%s)", (str(element), str(brand_id), str(info[8]), str(user_id)))
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(), %s,%s,%s)", (str(element), str(info[1]), str(brand_id), str(info[8]), str(user_id)))
+
 				else:
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_tapped = NOW(), time_shipped = NULL, customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)	
-					pass
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=%s, time_tapped = NOW(), time_shipped = NULL, customer=%s, notes =%s WHERE keg_id=%s", (str(info[0]), str(info[1]), str(brand_id), str(info[8]), str(info[9]), element ))	
+
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(), %s,%s,%s)", (str(element), str(info[1]), str(brand_id), str(info[8]), str(user_id)))
+					
 
 			elif (info[1] == 'FULL_INV'):
 				if (current == 'CLEAN'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_filled = NOW(), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=%s, time_filled = NOW(), customer=%s, notes =%s WHERE keg_id=%s", (str(info[0]), str(info[1]), str(brand_id), str(info[8]), str(info[9]), element ))
+
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(), %s,%s,%s)", (str(element), str(info[1]), str(brand_id), str(info[8]), str(user_id)))
+
 				elif (current == 'DIRTY'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_filled = NOW(), time_cleaned=DATE_SUB(NOW(), INTERVAL 1 MINUTE), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=%s, time_filled = NOW(), time_cleaned=DATE_SUB(NOW(), INTERVAL 1 MINUTE), customer=%s, notes =%s WHERE keg_id=%s", (str(info[0]), str(info[1]), str(brand_id), str(info[8]), str(info[9]), element ))
+				
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s, 'CLEAN', DATE_SUB(NOW(), INTERVAL 1 MINUTE), %s,%s,%s)", (str(element), str(brand_id), str(info[8]), str(user_id)))
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(), %s,%s,%s)", (str(element), str(info[1]), str(brand_id), str(info[8]), str(user_id)))
+
 				elif (current == 'FULL_OUT' or current == 'FULL_TAP'):
-					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_filled = NOW(), time_cleaned=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_in=DATE_SUB(NOW(), INTERVAL 2 MINUTE), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=%s, time_filled = NOW(), time_cleaned=DATE_SUB(NOW(), INTERVAL 1 MINUTE), time_in=DATE_SUB(NOW(), INTERVAL 2 MINUTE), customer=%s, notes =%s WHERE keg_id=%s", (str(info[0]), str(info[1]), str(brand_id), str(info[8]), str(info[9]), element ))
+				
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,'DIRTY',DATE_SUB(NOW(), INTERVAL 2 MINUTE), %s,%s,%s)",  (str(element), str(brand_id), str(info[8]), str(user_id)))
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,'CLEAN',DATE_SUB(NOW(), INTERVAL 1 MINUTE), %s,%s,%s)",  (str(element), str(brand_id), str(info[8]), str(user_id)))
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(), %s,%s,%s)", (str(element), str(info[1]), str(brand_id), str(info[8]), str(user_id)))
+
 				else:
 					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_filled = NOW(), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
-					
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES ("+element+",'"+info[1]+"',NOW(), "+brand_id+",'"+info[8] +"','"+user_id+"')")
 
+			if (info[8] == "NULL"):
+				c.execute("UPDATE inventory SET customer=NULL WHERE keg_id=%s", (element))
+				c.execute("UPDATE activity_log SET customer=NULL WHERE keg_id=%s AND time=NOW()", (element))
+			if (info[9] == "NULL"):
+				c.execute("UPDATE inventory SET notes=NULL WHERE keg_id=%s", (element))
+				
+					
 		conn.commit();
 		
 		return jsonify({"epc": string})
@@ -674,15 +757,15 @@ def logistics_ajax_customers():
 		for customer in customers:
 			name = customer["customer"]
 
-			activity_count = c.execute("SELECT max(time) AS `last_activity` FROM activity_log WHERE (status='DIRTY' OR status='FULL_OUT') AND customer='%s'" %(name))
+			activity_count = c.execute("""SELECT max(time) AS `last_activity` FROM activity_log WHERE (status='DIRTY' OR status='FULL_OUT') AND customer="%s" """ %(name))
 			activity = c.fetchone()
 			last_activity = str(activity["last_activity"])
 
-			keg_out_count = c.execute("SELECT count(*) AS `lifetime_total` FROM activity_log WHERE status='FULL_OUT' AND customer='%s'" %(name))
+			keg_out_count = c.execute(""" SELECT count(*) AS `lifetime_total` FROM activity_log WHERE status='FULL_OUT' AND customer="%s" """ %(name))
 			keg_out = c.fetchone()
 			lifetime_total = keg_out["lifetime_total"]
 
-			returned_count = c.execute("SELECT count(*) AS `returned_total` FROM activity_log WHERE status='DIRTY' AND customer='%s'" %(name))
+			returned_count = c.execute("""SELECT count(*) AS `returned_total` FROM activity_log WHERE status='DIRTY' AND customer="%s" """ %(name))
 			returned = c.fetchone()
 			returned_total = returned["returned_total"]
 			current_total = lifetime_total - returned_total
@@ -692,27 +775,27 @@ def logistics_ajax_customers():
 													SELECT time  FROM activity_log 
 													INNER JOIN (
 														SELECT keg_id, max(time) As `max` FROM activity_log 
-														WHERE customer='%s' 
+														WHERE customer="%s" 
 														GROUP BY keg_id
 														) self_t 
 													ON activity_log.keg_id=self_t.keg_id AND time=self_t.max 
-													WHERE customer='%s' AND status='FULL_OUT' 
+													WHERE customer="%s" AND status='FULL_OUT' 
 													GROUP BY activity_log.keg_id
 													) As self2_t""" 
 												%(name, name))
 			oldest = c.fetchone()
-			oldest_shipped = str(oldest["oldest_shipped"]) if oldest["oldest_shipped"] else '' 
+			oldest_shipped = str(oldest["oldest_shipped"]) if oldest["oldest_shipped"] else "" 
 
-			popular_count = c.execute(" SELECT beer_brands.name, count(*) AS freq FROM activity_log INNER JOIN beer_brands ON activity_log.beer_brand = beer_brands.id WHERE status='FULL_OUT' AND customer='%s' GROUP BY beer_brand ORDER BY freq DESC" %(name))
+			popular_count = c.execute("""SELECT beer_brands.name, count(*) AS freq FROM activity_log INNER JOIN beer_brands ON activity_log.beer_brand = beer_brands.id WHERE status='FULL_OUT' AND customer="%s" GROUP BY beer_brand ORDER BY freq DESC""" %(name))
 			popular = c.fetchall()
-			popular_brands = ['', '', '']
+			popular_brands = ["", "", ""]
 
 			for i in xrange(min(len(popular),3)):
 				popular_brands[i] = popular[i]["name"] 
 
 
 			customers_info.append([name, lifetime_total, current_total, last_activity, oldest_shipped, popular_brands[0], popular_brands[1], popular_brands[2]]) 
-				
+			
 	
 		return jsonify(customers_info)
 

@@ -8,16 +8,11 @@
 		<!-- Bootstrap Core CSS -->
 	 	<!-- DataTables CSS -->
 		<link href="{{url_for('static', filename='DataTables/DataTables-1.10.13/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
-	  	<!-- <link href="{{url_for('static', filename='DataTables/Buttons-1.2.4/css/buttons.bootstrap.min.css')}}" rel="stylesheet">-->
 		<link href="{{url_for('static', filename='DataTables/ColReorder-1.3.2/css/colReorder.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/Responsive-2.1.1/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/Scroller-1.4.2/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
-	   	<link href="{{url_for('static', filename='DataTables/Select-1.2.0/css/select.bootstrap.min.css')}}" rel="stylesheet">
-	   	<link href="/static/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet">
-	   	<link href="/static/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-
-	   
+	   	<link href="{{url_for('static', filename='DataTables/Select-1.2.0/css/select.bootstrap.min.css')}}" rel="stylesheet">  
    <!-- style of textareavv-->  
   {% endblock %}
  <!-- **************************************************************** -->  
@@ -164,17 +159,6 @@
 				<div class="panel-heading" id = "cp3">
 					Add Beer Brand
 				</div>
-
-				<!-- <div class="panel-body" id ="p0">						
-				
-				<textarea id="brand"  style="width:25%" col="1" placeholder="placeholder">Brand Name</textarea>
-
-				
-				<button type="button" id="submit3" class="btn btn-success">Add Brand</button>
-				
-				</div> -->
-
-				<!-- /.panel-heading -->
 				
 				<div class="panel-body" id ="abb">
 					<form class="form-horizontal" action="" method="">
@@ -234,7 +218,6 @@
   		<!-- DataTables JavaScript -->
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/jquery.dataTables.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/dataTables.bootstrap.min.js')}}"></script>
-   		<!--<script src="{{url_for('static', filename='DataTables/Buttons-1.2.4/js/dataTables.buttons.min.js')}}"></script>-->
 		<script src="{{url_for('static', filename='DataTables/ColReorder-1.3.2/js/dataTables.colReorder.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/dataTables.responsive.min.js')}}"></script>
