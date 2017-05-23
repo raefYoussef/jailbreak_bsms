@@ -13,6 +13,7 @@
 		<link href="{{url_for('static', filename='bootstrap-datepicker/css/bootstrap-datepicker3.min.css')}}" rel="stylesheet">
 		<!-- Multiselect -->
 		<link href="{{url_for('static', filename='bootstrap-multiselect/css/bootstrap-multiselect.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/Select-1.2.0/css/select.bootstrap.min.css')}}" rel="stylesheet">
 	{% endblock %}
 	
 	{% block account_name %}{{ account_name }}{% endblock %}
@@ -227,6 +228,8 @@
 							<!-- /.table-responsive -->
 						</div>
 						<!-- /.panel-body -->
+						<!-- **************************************************************** -->
+						<button type="button" id="delete_inv" class="btn btn-danger" title="Delete from Database">Delete</button>
 					</div>
 					<!-- /.panel -->
 				</div>
@@ -248,7 +251,8 @@
 		<script src="{{url_for('static', filename='bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script> 
 		<!-- Multiselect -->
 		<script src="{{url_for('static', filename='bootstrap-multiselect/js/bootstrap-multiselect.js')}}"></script> 
-
+		<script src="{{url_for('static', filename='DataTables/Select-1.2.0/js/dataTables.select.min.js')}}"></script>
+   		
 		<script>
 		/* Custom filtering function which will search data between two values */
 		$.fn.dataTable.ext.search.push(function(settings, data, dataIndex){
@@ -329,12 +333,32 @@
 			return boolTimeIn && boolTimeCleaned && boolTimeFilled && boolTimeShipped && boolID;
 		});
 
+		function delete_Row(idstring){
+
+			const keg_ids = {"keg_ids": idstring}
+
+			$.ajax({
+				url:"/delete_kegs/",
+				data: keg_ids,
+				dataType: "json",
+				type: "POST",
+				success: function(response){
+					alert("Keg #" + response["epc"] +" deleted succesfully!");
+		  		},
+				error: function(error){
+					alert("Error!!");
+				}
+			});
+		}
+
+
 		// executes when document is done loading
 		$(document).ready(function(){
 			// builds an inventory datatable 
 			var table = $("#inventory_table").DataTable({
 				"responsive": true,
 				"pagingType": "full_numbers",
+				"select": "multi+shift",
 				"initComplete": function()
 				{
 					// populates keg type search with available types
@@ -615,6 +639,25 @@
 				// searches table according to value then redraws table
 				table.column(10).search($("#input_keg_notes").val()).draw(); 
 			});
+
+			$("#delete_inv").click(function(){
+		     	var mydata = table.rows('.selected').data()
+				var idstring = "";
+				for (var i = 0; i < mydata.length; i++){
+					var my_id = mydata[i][0];
+					idstring = idstring + my_id;
+					if (i != mydata.length - 1){
+						idstring += ","
+					}
+				} 
+
+				delete_Row(idstring);
+
+			    table
+			    .rows('.selected')
+			    .remove()
+			    .draw();
+	    	});
 		});
 		</script>
 	{% endblock %}
