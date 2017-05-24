@@ -57,6 +57,7 @@ def signout():
 
 	return redirect(url_for('signin'))
 
+
 @app.route('/compare_epc/', methods=["POST"])
 def compare_epc():
 	try:
@@ -171,14 +172,6 @@ def signin_temp():
 #@app.errorhandler(405)
 #def method_not_found(e):
 #	return render_template("405.html")
-
-
-@app.route('/home/')
-def home():
-	if "uid" in session:
-		return render_template("home.html")
-
-	return redirect(url_for('signin'))
 
 
 @app.route('/dashboard/')
@@ -475,6 +468,7 @@ def edit_kegs():
 		ids = data[0].split("`")
 		info = data[1].split("`")
 		
+		query = ""
 		for element in ids:
 			inventory_items = c.execute(" SELECT inventory.status FROM inventory WHERE keg_id =" + element)
 		
@@ -500,15 +494,19 @@ def edit_kegs():
 				if (brand_id == "NULL"):
 					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=NULL, time_in = NOW(), customer=%s, notes =%s WHERE keg_id=%s", (str(info[0]), str(info[1]), str(info[8]), str(info[9]), element ))
 					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(),NULL,%s,%s)",  (str(element), str(info[1]), str(info[8]), str(user_id)))
+					
 				else:
 					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=%s, time_in = NOW(), customer=%s, notes =%s WHERE keg_id=%s", (str(info[0]), str(info[1]), brand_id, str(info[8]), str(info[9]), element ))
 					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(),%s,%s,%s)",  (str(element), str(info[1]), brand_id, str(info[8]), str(user_id)))
 				
 			elif (info[1] == 'CLEAN'):
 				if (current == 'DIRTY'):
-					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=NULL, time_cleaned = NOW(), customer=NULL, notes =%s WHERE keg_id=%s",(str(info[0]), str(info[1]), str(info[9]), element ))
-					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(),NULL,NULL,%s)", (str(element), str(info[1]), str(user_id)))
+					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=NULL, time_cleaned = NOW(), customer=NULL, notes=%s WHERE keg_id=%s",(str(info[0]), str(info[1]), str(info[9]), element ))
+					# print("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=NULL, time_cleaned = NOW(), customer=NULL, notes=%s WHERE keg_id=%s",(str(info[0]), str(info[1]), str(info[9]), element ))
 					
+					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (%s,%s,NOW(),NULL,NULL,%s)", (str(element), str(info[1]), str(user_id)))
+					# print("I got here")
+					#query = "INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES (,,NOW(),NULL,NULL,)"
 				else:
 					c.execute("UPDATE inventory SET keg_type=%s, status=%s, beer_brand=NULL, time_cleaned = NOW(), time_in=DATE_SUB(NOW(), INTERVAL 1 MINUTE), customer=NULL, notes=%s WHERE keg_id=%s",(str(info[0]), str(info[1]), str(info[9]), element))
 					
@@ -591,18 +589,20 @@ def edit_kegs():
 					c.execute("UPDATE inventory SET keg_type='"+info[0] +"', status='"+info[1] +"', beer_brand="+brand_id+", time_filled = NOW(), customer='"+info[8] +"', notes ='"+info[9] +"' WHERE keg_id=" + element)
 					c.execute("INSERT INTO activity_log (keg_id, status, time, beer_brand, customer, user) VALUES ("+element+",'"+info[1]+"',NOW(), "+brand_id+",'"+info[8] +"','"+user_id+"')")
 
+			
 			if (info[8] == "NULL"):
-				c.execute("UPDATE inventory SET customer=NULL WHERE keg_id=%s", (element))
-				c.execute("UPDATE activity_log SET customer=NULL WHERE keg_id=%s AND time=NOW()", (element))
-			if (info[9] == "NULL"):
-				c.execute("UPDATE inventory SET notes=NULL WHERE keg_id=%s", (element))
+				c.execute("UPDATE inventory SET customer=NULL WHERE keg_id="+str(element))
+				c.execute("UPDATE activity_log SET customer=NULL WHERE keg_id="+str(element)+ " AND time=NOW()")
 				
+			if (info[9] == "NULL"):
+				c.execute("UPDATE inventory SET notes=NULL WHERE keg_id="+ str(element) + " ")	
 					
-		conn.commit();
+		conn.commit()
 		
 		return jsonify({"epc": string})
 	except Exception as e:
 		return jsonify({"error": e})
+		#return 
 
 @app.route('/edit_inventory/', methods=["GET","POST"])
 def edit_inventory():
