@@ -1,0 +1,438 @@
+{% extends "blank_template.html" %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->	
+	{% block page_title %} Settings {% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->	
+	{% block stylesheets %}
+		<!-- Bootstrap Core CSS -->
+	 	<!-- DataTables CSS -->
+		<link href="{{url_for('static', filename='DataTables/DataTables-1.10.13/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/ColReorder-1.3.2/css/colReorder.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/Responsive-2.1.1/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
+		<link href="{{url_for('static', filename='DataTables/Scroller-1.4.2/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
+	   	<link href="{{url_for('static', filename='DataTables/Select-1.2.0/css/select.bootstrap.min.css')}}" rel="stylesheet">  
+   <!-- style of textareavv-->  
+  {% endblock %}
+ <!-- **************************************************************** -->  
+<!-- **************************************************************** -->
+	
+	{% block account_name %} {{ account_name }} {% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->	
+	{% block sidebar %}
+		<li>
+			<a href="/dashboard/"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+		</li>
+		<li>
+			<a href="/view_inventory/"><i class="fa fa-fw fa-table"></i> View Inventory</a>
+		</li>
+		<li>
+			<a href="/edit_inventory/"><i class="fa fa-fw fa-edit"></i> Edit Inventory</a>
+		</li>
+		<li>
+			<a href="/logistics/"><i class="fa fa-fw fa-bar-chart-o"></i> Logistics</a>
+		</li>
+	{% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->
+	{% block page_heading %} Settings {% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->	
+	{% block page_subheading %}{% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->	
+	{% block breadcrumbs %}
+		<li>
+			<i class="fa fa-dashboard"></i> <a href="/dashboard/">Dashboard</a>
+		</li>
+		<li class="active">
+			<i class="fa fa-edit"></i> Settings
+		</li>
+	{% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->
+ <!-- **************************************************************** -->  
+<!-- **************************************************************** -->
+ <!-- **************************************************************** -->
+ <!-- Body of hidden textbox and scan buttons -->
+	{% block body %}
+	
+	<p><font color="red">{{error}}</font></p>
+	<p><font color="green">{{success}}</font></p>
+	<p id="error_msg"><font size="4" color="red"></font></p>
+
+	<!-- Change Password Panel-->
+	 <div class="row">
+		<div class="col">
+			<div class="panel panel-primary">
+				<div class="panel-heading" id = "cp1">
+					Change Password
+				</div>
+				
+						<!-- /.panel-heading -->
+				<div class="panel-body" id ="cp">
+					<form class="form-horizontal">
+
+						<div class="form-group">
+					      <label class="control-label col-sm-2" for="cu_usr">User Email:</label>
+					      <div class="col-sm-10">          
+					        <input type="text" class="form-control" id="cu_usr" placeholder="Enter Email" name="cu_usr" value="{{request.form.cu_usr}}"  required style="width:auto">
+					      </div>
+					    </div>
+						<div class="form-group">
+					      <label class="control-label col-sm-2" for="cu_pwd">Current Password:</label>
+					      <div class="col-sm-10">          
+					        <input type="password" class="form-control" id="cu_pwd" placeholder="Enter password" name="cu_pwd" value="{{request.form.cu_pwd}}"  required style="width:auto">
+					      </div>
+					    </div>
+					    <div class="form-group">        
+					      <label class="control-label col-sm-2" for="new_pwd">New Password:</label>
+					      <div class="col-sm-10">          
+					        <input type="password" class="form-control" id="new_pwd" placeholder="Enter password" name="new_pwd" value="{{request.form.new_pwd}}"  required style="width:auto">
+					        </div>
+					      </div>
+					    <div class="form-group">        
+					      <label class="control-label col-sm-2" for="co_pwd">Confirm Password:</label>
+					      <div class="col-sm-10">          
+					        <input type="password" class="form-control" id="co_pwd" placeholder="Enter password" name="co_pwd" value="{{request.form.co_pwd}}"  required style="width:auto">
+					        </div>
+					      </div>
+
+					<!-------submit---->
+					<button type="button" id="submit1" class="btn btn-success">Submit</button>
+					
+					</form>
+				</div><!-- /.panel-body -->
+			</div><!-- /.panel- -->
+		</div><!-- /.col-lg-12 -->
+	</div><!-- /row -->
+<!-- ****************************************************************************************************************-->  
+	<!-- Add New User-->
+	 <div class="row">
+		<div class="col">
+			<div class="panel panel-primary">
+				<div class="panel-heading" id = "cp2">
+					Add New User
+				</div>
+						<!-- /.panel-heading -->
+				<div class="panel-body" id ="anu">
+
+				  	<form class="form-horizontal" action="" method="post">
+					    <div class="form-group">
+					      <label class="control-label col-sm-2" for="email">Email:</label>
+					      <div class="col-sm-10">
+					        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" value="{{request.form.email}}"  required style="width:auto" >
+					      </div>
+					    </div>
+					    <div class="form-group">
+					      <label class="control-label col-sm-2" for="name">Name:</label>
+					      <div class="col-sm-10">
+					        <input type="text" class="form-control" id="name" placeholder="Enter Name" name="name" value="{{request.form.name}}"  required style="width:auto">
+					      </div>
+					    </div>
+					    <div class="form-group">
+					      <label class="control-label col-sm-2" for="pwd">Password:</label>
+					      <div class="col-sm-10">          
+					        <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd" value="{{request.form.pwd}}"  required style="width:auto">
+					      </div>
+					    </div>
+					    <div class="form-group">        
+					      <label class="control-label col-sm-2" for="pwd1">Confirm Password:</label>
+					      <div class="col-sm-10">          
+					        <input type="password" class="form-control" id="pwd1" placeholder="Enter password" name="pwd1" value="{{request.form.pwd1}}"  required style="width:auto">
+					        </div>
+					      </div>
+
+					        <button type="submit" id="submit2" class="btn btn-success">Submit</button>
+  					</form>
+				</div><!-- /.panel-body -->
+			</div><!-- /.panel- -->
+		</div><!-- /.col-lg-12 -->
+	</div><!-- /row -->	
+<!-- ****************************************************************************************************************-->  
+	<!-- Add Beer Brand-->
+	 <div class="row">
+		<div class="col">
+			<div class="panel panel-primary">
+				<div class="panel-heading" id = "cp3">
+					Add Beer Brand
+				</div>
+				
+				<div class="panel-body" id ="abb">
+					<form class="form-horizontal" action="" method="">
+
+					    <div class="form-group">
+					      <label class="control-label col-sm-2" for="brand">Brand Name:</label>
+					      <div class="col-sm-10">
+					        <input type="text" class="form-control" id="brand" placeholder="Enter Name" name="brand" value="{{request.form.brand}}"  required style="width:auto">
+					      </div>
+					    </div>
+					        <button type="submit" id="submit3" class="btn btn-success">Submit</button>
+					     
+  					</form>
+				</div>
+				<!--/.panel-body -->
+
+			</div><!-- /.panel- -->
+		</div><!-- /.col-lg-12 -->
+	</div><!-- /row -->	
+	<!-- **********************Table*********************************** -->
+	<div class="row">
+		<div class ="col">
+			<div class="panel panel-primary">
+				<div class="panel-heading" id = "cp4">
+							Active Beers
+				</div>
+						<!-- /.panel-heading -->
+				<div class="panel-body" id ="ab">
+							<table width="100%" class="table table-striped table-bordered table-hover" id="t1">
+								
+								<tbody>
+									<thead>
+									<tr>
+										<th>ID</th>
+										<th>Beer Brand</th>
+										<th>Active</th>
+								    </tr>
+								</thead>
+								</tbody>
+							</table>
+							<!-- /.table-responsive -->
+				</div>
+						<!-- /.panel-body -->
+<!-- **************************************************************** -->
+				<button type="button" id="active" class="btn btn-success" title="Make Active">Make Active</button>
+				<button type="button" id="inactive" class="btn btn-warning"  title="Make Inactive">Make Inactive</button>
+			</div>
+		</div>
+	</div><!-- /.row -->
+
+  {% endblock %}
+<!-- **************************************************************** -->  
+<!-- **************************************************************** -->
+	{% block scripts %}
+
+ 		<!--Global var for counter -->
+  		<!-- DataTables JavaScript -->
+		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/jquery.dataTables.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/dataTables.bootstrap.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/ColReorder-1.3.2/js/dataTables.colReorder.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/dataTables.responsive.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/responsive.bootstrap.min.js')}}"></script>
+		<script src="{{url_for('static', filename='DataTables/Scroller-1.4.2/js/dataTables.scroller.min.js')}}"></script>
+   		<script src="{{url_for('static', filename='DataTables/Select-1.2.0/js/dataTables.select.min.js')}}"></script>
+
+ <!--Added Scripts -->
+ <!--******************************************************** -->
+</script> 
+<!--************************************************-->
+<!--************************************************-->
+	<!-- Inventory Table -->
+<script>
+
+function display_beers(){
+	const empty = {"keg_ids": ""};
+
+	$.ajax({
+		url:"/get_beer_data/",
+		data: empty,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+			for (var i = response["epc"].length - 1; i >= 0; i--) {
+				var active = "";
+				if(response["epc"][i]["active"]){
+					active = "Yes";
+				}else{
+					active = "No";
+				}
+				$('#t1').DataTable().row.add([
+					response["epc"][i]["id"],
+					response["epc"][i]["name"],
+					active
+				]).draw( false );
+			}
+  		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+}
+
+function change_password(datastring){
+	const data = {"data_str" :datastring};
+	$.ajax({
+		url:"/change_password/",
+		data: data,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+			$("#error_msg").html(response["epc"]);
+		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+}
+
+function add_beer_brand(my_brand){
+	const data = {"name" :my_brand};
+	$.ajax({
+		url:"/add_brand/",
+		data: data,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+}
+
+function deactivate_beers(idstring){
+	const beer_ids = {"beer_ids": idstring};
+
+	$.ajax({
+		url:"/deactivate_brands/",
+		data: beer_ids,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+}
+
+function activate_beers(idstring){
+	const beer_ids = {"beer_ids": idstring};
+
+	$.ajax({
+		url:"/activate_brands/",
+		data: beer_ids,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+}
+
+	$(document).ready(function() {
+		display_beers();
+		//<!--************************************************-->
+		//change password javascript
+		$("#submit1").click(function(){
+			var u1 = $('#cu_usr').val();
+			var p1 = $('#cu_pwd').val();
+	        var p2 = $('#new_pwd').val();
+	        var p3 = $('#co_pwd').val();
+	        if (p2 == p3){
+	        	// Check if there is a comma in the password. This breaks the parsing
+	        	var comma = 0;
+	        	for (var i = p2.length - 1; i >= 0; i--) {
+	        		if (p2[i] == ","){
+	        			comma = 1;
+	        		}
+	        	}
+	        	if (comma == 0){
+	        		usr_str = u1 + "," + p1 + "," + p2;
+	        		change_password(usr_str);
+	        	}else{
+	        		alert("The new password is invalid. Use one without a \",\" character");
+	        	}
+	        	
+
+	        }else{
+	        	alert("The passwords you entered do not match. Please try again.");
+	        	location.reload();
+	        }
+	        
+			});
+
+		//<!--************************************************-->
+		//Add new User javascript
+		$('#submit2').click(function(){
+			//var p1 = $('#email').val();
+	       // var p2 = $('#name').val();
+	       // var p3 = $('#pwd').val();
+	       // var p4= $('#pwd1').val();
+	       // alert(p1 + "," + p2 + "," + p3 + "," + p4);
+
+			});
+
+		//<!--************************************************-->
+		//Add new Brand javascript
+		$('#submit3').click(function(){
+			if ($.trim($('#brand').val()).length > 0) {
+				var brand_name = $("#brand").val();
+				brand_name = $.trim(brand_name);
+				add_beer_brand(brand_name);
+			}
+			else{
+				alert("Invalid Beer Brand Name!");
+			}
+
+		});
+
+		//<!--************************************************-->
+			
+		//Active Beers javascript
+		$('#active').click(function(){
+			var idstring = "";
+			if(($('#t1').DataTable()).rows('.selected').any()){
+				var mydata = $('#t1').DataTable().rows('.selected').data();
+				for (var i = 0; i < mydata.length; i++){
+					idstring = idstring + mydata[i][0];
+					if (i != mydata.length - 1){
+						idstring+=",";
+					}
+				}
+				activate_beers(idstring);
+				location.reload();
+			}
+
+			});
+		$('#inactive').click(function(){
+			var idstring = "";
+			if(($('#t1').DataTable()).rows('.selected').any()){
+				var mydata = $('#t1').DataTable().rows('.selected').data();
+				for (var i = 0; i < mydata.length; i++){
+					idstring = idstring + mydata[i][0];
+					if (i != mydata.length - 1){
+						idstring+=",";
+					}
+				}
+				deactivate_beers(idstring);
+				location.reload();
+			}
+
+			});
+
+		//<!--************************************************-->
+  //<!-- make it responsive and multiple select at one time -->
+			$('#t1').DataTable({
+				responsive: true,
+        		select: 'multi+shift',
+        		paging: false
+			});
+
+		});
+</script>
+   <!--************************************************-->
+  {% endblock %}
+
+<!--************************************************-->
+<!--************************************************-->
+
+
+
+	
+

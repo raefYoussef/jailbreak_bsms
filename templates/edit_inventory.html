@@ -5,16 +5,15 @@
 <!-- **************************************************************** -->  
 <!-- **************************************************************** -->	
 	{% block stylesheets %}
- <!-- DataTables CSS -->
+
+	 	<!-- DataTables CSS -->
 		<link href="{{url_for('static', filename='DataTables/DataTables-1.10.13/css/dataTables.bootstrap.min.css')}}" rel="stylesheet">
-  <!-- <link href="{{url_for('static', filename='DataTables/Buttons-1.2.4/css/buttons.bootstrap.min.css')}}" rel="stylesheet">-->
 		<link href="{{url_for('static', filename='DataTables/ColReorder-1.3.2/css/colReorder.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/Responsive-2.1.1/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
 		<link href="{{url_for('static', filename='DataTables/Scroller-1.4.2/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
-   <link href="{{url_for('static', filename='DataTables/Select-1.2.0/css/select.bootstrap.min.css')}}" rel="stylesheet">
-   
-   <!-- style of textarea
+	   	<link href="{{url_for('static', filename='DataTables/Select-1.2.0/css/select.bootstrap.min.css')}}" rel="stylesheet">
+   <!-- style of textareavv-->  
   {% endblock %}
  <!-- **************************************************************** -->  
 <!-- **************************************************************** -->
@@ -60,28 +59,40 @@
  <!-- **************************************************************** -->
  <!-- Body of hidden textbox and scan buttons -->
 	{% block body %}
-  <div class="row1">
-				<div class="col-lg-12">
-					<div class="panel panel-default">
-						
-<!-------Text area to enter tags------------>
+  	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-primary">
+				<div class="panel-heading" id = "ph0">
+					Please Scan tags Here
+				</div>
+						<!-- /.panel-heading -->
+				<div class="panel-body" id ="p0">						
+				<!-------Text area to enter tags------------>
+				<textarea id="tag"  style="width:99%" col="5" placeholder="placeholder" readonly>Scan Kegs Here</textarea>
 
-<h3 style="background-color:blue;color:white">Please Scan Tags Here</h3>
+				<!-------start scan button------------>
+				<button type="button" id="start" class="btn btn-success">Start Scan</button>
+				<!-------stop scan button------------>
+				<button type="button" id="stop" class="btn btn-danger" disabled>Stop Scan</button>
+				</div><!-- /.panel-body -->
+			</div><!-- /.panel- -->
+		</div><!-- /.col-lg-12 -->
+	</div><!-- /row -->
 
-<textarea id="tag" disabled autofocus style="width:99%" col="5" placeholder="Scanned RFID tag numbers go here."></textarea>
-<!-------start scan button------------>
-<button type="button" id="start" class="btn btn-success">Start Scan</button>
-<!-------stop scan button------------>
-<button type="button" id="stop" class="btn btn-danger" disabled>Stop Scan</button>
 
 <!-- **********************Table*********************************** -->
-<div class="panel-heading" id = "ph1">
+<div class="row">
+	<div class ="col-lg-12">
+		<div class="panel panel-primary">
+			<div class="panel-heading" id = "ph1">
 							Inventory
 						</div>
 						<!-- /.panel-heading -->
-<div class="panel-body" id ="p1">
+			<div class="panel-body" id ="p1">
 							<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-inventory">
-								<thead>
+								
+								<tbody>
+									<thead>
 									<tr>
 										<th>ID</th>
 										<th>Keg Type</th>
@@ -90,77 +101,126 @@
 										<th>Time In</th>
 										<th>Time Cleaned</th>
 										<th>Time Filled</th>
+										<th>Time Tapped</th>
+										<th>Time Shipped</th>
+										<th>Customer</th>
 										<th>Note</th>
 								    </tr>
 								</thead>
-								<tbody>
-									<tr>
-										<td>1</td>
-										<td>QB</td>
-										<td>FULL OUT</td>
-										<td>Feed the Monkey</td>
-										<td>03/25/2017</td>	
-										<td>03/26/2017</td>
-										<td>03/27/2017</td>
-										<td></th>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>HB</td>
-										<td>DIRTY</td>
-										<td>Poor Rigtheous</td>
-										<td>03/01/2017</td>
-										<td>03/02/2017</td>
-										<td>03/03/2017</td>
-										<td>Little Dented</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>QB</td>
-										<td>CLEAN</td>
-										<td>Feed the Monkey</td>
-										<td>02/01/2017</td>
-										<td>02/02/2017</td>
-										<td>02/03/2017</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>QB</td>
-										<td>DIRTY</td>
-										<td>Smoke</td>
-										<td>03/01/2017</td>
-										<td>03/02/2017</td>
-										<td>03/03/2017</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>10</td>
-										<td>HB</td>
-										<td>FULL INV</td>
-										<td>Poor Rigtheous</td>
-										<td>03/01/2016</td>
-										<td>03/02/2016</td>
-										<td>03/03/2016</td>
-										<td></td>
-									</tr>
 								</tbody>
 							</table>
 							<!-- /.table-responsive -->
 						</div>
 						<!-- /.panel-body -->
+<!-- **************************************************************** -->
+<button type="button" id="delete_inv" class="btn btn-danger" title="Delete from Database">Delete</button>
+<button type="button" id="edit_update" class="btn btn-warning"  title="Edit and update to Database">Edit & Update</button>
+<!-- *************************Modal1 code****************************** -->
+  <!-- Modal -->
+  <div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog modal-sm">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Please Edit Keg Info here</h4>
+        </div>
+        
+        <!-- **************************************************************** -->
+        <!-- Use grid on Modal-->
+        <div class="modal-body">
+        	<div class="container-fluid">
+	         <!-- Id row-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>ID:      </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		<input type = "text" id = "id_inv" value = "" readonly></input>
+	        	</div> 
+			</div> <!-- row for ID-->
+	         <!-- Keg Type-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Keg Type:</label>
+	        	</div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		<select id = "kegtype_inv">
+		 	 			<option value="HB">HB</option>
+		 			 	<option value="QB">QB</option>
+
+					</select>				
+	        	</div> 
+			</div> <!-- row for Keg Type-->	   
+	         <!-- Status-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Status:</label>
+	        	</div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		<select id = "status_inv">
+				         <option value="DIRTY">DIRTY</option>
+			 			 <option value="CLEAN">CLEAN</option>
+			 			 <option value="FULL_OUT">FULL_OUT</option>
+			 			 <option value="FULL_INV">FULL_INV</option>
+			 			 <option value="FULL_TAP">FULL_TAP</option>
+					</select>				
+	        	</div> 
+			</div> <!-- row Status-->	
+	         <!-- Beer Brand-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Beer Brand:</label>
+	        	</div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		      <select id = "beerbrand_inv">	 	 
+						</select>
+	        	</div> 
+			</div> <!-- row Beer Brand-->	
+			 <!-- Customer-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Customer:   </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		<input type = "text" id = "customer_inv" value = "" ></input>
+	        	</div> 
+			</div> <!-- Customer-->		
+	         <!-- Notes-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:5px; background-color:lightgray;">
+	        		<label>Notes:   </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:10px;" >
+	        		<input type = "text" id = "notes_inv" value = "" ></input>
+	        	</div> 
+			</div> <!-- Notes-->
+			</div> <!-- container-fluid-->
+        </div><!-- Modal-body-->
+<!-- **************************************************************** -->
+
+        <div class="modal-footer">
+          <button type="button" id="submit" class="btn btn-default" >Submit</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+<!-- **************************************************************** -->
+
 </div>
 <!-- /.panel -->
-				</div>
-				<!-- /.col-lg-12 -->
-			</div>
-			<!-- /.row -->
+	</div>
+	<!-- /.col-lg-12 -->
+	</div>
+	<!-- /.row -->
 <!-- **************************************************************** -->
 
 <!-- **********************Table for Raw Scanned RFIDs*********************************** -->
-  <div class="row2">
+  <div class="row">
 				<div class="col-lg-12">
-					<div class="panel panel-default">
+					<div class="panel panel-primary">
             <div class="panel-heading" id ="ph2">
 							Unidentified Kegs
 						</div>
@@ -174,10 +234,7 @@
 								    </tr>
 								</thead>
 								<tbody>
-									<tr>
-                    <td>0</td>
-                    <td>0123456789</td>
-                  </tr>
+								
 								</tbody>
 							</table>
 							<!-- /.table-responsive1 -->
@@ -185,139 +242,464 @@
 						<!-- /.panel-body1 -->
 
 <!-- **************************************************************** -->
-<button type="button" id="delete" class="btn btn-danger">Delete</button>
-<button type="button" id="edit" class="btn btn-warning">Edit</button>
-<button type="button" id="add" class="btn btn-primary">Add</button>
+<button type="button" id="delete" class="btn btn-danger" title="Temporarily delete tag ID" >Delete</button>
+<!-- Trigger the modal with a button -->
+  <button type="button" id="editadd" class="btn btn-warning" title ="Edit and Add to Database">Edit & Add</button>
+<!-- *************************Modal code****************************** -->
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Please Edit Keg ID here</h4>
+        </div>
+<!-- **************************************************************** -->
+        <!-- Use grid on Modal-->
+        <div class="modal-body">
+        	<div class="container-fluid">
+	         <!-- Id row-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:15px; background-color:lightgray;">
+	        		<label>ID:      </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:15px;" >
+	        		<input type = "text" id = "id_inv" value = "" readonly></input>
+	        	</div> 
+			</div> <!-- row for ID-->
+	         <!-- Keg Type-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:15px; background-color:lightgray;">
+	        		<label>Keg Type:</label>
+	        	</div>
+	        	<div class="col col-xm-6" style="margin-bottom:15px;" >
+	        		<select id = "kegtype_inv">
+		 	 			<option value="HB">HB</option>
+		 			 	<option value="QB">QB</option>
+					</select>				
+	        	</div> 
+			</div> <!-- row for Keg Type-->	          
+	         <!-- Notes-->
+	        <div class "row">
+	        	<div class="col col-xm-6" style="margin-bottom:15px; background-color:lightgray;">
+	        		<label>Notes:   </label>
+	        	 </div>
+	        	<div class="col col-xm-6" style="margin-bottom:15px;" >
+	        		<input type = "text" id = "notes_inv" value = "" ></input>
+	        	</div> 
+			</div> <!-- Notes-->
+			</div> <!-- container-fluid-->
+        </div><!-- Modal-body-->
+<!-- **************************************************************** -->
+        <div class="modal-footer">
+          <button type="button" id="submit1" class="btn btn-default" data-dismiss="modal">Submit</button>
+        </div>
+      </div><!-- Modal-content-->
+      
+    </div><!-- Modal-dialog-->
+  </div><!-- Modal-fade-->
+<!-- **************************************************************** -->
+
+
 </div>
 <!-- /.panel -->
-				</div>
-				<!-- /.col-lg-12 -->
-			</div>
-			<!-- /.row -->
+</div>
+<!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
   
 
   {% endblock %}
 <!-- **************************************************************** -->  
 <!-- **************************************************************** -->
 	{% block scripts %}
- <!--Global var for counter -->
+
+ 		<!--Global var for counter -->
   		<!-- DataTables JavaScript -->
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/jquery.dataTables.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/DataTables-1.10.13/js/dataTables.bootstrap.min.js')}}"></script>
-   <!--<script src="{{url_for('static', filename='DataTables/Buttons-1.2.4/js/dataTables.buttons.min.js')}}"></script>-->
 		<script src="{{url_for('static', filename='DataTables/ColReorder-1.3.2/js/dataTables.colReorder.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/FixedHeader-3.1.2/js/dataTables.fixedHeader.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/dataTables.responsive.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Responsive-2.1.1/js/responsive.bootstrap.min.js')}}"></script>
 		<script src="{{url_for('static', filename='DataTables/Scroller-1.4.2/js/dataTables.scroller.min.js')}}"></script>
-   <script src="{{url_for('static', filename='DataTables/Select-1.2.0/js/dataTables.select.min.js')}}"></script>
- <!-------Added Scripts------------>
- 
-<!-----  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script> ---->
- 
+   		<script src="{{url_for('static', filename='DataTables/Select-1.2.0/js/dataTables.select.min.js')}}"></script>
+   		<script src="{{url_for('static', filename='custom/js/jquery.pos.js')}}"></script> 
+ <!--Added Scripts -->
+ <!--******************************************************** -->
+ <!--Function to add beer brands to dropdown list on modal for inventery table -->
  <script>
- <!----jQuery.noConflict()(function ($) {--->
-$(document).ready(function(){  
+function all_beersBrand(){
+	const empty = {"keg_ids": ""};
+	$.ajax({
+		url:"/get_beer_data/",
+		data: empty,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+			for (var i = response["epc"].length - 1; i >= 0; i--) {
+				var v=response["epc"][i]["name"];
+				$('#beerbrand_inv').append($("<option></option>")
+                    .attr("value",v)
+                    .text(v)); 
+			}
+  		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+	
+}
+</script>
+
+<!--******************************************************** -->
+ <script>
 var counter = 1;
-<!----var rowValue="<td><input type='checkbox' name='record'></td>"--->
-<!-------start scan button------------>
-<!-------start scan button------------>
+
+function edit_keg(my_keg_data){
+	const keg_data = {"string" :my_keg_data};
+	$.ajax({
+		url:"/edit_kegs/",
+		data: keg_data,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+			location.reload();
+		},
+		error: function(error){
+			// console.log(error);
+			alert("Error!!");
+		}
+	});
+}
+
+function doRow(i, newi, linesId){
+	var epcData = jQuery.param({epc: linesId[i]});
+
+	$.ajax({
+		url:"/compare_epc/",
+		data: epcData,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+			if(response["epc"].length != 0){
+          		// keg exists in database
+				$('#dataTables-inventory').DataTable().row.add([
+					response["epc"][0]["keg_id"],
+					response["epc"][0]["keg_type"],
+					response["epc"][0]["status"],
+					response["epc"][0]["beer_brand"],
+					response["epc"][0]["time_in"],
+					response["epc"][0]["time_cleaned"],
+					response["epc"][0]["time_filled"],
+					response["epc"][0]["time_tapped"],
+					response["epc"][0]["time_shipped"],
+					response["epc"][0]["customer"],
+					response["epc"][0]["notes"]
+				]).draw( false );
+				//newi++;
+				// console.log(response["epc"][0]["keg_type"]);
+          	}
+			else 
+			{
+          		// keg is not in the database
+				$('#dataTables-inventory1').DataTable().row.add([
+					counter,
+					linesId[newi]             
+				]).draw( false );
+				//newi++;
+				counter++;
+			}
+			//newi++;
+			//newi++;
+			
+  		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+}
+
+function delete_Row(idstring){
+
+	const keg_ids = {"keg_ids": idstring}
+
+	$.ajax({
+		url:"/delete_kegs/",
+		data: keg_ids,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+			alert(response["epc"] +" have been deleted succesfully!");
+  		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+}
+
+function add_Row(rawId_und, kegtype_und, notes_und){
+	var params = [$.trim(rawId_und), $.trim(kegtype_und), $.trim(notes_und)];
+
+	const epcData = {"rawId_und": params[0], "kegtype_und": params[1], "notes_und": params[2]}
+
+	$.ajax({
+		url:"/add_epc/",
+		data: epcData,
+		dataType: "json",
+		type: "POST",
+		success: function(response){
+			alert("Kegs with IDs "+ response["epc"] +" have been added succesfully!");
+  		},
+		error: function(error){
+			alert("Error!!");
+		}
+	});
+}
+
+$(document).ready(function(){  
+	all_beersBrand();
+	// start scan button
     $("#start").click(function(){
-    <!--  Clear text area-->     
-       <!--  Reset text area-->
+    	counter =1;
+    	var current = ""
+		// Clear text area     
+		// Reset text area
         $('#tag').val('');
-       $("#tag").removeAttr('disabled');
-         $("#stop").removeAttr('disabled');
-        $("#start").prop("disabled", true);
-        
-    <!--  $("#tag").hide("slow");-->     
+		//$("#tag").removeAttr('disabled');
+		$("#stop").removeAttr('disabled');
+		$("#start").prop("disabled", true);
+		//$("#tag").hide("slow");   
+		$('#tag').focus();
+
+		//reset datatables everytime start scan is pressed
+		//reset inventory datatable
+		($('#dataTables-inventory').DataTable())
+            .clear()
+            .draw();
+        //reset unidentified keg datatable
+		($('#dataTables-inventory1').DataTable())
+            .clear()
+            .draw();
+
+    	// Handle scan event and append to scan field
+    	// Turn off all 'scan.pos.barcode' event handlers. Turn one on.
+    	// Check previous entry, only append if different.	
+        $(document).pos();
+     
+		$(document).off('scan.pos.barcode').on('scan.pos.barcode', function(event){	
+			if (current != event.code){
+				$("#tag").val($("#tag").val() + event.code + "\n");	
+			}
+			current = event.code;
+		});
+
+  
     });
    
-<!-------stop scan button------------>    
-<!-------stop scan button------------>
-     
-      <!--get values from textarea, ignore if empty--> 
-  $("#stop").click(function(){ 
-   <!--Add a row if tag scanned is valid--> 
-    if ($.trim($('#tag').val()).length > 0) {
-      <!--add a new row to the table--> 
-      <!--Get line by line text from textarea--> 
-      var linesId = $('#tag').val().split('\n');
-      <!--add a new row to the table-->
-       for (var i = 0; i < linesId.length; i++){
-          $('#dataTables-inventory1').DataTable().row.add( [
-              counter,
-              linesId[i],
-            ] ).draw( false );
-        
-            counter++;
-            }<!-- end for-->     
-        }
+	// stop scan button   
+	// get values from textarea, ignore if empty 
+	$("#stop").click(function(){
+		$("#tag").val($.trim($("#tag").val()));
+		//Add a row if tag scanned is valid
+		if ($.trim($('#tag').val()).length > 0) {
+			// add a new row to the table
+			// get line by line text from textarea
+			var linesId = $('#tag').val().split('\n');
+			var linesId2 = [];
+
+			$.each(linesId, function(i, e1){
+				if($.inArray(e1, linesId2) === -1) linesId2.push(e1);
+			});
+
+			var newi = 0;
+			// add a new row to the table
+			//check if id already exists in datatable, if it is there, dont add
+
+			for (var i = 0; i < linesId2.length; i++){
+					
+					doRow(i, newi, linesId2);
+					newi++;
+				
+			}
+		}
         else {
-        <!--The scanned tag number is invalid--> 
+        // The scanned tag number is invalid 
          alert("Invalid Input");
         }
-        <!--Disable stop scan button and enable start scan button, disable textare again--> 
-       $("#tag").attr('disabled', ''); 
-        $("#start").removeAttr('disabled');
-        $("#stop").prop("disabled", true); 
- 
+        // Disable stop scan button and enable start scan button, disable textare again--> 
+		$("#tag").attr('disabled', ''); 
+		$("#start").removeAttr('disabled');
+		$("#stop").prop("disabled", true); 
     }); 
- <!-------Delete button------------>    
-<!-------Multiple delete at once------------>
-<!-------Deletes selected row from unidentified keg table ------------>
+//<!-------Delete button------------>    
+//<!-------Multiple delete at once------------>
+//<!-------Deletes selected row from unidentified keg table ------------>
     $("#delete").click(function(){
-            ($('#dataTables-inventory1').DataTable())
-            .rows('.selected')
-            .remove()
-            .draw();
+        ($('#dataTables-inventory1').DataTable())
+        .rows('.selected')
+        .remove()
+        .draw();
     });
-});<!-- noconflict -->
+//<!-------Open pop up modal when edit & update button is pressed------------>    
+//<!-------Works when row selected on table inventory------------>
+//<!-------open myModal1 ------------>
+    $("#edit_update").click(function(){
+    	
+    	if(($('#dataTables-inventory').DataTable()).rows('.selected').any()){
+    		var string = "";
+     		var all_data = $('#dataTables-inventory').DataTable().rows({selected : true}).data();
+     		for (var i = 0; i < all_data.length; i++){
+				var my_id = all_data[i][0];
+				var my_type = all_data[i][1];
+				var my_status = all_data[i][2];
+				var my_brand = all_data[i][3];
+				var my_customer = all_data[i][9];
+				var my_note = all_data[i][10];
+
+     			string = string + my_id;
+     			if(i != all_data.length - 1){
+     				string = string + "`";
+     			}
+    		}
+
+    		$id=$("#myModal1").find('#id_inv');
+			$id.val(string);	
+			$type=$("#myModal1").find('#kegtype_inv');
+			$type.val(my_type);
+			$status=$("#myModal1").find('#status_inv');
+			$status.val(my_status);
+			$brand=$("#myModal1").find('#beerbrand_inv');
+			$brand.val(my_brand);
+			$customer=$("#myModal1").find('#customer_inv');
+			$customer.val(my_customer);
+			$note=$("#myModal1").find('#notes_inv');
+    		$note.val(my_note);
+    		$("#myModal1").modal("show");
+
+    	}
+    	else{
+    		$("#myModal1").modal("hide");
+    		alert("Nothing Selected or Empty Table");
+    	}   	
+
+    });
+    		
+     $("#delete_inv").click(function(){
+     	var mydata = ($('#dataTables-inventory').DataTable()).rows('.selected').data()
+		var idstring = "";
+		for (var i = 0; i < mydata.length; i++){
+			var my_id = mydata[i][0];
+			idstring = idstring + my_id;
+			if (i != mydata.length - 1){
+				idstring += ","
+			}
+		} 
+
+		delete_Row(idstring);
+
+	    ($('#dataTables-inventory').DataTable())
+	    .rows('.selected')
+	    .remove()
+	    .draw();
+    });
+    //edit&add button pressed
+//<!-------open myModal, unidentified keg modal ------------>
+    $("#editadd").click(function(){ 	
+     	if(($('#dataTables-inventory1').DataTable()).rows('.selected').any()){
+     		var string = "";
+     		var all_data = $('#dataTables-inventory1').DataTable().rows({selected : true}).data();
+     		for (var i = 0; i < all_data.length; i++){
+				var my_id = all_data[i][1];
+				string += $.trim(my_id);
+				if (i != all_data.length - 1){
+					string += ',';
+				}
+     			$userName=$("#myModal").find('#id_inv');
+    			$userName.val(string);	
+    		} 
+     		$("#myModal").modal("show");
+     		($('#dataTables-inventory1').DataTable())
+	    	.rows('.selected')
+	    	.remove()
+	    	.draw();
+    	}
+    	else{
+    		$("#myModal").modal("hide");
+    		alert("Nothing Selected or Empty Table");
+    	}
+    });//editadd
+    //submit button for unidentified keg table modal
+    $("#submit1").click(function(){
+     	$id=$("#myModal").find('#id_inv');
+    	my_id = $id.val();	
+    	$kegtype=$("#myModal").find('#kegtype_inv');
+    	my_kegtype = $kegtype.val();
+    	$note=$("#myModal").find('#notes_inv');
+    	my_note = $note.val();
+
+    	add_Row(my_id, my_kegtype, my_note);
+
+    });//submit
+
+    $("#submit").click(function(){
+
+     	$id=$("#myModal1").find('#id_inv');
+		string = $id.val();	
+		$type=$("#myModal1").find('#kegtype_inv');
+		my_type = $type.val();
+		$status=$("#myModal1").find('#status_inv');
+		my_status = $status.val();
+		$brand=$("#myModal1").find('#beerbrand_inv');
+		my_brand = $brand.val();
+		var my_in = "";
+		var my_cleaned = "";
+		var my_filled = "";
+		var my_tapped = "";
+		var my_shipped = "";
+		$customer=$("#myModal1").find('#customer_inv');
+		//let customer field be blank
+		my_customer = $customer.val();
+		// if(my_customer.length < 1){
+		// 	my_customer = " ";
+		// }
+		$note=$("#myModal1").find('#notes_inv');
+		my_note = $note.val(); 
+		// if(my_note.length < 1){
+		// 	my_note = " ";
+		// }   	
+    	//write ajax that takes in string, my_type, my_status, my_brand, my_in,
+		// my_cleaned, my_filled, my_tapped, my_shipped, my_customer, my_note
+		if (my_brand == null){
+			my_brand = "";
+		}
+
+		edit_string = string + "|||" + my_type + "`" + my_status + "`" + my_brand + "`" + my_in + "`" + my_cleaned + "`" + my_filled + "`" + my_tapped + "`" + my_shipped + "`" + my_customer + "`" + my_note;
+
+
+
+		edit_keg(edit_string);
+
+    });//submit
+});//<!-- noconflict -->
 </script> 
-<!-- <script> 
-$(document).ready(function() {
- 
-    $('#dataTables-inventory1 tbody').on( 'click', 'tr', function () {
-        if ( $(this).hasClass('selected') ) {
-            $(this).removeClass('selected');
-        }
-        else {
-            ($('#dataTables-inventory1').DataTable()).$('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
-        }
-    } );
- 
-    $('#delete').click( function () {
-        ($('#dataTables-inventory1').DataTable()).row('.selected').remove().draw( false );
-    } );
-} );
-</script> -->
 <!--************************************************-->
 <!--************************************************-->
 	<!-- Inventory Table -->
 		<script>
 		$(document).ready(function() {
-   
-       $('#ph1').css({
-            'color':'white',
-            'background-color': 'black',
-            'margin-top': '20px'});
   
 			$('#dataTables-inventory').DataTable({
 				responsive: true,
-        select: 'multi+shift'
+       			select: 'multi+shift'
 			});
-      <!-- Unidentified Kegs Table -->
-      $('#ph2').css({
-            'color':'white',
-            'background-color': 'red',
-            'margin-top': '20px'});
-  <!-- make it responsive and multiple select at one time -->
+  //<!-- make it responsive and multiple select at one time -->
 			$('#dataTables-inventory1').DataTable({
 				responsive: true,
-        select: 'multi+shift'
+        		select: 'multi+shift',
+        		unique:true
 			});
 		});
 		</script>
