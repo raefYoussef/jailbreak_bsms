@@ -55,7 +55,8 @@ Clicking the “Start Scan” button will wait and listen for the scanner to sca
 
 **Inventory**  
 The Inventory table will display all the scanned kegs that are already in inventory. Users can delete any number of kegs after clicking “Delete”. This will delete the entry from the database.  
-The user can select any row(s) to edit or update by clicking on “Edit & Update” button.  A single pop up menu will appear prompting the user to enter relevant information about the kegs in question.  
+The user can select any row(s) to edit or update by clicking on “Edit & Update” button.  A single pop up menu will appear prompting the user to enter relevant information about the kegs in question.
+
 **ID:** The keg ID’s of the selected kegs appear in the ID box.  
 **Keg Type:** Choose from HB or QB. More can be added from within MariaDB.  
 **Status:** Choose from a drop down menu of possible statuses.  
