@@ -341,9 +341,13 @@ function all_beersBrand(){
 		success: function(response){
 			for (var i = response["epc"].length - 1; i >= 0; i--) {
 				var v=response["epc"][i]["name"];
-				$('#beerbrand_inv').append($("<option></option>")
-                    .attr("value",v)
-                    .text(v)); 
+
+				if (response["epc"][i]["active"] == 1) 
+				{
+					$('#beerbrand_inv').append($("<option></option>")
+					.attr("value",v)
+					.text(v)); 
+				}
 			}
   		},
 		error: function(error){
