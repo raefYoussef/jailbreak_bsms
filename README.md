@@ -102,3 +102,4 @@ Anyone logged into the system can add a new Brand Brand to the database by enter
 
 **Change Beer Brand Status**  
 This section will list all the Beer Brand that are already on the system. Then, the user can make any item Active or Inactive by clicking on “Active” or “Inactive” button.
+
